@@ -1,0 +1,65 @@
+.logo {
+  margin-top: 1vh;
+  height: 15vh;
+  width: 22vh;
+}
+
+
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.head {
+  margin-top: 3vh;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8vh;
+  font-weight: bolder;
+  color: whitesmoke;
+  -webkit-text-stroke: 0.5px #FFCC00;
+}
+
+.location{
+  margin-top: -20px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 4vh;
+  font-weight: bolder;
+  color: whitesmoke;
+  -webkit-text-stroke: 0.5px rgb(255, 0, 0);
+}
+
+.slogan{
+  margin-top: 4vh;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5vh;
+  font-weight: bolder;
+  color: whitesmoke;
+}
+
+.p-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 50px;
+  margin-top: 5vh;
+  color: rgba(245, 245, 245, 0.573);
+  font-size: medium;
+}
+
+.left-text,
+.right-text {
+  width: 40%;
+  text-align: justify;
+}
+
+.button{
+  font-family: 'Orbitron', sans-serif;
+  margin-left: 140px;
+  margin-top: 5px;
+}
+
+.sponserbut{
+  color: #D1C697 !important;
+}
