@@ -1,16 +1,16 @@
 <mat-toolbar class="navbar">
 
-  <img src="../../assets/images/pictogramColor.png" alt="Logo" width="80" height="60">
-  <p class="dash">|</p>
-  <img src="../../assets/images/tudsatLogo.png" alt="Logo" width="80" height="60">
+  <img src="../../assets/images/pictogramColor.png" alt="Logo" width="80" height="60" class="clickable" routerLink="/">
+  <p class="dash clickable" routerLink="/">|</p>
+  <img src="../../assets/images/tudsatLogo.png" alt="Logo" width="80" height="60" class="clickable" routerLink="/">
 
 
   <span class="example-spacer"></span>
 
-  <button mat-button class="button">About</button>
-  <button mat-button class="button end">Schedule</button>
-  <button mat-button class="button end">Speakers & Guests</button>
-  <button mat-button class="button end">Sponsors</button>
-  <button mat-button class="button end">Contact</button>
+  <button mat-button class="button" routerLink="/about">About</button>
+  <button mat-button class="button end" routerLink="/schedule">Schedule</button>
+  <button mat-button class="button end" routerLink="/speakers">Speakers & Guests</button>
+  <button mat-button class="button end" routerLink="/sponsers">Sponsors</button>
+  <button mat-button class="button end" routerLink="/contact">Contact</button>
 
 </mat-toolbar>

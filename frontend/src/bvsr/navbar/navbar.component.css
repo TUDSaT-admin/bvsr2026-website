@@ -21,3 +21,7 @@
   height: 8vh;
   background-color: rgba(0, 0, 0, 0.443);
 }
+
+.clickable{
+  cursor: pointer;
+}
