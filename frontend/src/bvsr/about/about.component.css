@@ -1,0 +1,118 @@
+.title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4vh;
+    margin-left: 2vh;
+    font-weight: bolder;
+    color: whitesmoke;
+}
+
+.pic {
+align-items: center;
+}
+
+.mainhead {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3vh;
+  font-weight: bolder;
+  margin-top:  3vh;
+  margin-left: 3vh;
+  color: whitesmoke;
+  -webkit-text-stroke: 0.5px #FFCC00;
+
+}
+
+
+.teampic{
+  width: 1220px;
+  height: 300px;
+  margin: 20px;
+  background-image: url('../../assets/images/teampic.jpg');
+  background-position: 50% 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.description {
+
+  font-size: 3vh;
+  margin-left: 3vh;
+  color: whitesmoke;
+
+}
+
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 40px 0;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 280px;
+  height: 200px;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease-in-out, background-size 0.3s ease-in-out;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.history-card {
+ background-image: url('../../assets/images/yearpic.jpg');
+}
+
+.conference-card {
+  background-image: url('../../assets/images/conf\ pic.jpg');
+
+}
+
+.conference2026-card {
+  background-image: url('../../assets/images/teampic.jpg');
+
+}
+
+.card:hover {
+  transform: scale(1.05);
+  background-size: 110%;
+}
+
+
+
+.card-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 2;
+  background: rgba(0,0,0,0.6);
+  height: 20%;
+}
+
+.card-bottom h2 {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 4vh;
+  font-size: 2vh;
+  color: whitesmoke;
+}
+
+
+
+.pageend {
+
+  padding-bottom: 5vh;
+  padding-top: 3vh;
+  font-size: 3vh;
+  margin-left: 3vh;
+  color: whitesmoke;
+  font-style: italic;
+
+}
