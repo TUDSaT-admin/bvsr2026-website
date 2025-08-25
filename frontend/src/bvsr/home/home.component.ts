@@ -12,5 +12,8 @@ import { RouterModule } from '@angular/router';
 })
 
 export class HomeComponent {
+  ngOnInit() {
+    document.title = "BVSR Conference 2026";
+  }
 
 }
