@@ -81,6 +81,7 @@ align-items: center;
 .card:hover {
   transform: scale(1.05);
   background-size: 110%;
+  z-index: 2;
 }
 
 
