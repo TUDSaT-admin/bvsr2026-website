@@ -9,5 +9,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
   styleUrl: './contact.component.css'
 })
 export class ContactComponent {
-
+  ngOnInit() {
+    document.title = "Contact · BVSR Conference 2026";
+  }
 }

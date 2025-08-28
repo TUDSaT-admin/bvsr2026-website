@@ -9,5 +9,9 @@ import { NavbarComponent } from "../navbar/navbar.component";
   styleUrl: './speakers.component.css'
 })
 export class SpeakersComponent {
+  ngOnInit() {
+    document.title = "Speakers · BVSR Conference 2026";
+  }
+
 
 }
