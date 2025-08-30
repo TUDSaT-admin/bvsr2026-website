@@ -1,11 +1,14 @@
 .navbar {
   height: 64px;
   background: rgba(0,0,0,0.44);
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   padding: 0 clamp(20px, 3vw, 48px);
   box-sizing: border-box;
   gap: clamp(10px, 1.6vw, 18px);
+  position: fixed;
+  z-index: 1000;
 }
 
 .brand {

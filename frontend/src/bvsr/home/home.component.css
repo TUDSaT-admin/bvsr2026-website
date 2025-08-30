@@ -1,4 +1,7 @@
-.home { display: block; }
+.home {
+  display: block;
+  padding-top: 72px;
+}
 
 .container {
   max-width: 1280px;
@@ -52,19 +55,24 @@
   max-width: 1600px;
   margin: clamp(120px, 15vh, 220px) auto 0;
   padding: 0 clamp(48px, 6vw, 96px);
-
   display: grid;
-  grid-template-columns: 1fr minmax(140px, 1.6fr) 1fr;
+  grid-template-columns: 2.6fr minmax(140px, 1.6fr) 2.6fr;
   column-gap: 0;
   align-items: start;
-
   color: rgba(245,245,245,0.82);
   font-size: clamp(14px, 1.1vw, 16px);
   line-height: 1.7;
 }
 
-.left-text  { grid-column: 1; text-align: justify; }
-.right-text { grid-column: 3; text-align: justify; }
+.left-text  {
+  grid-column: 1;
+  text-align: justify;
+}
+
+.right-text {
+  grid-column: 3;
+  text-align: justify;
+}
 
 .button{
   display: block;
