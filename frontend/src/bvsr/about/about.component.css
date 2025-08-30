@@ -1,31 +1,31 @@
 .title {
     font-family: 'Orbitron', sans-serif;
     font-size: 4vh;
+    text-align: center;
     margin-left: 2vh;
+    margin-top:6vh;
     font-weight: bolder;
     color: whitesmoke;
     padding-top: 72px;
 }
 
-.pic {
-align-items: center;
-}
 
 .mainhead {
   font-family: 'Orbitron', sans-serif;
   font-size: 3vh;
   font-weight: bolder;
-  margin-top:  3vh;
-  margin-left: 3vh;
+  margin-top:  2vh;
+  margin-left: 4vh;
   color: whitesmoke;
   -webkit-text-stroke: 0.5px #FFCC00;
 }
 
 
 .teampic{
-  width: 1220px;
+  width: 1000px;
   height: 300px;
   margin: 20px;
+  margin-left: 250px;
   background-image: url('../../assets/images/teampic.jpg');
   background-position: 50% 50%;
   background-size: cover;
@@ -35,8 +35,9 @@ align-items: center;
 .description {
 
   font-size: 3vh;
-  margin-left: 3vh;
-  color: whitesmoke;
+  margin-left: 4vh;
+  color: rgba(245,245,245,0.82);
+  font-size: clamp(14px, 1.1vw, 16px);
 
 }
 
@@ -107,13 +108,121 @@ align-items: center;
 
 
 
-.pageend {
 
-  padding-bottom: 5vh;
-  padding-top: 3vh;
-  font-size: 3vh;
-  margin-left: 3vh;
-  color: whitesmoke;
-  font-style: italic;
 
+.history-grid {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr; /* left smaller, right bigger */
+  gap: 20px;
+  margin-left: 4vh;
+  align-items: center; 
 }
+
+.history-image img {
+  width: 100%;
+ 
+  border-radius: 12px; /* optional styling */
+}
+
+.history-text {
+  margin-top: -8vh;
+  margin-right: 4vh;
+  text-align: left;
+}
+
+.conference-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* text left bigger */
+  gap: 20px;
+  align-items: center;
+  margin-left: 4vh;
+  margin-right: 4vh;
+}
+
+.conference-image img {
+  width: 100%;
+  height: auto;
+ align-items: center;
+  border-radius: 12px;
+}
+
+.conference-text {
+  text-align: left;
+}
+
+
+
+.past-conferences {
+  padding: 6vh 5vw;
+  
+}
+
+.pastconference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.pastconference-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 20px;
+  color: rgba(245,245,245,0.82);
+  font-size: clamp(14px, 1.1vw, 16px);
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pastconference-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+}
+
+.pastconference-card img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.pastconference-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.pastconference-card p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #ccc;
+}
+
+
+
+
+
+.pageend {
+  padding: 5vh 3vh;
+  font-size: 3vh;
+  color: whitesmoke;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.quote-card {
+  background: rgba(255, 255, 255, 0.05); 
+  padding: 40px 30px;
+  max-width: 700px;
+  text-align: center;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+
+
+.quote {
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
