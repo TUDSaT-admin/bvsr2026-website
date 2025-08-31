@@ -21,7 +21,7 @@ export class SponsersComponent {
 
   openPopup() {
     this.dialog.open(SponsorFormDialogComponent, {
-      width: '400px',
+      width: '600px',
     });
   }
 }
