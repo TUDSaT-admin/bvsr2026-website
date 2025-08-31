@@ -6,3 +6,18 @@ body {
   background-color: #060c20;
   font-family: 'Orbitron', sans-serif;
 }
+
+@font-face {
+  font-family: 'Constellation';
+  src: url('/assets/fonts/Constellation.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.constellation-text {
+  font-family: 'Constellation', sans-serif;
+  font-size: 64px;
+  color: #fff;
+  letter-spacing: 12px;
+}
+
