@@ -1,103 +1,68 @@
-<!-- <app-navbar></app-navbar>
+<app-navbar></app-navbar>
 
-<div class="headpic">
+<section class="contact-section">
+  <h1 class="constellation-title">TRACE YOUR PATH</h1>
 
-</div>
+  <div class="contact-container">
+    <!-- Left side panel -->
+    <div class="contact-info">
+      <h2>Connect With Us</h2>
+      <p>
+        Join us at the BVSR Conference 2026, organized by TUDSaT, and be part of a unique platform where students,
+        researchers, and industry leaders collaborate on the future of aerospace.
+      </p>
 
-<section class="division">
-
-  <mat-grid-list cols="2" rowHeight="1:1">
-    <mat-grid-tile class="left">
-
-      <div class="">
-
-      </div>
-
-
-
-      <div class="social-links">
-        <a href="https://www.instagram.com" target="_blank" class="social-link social-instagram" aria-label="Instagram">
-          <img src="../../assets/icons/insta.jpg" alt="Instagram Icon">
+      <div class="socials">
+        <a href="https://www.youtube.com/@tudsat" target="_blank">
+          <img src="assets/icons/youtube.svg" alt="YouTube" class="social-icon" />
         </a>
-    <a href="https://discord.gg" target="_blank" class="social-link social-discord" aria-label="Discord">
-      <img src="../../assets/icons/discordicon.jpg" alt="Discord Icon">
-    </a>
-    <a href="https://www.youtube.com" target="_blank" class="social-link social-youtube" aria-label="YouTube">
-      <img src="../../assets/icons/youtubeicon.png" alt="YouTube Icon">
-    </a>
-    <a href="https://www.linkedin.com" target="_blank" class="social-link social-linkedin" aria-label="LinkedIn">
-      <img src="../../assets/icons/linkedin.jpg" alt="LinkedIn Icon">
-    </a>
-  </div>
-  </mat-grid-tile>
-  <mat-grid-tile class="right">
-
-    <div class="closing-section">
-          <div class="closing-container">
-
-          <h2 class="closing-title"> Connect With Us</h2>
-
-          <div class="typing-container">
-            <p> At BVSR Space Conference, we bring together pioneers, dreamers, and innovators.</p>
-            <p>Together, we push boundaries and make space exploration a shared journey.</p>
-            <p>Reach out today and take your place among the stars.</p>
-
-          </div>
-
-        <a class="closing-btn" href="/register">Register</a>
+        <a href="https://www.instagram.com/tudsat_ev/?hl=en" target="_blank">
+          <img src="assets/icons/instagram.svg" alt="Instagram" class="social-icon" />
+        </a>
+        <a href="https://www.linkedin.com/school/tu-darmstadt-space-technology-e-v/" target="_blank">
+          <img src="assets/icons/linkedin.svg" alt="LinkedIn" class="social-icon" />
+        </a>
+        <a href="https://discord.gg/YsEQEa3N9a" target="_blank">
+          <img src="assets/icons/discord.svg" alt="Discord" class="social-icon" />
+        </a>
+        <a href="mailto:vorstand@tudsat.space" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/mail.svg" alt="Gmail" class="social-icon" />
+        </a>
+      </div>
 
     </div>
 
+    <!-- Right side panel -->
+    <div class="contact-form">
+  <h2 class="yellow-title">Launch Your Queries</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
 
-  </mat-grid-tile>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+    </mat-form-field>
 
-  </mat-grid-list>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Questions</mat-label>
+      <textarea matInput rows="3" formControlName="questions"></textarea>
+    </mat-form-field>
 
-</section>
+    <div *ngIf="successMsg" style="color: lightgreen; margin: 8px 0;">
+      {{ successMsg }}
+    </div>
+    <div *ngIf="errorMsg" style="color: red; margin: 8px 0;">
+      {{ errorMsg }}
+    </div>
 
- -->
+    <button class="launch-btn" type="submit" [disabled]="submitting">
+      LAUNCH
+    </button>
+  </form>
+</div>
 
- <app-navbar></app-navbar>
-
-<div class="headpic"></div>
-
-<section class="division">
-  <mat-grid-list cols="2" rowHeight="1:1">
-
-    <!-- Left Section -->
-    <mat-grid-tile class="left">
-      <div class="social-links">
-        <a href="https://www.instagram.com" target="_blank" class="social-link social-instagram" aria-label="Instagram">
-          <img src="../../assets/icons/insta.jpg" alt="Instagram Icon">
-        </a>
-        <a href="https://discord.gg" target="_blank" class="social-link social-discord" aria-label="Discord">
-          <img src="../../assets/icons/discordicon.jpg" alt="Discord Icon">
-        </a>
-        <a href="https://www.youtube.com" target="_blank" class="social-link social-youtube" aria-label="YouTube">
-          <img src="../../assets/icons/youtubeicon.png" alt="YouTube Icon">
-        </a>
-        <a href="https://www.linkedin.com" target="_blank" class="social-link social-linkedin" aria-label="LinkedIn">
-          <img src="../../assets/icons/linkedin.jpg" alt="LinkedIn Icon">
-        </a>
-      </div>
-    </mat-grid-tile>
-
-    <!-- Right Section -->
-    <mat-grid-tile class="right">
-      <div class="closing-section">
-        <div class="closing-container">
-          <h2 class="closing-title">Connect With Us</h2>
-
-          <div class="typing-container">
-            <p>At BVSR Space Conference, we bring together pioneers, dreamers, and innovators.</p>
-            <p>Together, we push boundaries and make space exploration a shared journey.</p>
-            <p>Reach out today and take your place among the stars.</p>
-          </div>
-
-          <a class="closing-btn" href="/register">Register</a>
-        </div>
-      </div>
-    </mat-grid-tile>
-
-  </mat-grid-list>
+  </div>
 </section>
