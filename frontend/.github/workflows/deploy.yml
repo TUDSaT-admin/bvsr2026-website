@@ -3,30 +3,33 @@ name: Deploy Angular to GitHub Pages
 on:
   push:
     branches:
-      - sprint-1 
+      - sprint-1
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build Angular app
-        run: npm run build -- --configuration production --base-href "/tudsat/"
+        run: npm run build -- --configuration production --base-href /tudsat/
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/frontend
-          publish_branch: gh-pages
+          branch: gh-pages
+          folder: dist/frontend
