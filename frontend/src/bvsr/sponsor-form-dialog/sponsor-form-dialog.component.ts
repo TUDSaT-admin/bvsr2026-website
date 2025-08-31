@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material/material.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-sponsor-form-dialog',
@@ -19,19 +20,20 @@ export class SponsorFormDialogComponent {
   private scriptURL =
     'https://script.google.com/macros/s/AKfycbzg8tFMijrWWNMRzKnHNsWUaLvBuHDjWz12CI4s6qSUmqsxyZfm0N3owqKy6lWGsCHnLg/exec';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<SponsorFormDialogComponent>) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       companyName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      sponsorTier: ['', Validators.required],
+      sponsorTier: [{ value: '', disabled: true }],
       message: ['']
     });
   }
 
   onSubmit() {
     if (this.form.invalid) return;
+
     this.submitting = true;
     const formData = new FormData();
     Object.keys(this.form.value).forEach((key) => {
@@ -40,16 +42,18 @@ export class SponsorFormDialogComponent {
 
     fetch(this.scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        this.successMsg = '✅ Form submitted successfully!';
-        this.form.reset();
+        this.successMsg = 'Form submitted successfully!';
         this.submitting = false;
-        setTimeout(() => (this.successMsg = ''), 5000);
+
+        setTimeout(() => {
+          this.successMsg = '';
+          this.dialogRef.close();
+        }, 2000);
       })
       .catch((err) => {
         console.error('Error!', err);
-        this.errorMsg = '❌ Submission failed. Please try again.';
+        this.errorMsg = 'Submission failed. Please try again.';
         this.submitting = false;
       });
   }
 }
-
