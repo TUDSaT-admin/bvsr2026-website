@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>Sponsor Form</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Company Name</mat-label>
+      <input matInput formControlName="companyName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Sponsor Tier</mat-label>
+      <mat-select formControlName="sponsorTier">
+        <mat-option value="1">Tier 1</mat-option>
+        <mat-option value="2">Tier 2</mat-option>
+        <mat-option value="3">Tier 3</mat-option>
+      </mat-select>
+      <mat-hint align="start" style="color: rgba(255, 255, 255, 0.7); font-style: italic;">
+        Sponsor tier details coming soon
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Message</mat-label>
+      <textarea matInput rows="3" formControlName="message"></textarea>
+    </mat-form-field>
+
+    <div *ngIf="successMsg" style="color: lightgreen; margin: 8px 0;">
+      {{ successMsg }}
+    </div>
+    <div *ngIf="errorMsg" style="color: red; margin: 8px 0;">
+      {{ errorMsg }}
+    </div>
+
+    <mat-dialog-actions align="center">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-stroked-button type="submit" [disabled]="submitting">
+        Submit
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>
+
+

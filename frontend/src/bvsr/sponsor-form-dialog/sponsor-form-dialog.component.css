@@ -1,0 +1,80 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  background: rgba(7, 1, 55, 0.167);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.08),
+              0 8px 30px rgba(0,0,0,0.4);
+  color: white;
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  max-height: 90vh;
+  overflow: visible !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+  max-width: 600px !important;
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  padding-top: 16px !important;
+  max-height: unset !important;
+  overflow: visible !important;
+}
+
+::ng-deep .mat-mdc-dialog-actions button[mat-dialog-close] {
+  color: #bbb !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 600 !important;
+  border-radius: 20px !important;
+  padding: 6px 22px !important;
+  transition: color 0.2s ease, box-shadow 0.2s ease !important;
+}
+::ng-deep .mat-mdc-dialog-actions button[mat-dialog-close]:hover {
+  color: #f1d85b !important;
+  border: 1px solid #f1d85b !important;
+  box-shadow: 0 0 8px rgba(241, 216, 91, 0.6) !important;
+  transform: translateY(-2px);
+}
+
+::ng-deep .mat-mdc-dialog-actions button[type="submit"] {
+  background: linear-gradient(90deg, #f1d85b, #ff6a00) !important;
+  color: #0a0d1a !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 700 !important;
+  border-radius: 20px !important;
+  padding: 6px 22px !important;
+  border: none !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+::ng-deep .mat-mdc-dialog-actions button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(255, 106, 0, 0.6) !important;
+}
+
+::ng-deep .mdc-text-field--focused .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--focused .mdc-notched-outline__notch,
+::ng-deep .mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #4e2b08 !important;
+}
+
+::ng-deep .mat-mdc-select.mdc-select--focused .mdc-notched-outline {
+  border-color: #ff8c1a !important;
+}
+
+::ng-deep .mat-mdc-floating-label.mdc-floating-label--float-above,
+::ng-deep .mdc-text-field--focused .mdc-floating-label {
+  color: #ff8c1a !important;
+}
+
+::ng-deep input.mat-mdc-input-element,
+::ng-deep textarea.mat-mdc-input-element {
+  caret-color: #ff8c1a !important;
+}

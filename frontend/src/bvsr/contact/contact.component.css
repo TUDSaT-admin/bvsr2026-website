@@ -1,0 +1,140 @@
+.contact-section {
+  padding: clamp(100px, 12vh, 160px) 5%;
+  color: #fff;
+  background: transparent;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.constellation-title {
+  font-family: 'Constellation', sans-serif;
+  font-size: clamp(36px, 6vw, 80px);
+  color: rgb(201, 221, 238);
+  letter-spacing: 6px;
+  margin-bottom: 80px;
+  margin-top: 10px;
+  text-shadow: 0 0 8px rgba(241, 216, 91, 0.7);
+}
+
+.contact-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 230px;
+}
+
+.contact-info,
+.contact-form {
+  flex: 1;
+  min-width: 320px;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 32px;
+  border-radius: 10px;
+  box-shadow: 0 0 2px rgba(119, 119, 145, 0.281),
+              0 0 20px rgba(108, 108, 222, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: box-shadow 0.3s ease;
+    backdrop-filter: blur(2px);
+
+}
+
+.contact-info h2,
+.yellow-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 32px;
+  color: #f1d85b;
+  margin-bottom: 20px;
+}
+
+.contact-info p {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.socials {
+  display: flex;
+  gap: 24px;
+  margin: 24px 0;
+  justify-content: center;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  transition: filter 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.social-icon:hover {
+  filter: brightness(0) saturate(100%) invert(74%) sepia(78%) saturate(356%) hue-rotate(359deg) brightness(102%) contrast(97%);
+  transform: scale(1.15);
+}
+
+.emailtext{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 12px;
+
+
+}
+
+
+.extra-info {
+  margin-top: 24px;
+  font-size: 15px;
+  opacity: 0.95;
+  display: flex;
+  justify-content: center;
+}
+
+.extra-info a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.extra-info a:hover {
+  color: #f1d85b;
+}
+
+.extra-info img {
+  width: 28px;
+  height: 28px;
+  transition: filter 0.3s ease;
+}
+
+.extra-info a:hover img {
+  filter: brightness(0) saturate(100%) invert(74%) sepia(78%)
+          saturate(356%) hue-rotate(359deg) brightness(102%) contrast(97%);
+}
+
+
+.full-width {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.launch-btn {
+  background: linear-gradient(90deg, #f1d85b, #ff6a00);
+  color: #0a0d1a;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  padding: 14px 36px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+.launch-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255, 106, 0, 0.6);
+}

@@ -1,0 +1,49 @@
+.navbar {
+  height: 64px;
+  background: rgba(0,0,0,0.44);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(20px, 3vw, 48px);
+  box-sizing: border-box;
+  gap: clamp(10px, 1.6vw, 18px);
+  position: fixed;
+  z-index: 1000;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1vw, 12px);
+}
+
+.brand-logo {
+  width: clamp(56px, 4vw, 80px);
+  height: auto;
+}
+
+.dash { margin: 0 4px; }
+.spacer { flex: 1; }
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.6vw, 20px);
+}
+
+.link {
+  color: whitesmoke !important;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  padding: 0 6px;
+  margin: 0;
+  min-width: auto;
+}
+
+.clickable { cursor: pointer; }
+
+/* Tablet & up  */
+@media (min-width: 1280px) {
+  .navbar { height: 72px; }
+  .brand-logo { width: clamp(64px, 4vw, 84px); }
+}
