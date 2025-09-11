@@ -1,0 +1,52 @@
+.coming-soon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.coming-card h1 {
+  font-family: 'Constellation', sans-serif;
+  font-size: clamp(36px, 6vw, 78px);
+  color: #f1d85b;
+  text-shadow: 0 0 12px rgba(241, 216, 91, 0.9);
+  margin-bottom: 16px;
+  letter-spacing: 30px;
+}
+.coming-card{
+  margin-top: -200px;
+}
+
+.coming-card p {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(16px, 2vw, 20px);
+  color: #fff;
+  opacity: 0.9;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  margin-top: 80px;
+}
+
+.rocket {
+  width: 80px;
+  animation: float 3s ease-in-out infinite;
+  rotate: 34deg;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 10px rgba(241, 216, 91, 0.3),
+                0 0 20px rgba(241, 216, 91, 0.4);
+  }
+  to {
+    box-shadow: 0 0 25px rgba(241, 216, 91, 0.6),
+                0 0 50px rgba(241, 216, 91, 0.8);
+  }
+}

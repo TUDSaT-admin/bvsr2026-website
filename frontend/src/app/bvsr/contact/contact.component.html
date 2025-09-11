@@ -1,0 +1,70 @@
+<app-navbar></app-navbar>
+
+<section class="contact-section">
+  <h1 class="constellation-title">TRACE YOUR PATH</h1>
+
+  <div class="contact-container">
+    <!-- Left side panel -->
+    <div class="contact-info">
+      <h2>Connect With Us</h2>
+      <p>
+        Join us at the BVSR Conference 2026, organized by TUDSaT, and be part of a unique platform where students,
+        researchers, and industry leaders collaborate on the future of aerospace.
+      </p>
+
+      <div class="socials">
+        <a href="https://www.youtube.com/@tudsat" target="_blank">
+          <img src="assets/icons/youtube.svg" alt="YouTube" class="social-icon" />
+        </a>
+        <a href="https://www.instagram.com/tudsat_ev/?hl=en" target="_blank">
+          <img src="assets/icons/instagram.svg" alt="Instagram" class="social-icon" />
+        </a>
+        <a href="https://www.linkedin.com/school/tu-darmstadt-space-technology-e-v/" target="_blank">
+          <img src="assets/icons/linkedin.svg" alt="LinkedIn" class="social-icon" />
+        </a>
+        <a href="https://discord.gg/YsEQEa3N9a" target="_blank">
+          <img src="assets/icons/discord.svg" alt="Discord" class="social-icon" />
+        </a>
+        <a href="mailto:vorstand@tudsat.space" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/mail.svg" alt="Gmail" class="social-icon" />
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Right side panel -->
+    <div class="contact-form">
+  <h2 class="yellow-title">Launch Your Queries</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Fuel our inbox with your thoughts...</mat-label>
+      <textarea matInput rows="3" formControlName="questions"></textarea>
+    </mat-form-field>
+
+    <div *ngIf="successMsg" style="color: lightgreen; margin: 8px 0;">
+      {{ successMsg }}
+    </div>
+    <div *ngIf="errorMsg" style="color: red; margin: 8px 0;">
+      {{ errorMsg }}
+    </div>
+
+    <button class="launch-btn" type="submit" [disabled]="submitting">
+      LAUNCH
+    </button>
+  </form>
+</div>
+
+  </div>
+</section>
+
+<app-footer></app-footer>
