@@ -8,6 +8,10 @@
   padding-top: 72px;
 }
 
+.about{
+  min-height: 100vh;
+}
+
 .mainhead {
   font-family: 'Orbitron', sans-serif;
   font-size: 3vh;

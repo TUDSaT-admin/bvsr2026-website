@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 70vh;
+  min-height: 100vh;
   padding: 40px 20px;
   text-align: center;
 }
@@ -14,6 +14,9 @@
   text-shadow: 0 0 12px rgba(241, 216, 91, 0.9);
   margin-bottom: 16px;
   letter-spacing: 30px;
+}
+.coming-card{
+  margin-top: -200px;
 }
 
 .coming-card p {
