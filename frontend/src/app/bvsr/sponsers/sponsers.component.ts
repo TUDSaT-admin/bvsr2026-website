@@ -4,11 +4,12 @@ import { MaterialModule } from '../../material/material.module';
 import { CommonModule } from '@angular/common';
 import { SponsorFormDialogComponent } from '../sponsor-form-dialog/sponsor-form-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
   selector: 'app-sponsers',
   standalone: true,
-  imports: [NavbarComponent, MaterialModule, CommonModule],
+  imports: [NavbarComponent, MaterialModule, CommonModule, FooterComponent],
   templateUrl: './sponsers.component.html',
   styleUrls: ['./sponsers.component.css']
 })

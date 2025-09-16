@@ -3,6 +3,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
   selector: 'app-about',
@@ -11,8 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     NavbarComponent,
     MatCardModule,
-    MatButtonModule
-  ],
+    MatButtonModule,
+    FooterComponent
+],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.css']
 })

@@ -2,9 +2,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 70vh;
+  min-height: 100vh;
   padding: 40px 20px;
   text-align: center;
+}
+
+.coming-card{
+  margin-top: -200px;
 }
 
 .coming-card h1 {

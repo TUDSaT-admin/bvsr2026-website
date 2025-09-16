@@ -8,6 +8,10 @@
   padding-top: 72px;
 }
 
+.about{
+  min-height: 100vh;
+}
+
 .mainhead {
   font-family: 'Orbitron', sans-serif;
   font-size: 3vh;
@@ -17,13 +21,13 @@
   -webkit-text-stroke: 0.5px #FFCC00;
 }
 
-.teampic {
+.headpic {
   width: 90%;
   max-width: 980px;
   height: 300px;
   margin: 20px auto;
   background-image: url('../../../assets/images/teampic.jpg');
-  background-position: 50% 50%;
+  background-position: 45% 50%;
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 12px;
@@ -60,7 +64,7 @@
 }
 
 .history-card {
-  background-image: url('../../../assets/images/yearpic.jpg');
+  background-image: url('../../../assets/images/yearpic.JPG');
 }
 
 .conference-card {
@@ -68,7 +72,7 @@
 }
 
 .conference2026-card {
-  background-image: url('../../../assets/images/teampic.jpg');
+  background-image: url('../../../assets/images/teampic1.jpg');
 }
 
 .card:hover {
@@ -97,7 +101,6 @@
   margin: 0;
 }
 
-/* Grids */
 .history-grid {
   display: grid;
   grid-template-columns: 0.5fr 2fr;
@@ -133,9 +136,9 @@
   margin-left: -45px ;
 }
 
-/* Past conferences */
 .past-conferences {
   padding: 6vh 5vw;
+
 }
 
 .pastconference-grid {
@@ -168,12 +171,15 @@
 .pastconference-card h3 {
   font-size: 1.4rem;
   margin-bottom: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
 }
 
 .pastconference-card p {
   font-size: 1rem;
   margin-bottom: 15px;
   color: #ccc;
+
 }
 
 

@@ -4,11 +4,12 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material/material.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [NavbarComponent, RouterModule, MaterialModule, ReactiveFormsModule, CommonModule],
+  imports: [NavbarComponent, RouterModule, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css']
 })

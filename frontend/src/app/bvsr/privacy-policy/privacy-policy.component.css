@@ -1,0 +1,22 @@
+.page-section {
+  padding: 120px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  color: #fff;
+  line-height: 1.7;
+}
+
+.page-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  color: #f1d85b;
+  margin-bottom: 20px;
+}
+
+.page-section h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
+  color: #f1d85b;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
