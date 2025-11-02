@@ -7,11 +7,30 @@
 
   <span class="spacer"></span>
 
-  <nav class="links">
+  <nav class="links desktop-links">  
     <button mat-button class="link" routerLink="/about">About</button>
     <button mat-button class="link" routerLink="/schedule">Schedule</button>
     <button mat-button class="link" routerLink="/speakers">Speakers & Guests</button>
     <button mat-button class="link" routerLink="/sponsers">Sponsors</button>
     <button mat-button class="link" routerLink="/contact">Contact</button>
   </nav>
+
+
+  <button class="menu-icon" (click)="toggleMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  
+  <div class="mobile-menu" [class.open]="menuOpen">
+    
+    <button mat-button class="link" routerLink="/about" (click)="toggleMenu()">About</button>
+    <button mat-button class="link" routerLink="/schedule" (click)="toggleMenu()">Schedule</button>
+    <button mat-button class="link" routerLink="/speakers" (click)="toggleMenu()">Speakers & Guests</button>
+    <button mat-button class="link" routerLink="/sponsers" (click)="toggleMenu()">Sponsors</button>
+    <button mat-button class="link" routerLink="/contact" (click)="toggleMenu()">Contact</button>
+  </div>
+
+
+
+
 </mat-toolbar>
