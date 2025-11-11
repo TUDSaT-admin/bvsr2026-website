@@ -1,13 +1,13 @@
 <mat-toolbar class="navbar">
   <div class="brand clickable" routerLink="/">
-    <img src="../../assets/images/pictogramColor.png" alt="BVSR" class="brand-logo">
+    <img src="../../assets/images/pictogramColor.png" alt="BVSR" class="brand-logo bvsrlogo">
     <span class="dash">|</span>
     <img src="../../assets/images/tudsatLogo.png" alt="TUdSat" class="brand-logo">
   </div>
 
   <span class="spacer"></span>
 
-  <nav class="links desktop-links">  
+  <nav class="links desktop-links">
     <button mat-button class="link" routerLink="/about">About</button>
     <button mat-button class="link" routerLink="/schedule">Schedule</button>
     <button mat-button class="link" routerLink="/speakers">Speakers & Guests</button>
@@ -20,9 +20,9 @@
     <mat-icon>menu</mat-icon>
   </button>
 
-  
+
   <div class="mobile-menu" [class.open]="menuOpen">
-    
+
     <button mat-button class="link" routerLink="/about" (click)="toggleMenu()">About</button>
     <button mat-button class="link" routerLink="/schedule" (click)="toggleMenu()">Schedule</button>
     <button mat-button class="link" routerLink="/speakers" (click)="toggleMenu()">Speakers & Guests</button>

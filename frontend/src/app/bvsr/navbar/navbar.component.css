@@ -17,6 +17,11 @@
   gap: clamp(8px, 1vw, 12px);
 }
 
+.bvsrlogo{
+  filter: drop-shadow(0 0 3px rgba(78, 73, 73, 0.751))
+          drop-shadow(0 0 1px rgba(255, 255, 255, 0.235));
+}
+
 .brand-logo {
   width: clamp(56px, 4vw, 80px);
   height: auto;
@@ -63,7 +68,7 @@
   right: -220px;
   width: 200px;
   height: 100vh;
-  background: #000; 
+  background: #000;
   padding-top: 80px;
   transition: right 0.4s ease;
   z-index: 2000;
