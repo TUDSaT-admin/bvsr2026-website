@@ -23,6 +23,8 @@
 .logo {
   width: clamp(80px, 10vw, 160px);
   height: auto;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.47))
+          drop-shadow(0 0 1px rgba(255, 255, 255, 0.235));
 }
 
 .head {
@@ -42,14 +44,20 @@
   font-size: clamp(22px, 2.6vw, 36px);
   color: whitesmoke;
   -webkit-text-stroke: 0.5px rgb(255, 0, 0);
+
 }
 
 .slogan {
-  margin-top: 4px;
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
-  opacity: 0.9;
-  font-size: clamp(12px, 1.2vw, 16px);
+  font-size: clamp(17px, 1.2vw, 16px);
+  text-transform: uppercase;
+  background: linear-gradient(90deg, rgb(114, 111, 111) 0%, rgb(196, 100, 100) 50%, rgb(188, 169, 63) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  opacity: 1;
 }
 
 .p-container {
@@ -87,7 +95,7 @@
 
 @media (max-width: 1200px) {
   .p-container {
-    grid-template-columns: 1fr 1fr;  
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
   }
   .left-text { grid-column: 1; }
@@ -96,7 +104,7 @@
 
 @media (max-width: 900px) {
   .p-container {
-    grid-template-columns: 1fr;  
+    grid-template-columns: 1fr;
     gap: 16px;
     margin-top: clamp(40px, 10vh, 10px);
     margin-bottom:calc(20px, 23px, 25px);
@@ -106,13 +114,13 @@
   .left-text, .right-text {
     grid-column: 1;
     text-align: center;
-    margin-bottom: 80px;  
+    margin-bottom: 80px;
   }
-  
+
 
   .button {
     margin-top: 10px auto;
     margin-bottom: 80px auto;;
-    width: 100%; 
+    width: 100%;
   }
 }
