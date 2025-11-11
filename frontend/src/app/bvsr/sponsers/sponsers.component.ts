@@ -17,7 +17,7 @@ export class SponsersComponent {
   constructor(private dialog: MatDialog) {}
 
   ngOnInit() {
-    document.title = "Sponsers · BVSR Conference 2026";
+    document.title = "Sponsors · BVSR Conference 2026";
   }
 
   openPopup() {
