@@ -1,0 +1,45 @@
+.coming-soon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  text-align: center;
+}
+
+.coming-card h1 {
+  font-family: 'Constellation', sans-serif;
+  font-size: clamp(36px, 6vw, 78px);
+  color: #f1d85b;
+  text-shadow: 0 0 12px rgba(241, 216, 91, 0.9);
+  letter-spacing: 30px;
+}
+
+.workshops-container {
+   display: grid; 
+  grid-template-columns: repeat(3, 300px);
+  grid-template-rows: repeat(2, 150px);
+  gap: 80px;
+  justify-content: center;
+  align-items: center;
+}
+
+.workshop-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #161615;
+  color: #f1d85b;
+  font-size: 15px;
+  text-align: center;
+  line-height: 100px; 
+  border-radius: 10px;
+}
+
+.workshop-subitem {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f1d85b;
+  align-items: center;
+  font-size: 15px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 10px;
+}
