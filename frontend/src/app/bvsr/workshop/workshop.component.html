@@ -32,7 +32,7 @@
           </div>
         </ng-container>
 
-        <h3 class="slot-heading">Slot 2 — 1500 – 1800 </h3>
+        <h3 class="slot-heading">Slot 2 : 1500 – 1800 </h3>
         <ng-container *ngFor="let w of slot2Workshops; trackBy: trackById">
           <div class="workshop-row">
             <div class="workshop-info">
@@ -97,7 +97,11 @@
 
         <div class="privacy">
           <input type="checkbox" formControlName="agree" id="agree" />
-          <label for="agree">I have read and agree to the privacy policy.</label>
+          <label for="agree">I have read and agree to the
+            <a href="https://www.tudsat.space/privacy-policy" target="_blank" rel="noopener noreferrer">
+                privacy policy
+            </a>.
+          </label>
         </div>
         <div class="field-error" *ngIf="agree?.touched && agree?.invalid">
           <div *ngIf="agree?.errors?.['required']">You must agree to the policy.</div>
@@ -112,5 +116,3 @@
     </aside>
   </div>
 </section>
-
-<app-footer></app-footer>

@@ -256,3 +256,11 @@ app-footer, footer, .site-footer {
   transition: transform .28s ease, opacity .28s ease;
   opacity: 1;
 }
+
+@media (max-width: 600px) {
+  .page-heading {
+    font-size: clamp(24px, 10vw, 40px);
+    letter-spacing: 8px;
+    margin-bottom: 16px;
+  }
+}
