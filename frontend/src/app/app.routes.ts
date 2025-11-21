@@ -7,6 +7,7 @@ import { SpeakersComponent } from './bvsr/speakers/speakers.component';
 import { SponsersComponent } from './bvsr/sponsers/sponsers.component';
 import { ImpressumComponent } from './bvsr/impressum/impressum.component';
 import { PrivacyPolicyComponent } from './bvsr/privacy-policy/privacy-policy.component';
+import { WorkshopComponent } from './bvsr/workshop/workshop.component';
 
 export const routes: Routes = [
   {path: '' ,  component: HomeComponent},
@@ -16,6 +17,7 @@ export const routes: Routes = [
   {path: 'sponsers', component:SponsersComponent},
   {path: 'contact', component:ContactComponent},
   {path: 'privacy-policy', component: PrivacyPolicyComponent },
-  {path: 'impressum', component: ImpressumComponent }
+  {path: 'impressum', component: ImpressumComponent },
+  {path: 'workshop', component: WorkshopComponent}
 
 ];
