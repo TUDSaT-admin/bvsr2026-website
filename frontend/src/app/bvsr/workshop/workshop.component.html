@@ -1,33 +1,116 @@
 <app-navbar></app-navbar>
 
-<section class="coming-soon">
-  <div class="coming-card">
-    <h1>WORKSHOPS</h1>
-  </div>
-</section>
+<section class="container">
+  <div class="page-heading">WORKSHOPS</div>
 
+  <div class="grid">
+    <div>
+      <section class="hero">
+        <!-- <div class="headline">Hands-on Workshop Day</div> -->
+        <div class="sub">Choose one workshop from each time slot (One per slot).</div>
+      </section>
 
-<section class="Workshops">
-  <div class="workshops-container">
-  <div class="workshop-item">
-        11:30 - 15: 30
+      <section class="workshops">
+        <div class="section-title">
+          <strong>WORKSHOPS</strong>
+          <span class="muted">Choose your slot</span>
+        </div>
+
+        <h3 class="slot-heading">Slot 1 : 1100 - 1400</h3>
+        <ng-container *ngFor="let w of slot1Workshops; trackBy: trackById">
+          <div class="workshop-row">
+            <div class="workshop-info">
+              <div>
+                <div class="workshop-title">{{ w.title }}</div>
+                <div class="workshop-meta">Time: {{ w.time }}</div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div *ngIf="w.max !== null" class="workshop-meta">Max: {{ w.max }} • Seats left: {{ w.seatsLeft }}</div>
+              <div *ngIf="w.max === null" class="workshop-meta">{{ w.registered }} Registered (No limit on Occupancy)</div>
+            </div>
+          </div>
+        </ng-container>
+
+        <h3 class="slot-heading">Slot 2 — 1500 – 1800 </h3>
+        <ng-container *ngFor="let w of slot2Workshops; trackBy: trackById">
+          <div class="workshop-row">
+            <div class="workshop-info">
+              <div>
+                <div class="workshop-title">{{ w.title }}</div>
+                <div class="workshop-meta">Time: {{ w.time }}</div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div *ngIf="w.max !== null" class="workshop-meta">Max: {{ w.max }} • Seats left: {{ w.seatsLeft }}</div>
+              <div *ngIf="w.max === null" class="workshop-meta">{{ w.registered }} Registered (No limit on Occupancy)</div>
+            </div>
+          </div>
+        </ng-container>
+      </section>
     </div>
-  <div class="workshop-item">Rocketry 101
-     <div class="workshop-subitem">Pizza Break 🍕</div>
-  </div>
-  <div class="workshop-item">Ground Support
-     <div class="workshop-subitem">Pizza Break 🍕</div>
-  </div>
 
-  <div class="workshop-item">
-      
-    15:30 - 17:00 </div>
-   
-  <div class="workshop-item">Launch Procedures Safety</div>
-  <div class="workshop-item"> Avionics for 10th Graders</div>
-  
+    <aside class="registration-panel">
+      <h2>Register for Workshops</h2>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-row">
+          <label class="label">Name</label>
+          <input class="input" formControlName="name" placeholder="Your full name" />
+          <div class="field-error" *ngIf="name?.touched && name?.invalid">
+            <div *ngIf="name?.errors?.['required']">Name is required.</div>
+            <div *ngIf="name?.errors?.['maxlength']">Name is too long.</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="label">Email</label>
+          <input class="input" type="email" formControlName="email" placeholder="you@example.com" />
+          <div class="field-error" *ngIf="email?.touched && email?.invalid">
+            <div *ngIf="email?.errors?.['required']">Email is required.</div>
+            <div *ngIf="email?.errors?.['email']">Enter a valid email.</div>
+            <div *ngIf="email?.errors?.['maxlength']">Email is too long.</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="label">Slot 1 — pick one (optional)</label>
+          <select class="input" formControlName="slot1Choice">
+            <option value="">-- none --</option>
+            <option *ngFor="let w of slot1Workshops" [value]="w.id">{{ w.title }} {{ w.max === null ? '(unlimited)' : '- Max ' + w.max }}</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label class="label">Slot 2 — pick one (optional)</label>
+          <select class="input" formControlName="slot2Choice">
+            <option value="">-- none --</option>
+            <option *ngFor="let w of slot2Workshops" [value]="w.id">{{ w.title }} {{ w.max === null ? '(unlimited)' : '- Max ' + w.max }}</option>
+          </select>
+        </div>
+
+        <div class="field-error" *ngIf="form.touched && form.errors">
+          <div *ngIf="form.errors?.['atLeastOne']">Please select at least one workshop (one per slot).</div>
+          <div *ngIf="form.errors?.['sameWorkshop']">Cannot pick the same workshop twice.</div>
+          <div *ngIf="form.errors?.['sameSlot']">Selections conflict: please pick at most one per slot.</div>
+        </div>
+
+        <div class="privacy">
+          <input type="checkbox" formControlName="agree" id="agree" />
+          <label for="agree">I have read and agree to the privacy policy.</label>
+        </div>
+        <div class="field-error" *ngIf="agree?.touched && agree?.invalid">
+          <div *ngIf="agree?.errors?.['required']">You must agree to the policy.</div>
+        </div>
+
+        <button class="btn-primary" type="submit" [disabled]="form.invalid || submitting">{{ submitting ? 'Submitting...' : 'Confirm Registration' }}</button>
+
+        <div *ngIf="serverMessage" [class.result-banner]="serverError" style="margin-top:12px;">
+          {{ serverMessage }}
+        </div>
+      </form>
+    </aside>
   </div>
 </section>
-
 
 <app-footer></app-footer>
