@@ -7,13 +7,13 @@
     <div>
       <section class="hero">
         <!-- <div class="headline">Hands-on Workshop Day</div> -->
-        <div class="sub">Choose one workshop from each time slot (One per slot).</div>
+       <br> <div class="sub">Choose one workshop from each time slot (One per slot).</div>
       </section>
 
       <section class="workshops">
         <div class="section-title">
-          <strong>WORKSHOPS</strong>
-          <span class="muted">Choose your slot</span>
+          <!-- <strong>WORKSHOPS</strong> -->
+          <span class="muted">Will be contacted via entered email for more details</span>
         </div>
 
         <h3 class="slot-heading">Slot 1 : 1100 - 1400</h3>
@@ -76,16 +76,16 @@
         <div class="form-row">
           <label class="label">Slot 1 — pick one (optional)</label>
           <select class="input" formControlName="slot1Choice">
-            <option value="">-- none --</option>
-            <option *ngFor="let w of slot1Workshops" [value]="w.id">{{ w.title }} {{ w.max === null ? '(unlimited)' : '- Max ' + w.max }}</option>
+            <option value="">None</option>
+            <option *ngFor="let w of slot1Workshops" [value]="w.id">{{ w.title }} </option>
           </select>
         </div>
 
         <div class="form-row">
           <label class="label">Slot 2 — pick one (optional)</label>
           <select class="input" formControlName="slot2Choice">
-            <option value="">-- none --</option>
-            <option *ngFor="let w of slot2Workshops" [value]="w.id">{{ w.title }} {{ w.max === null ? '(unlimited)' : '- Max ' + w.max }}</option>
+            <option value="">None</option>
+            <option *ngFor="let w of slot2Workshops" [value]="w.id">{{ w.title }} </option>
           </select>
         </div>
 

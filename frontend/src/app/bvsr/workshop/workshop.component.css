@@ -167,13 +167,61 @@ app-footer, footer, .site-footer {
   font-weight:700;
 }
 
-app-footer, footer, .site-footer {
-  position: relative !important;
-  bottom: auto !important;
-  left: auto !important;
-  right: auto !important;
-  width: 100% !important;
+select.input {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-size: 15px;
+  color: #e6eef6;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 12px 40px 12px 14px;
+  border-radius: 10px;
+  width: 100%;
+  line-height: 1.6;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: relative;
+  z-index: 2147483647;
 }
+
+select.input {
+  background-image:
+    linear-gradient(45deg, rgba(230,238,246,0.72) 50%, transparent 50%),
+    linear-gradient(135deg, transparent 50%, rgba(230,238,246,0.72) 50%);
+  background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 13px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+select.input::-ms-expand {
+  display: none;
+}
+
+select.input option {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #0b1220;
+  background: #ffffff;
+  padding: 6px 10px;
+  line-height: 1.5;
+}
+
+.container, .grid, .registration-panel, .workshops {
+  transform: none !important;
+  will-change: auto !important;
+}
+
+select.input:focus {
+  border-color: rgba(47,157,246,0.95);
+  box-shadow: 0 6px 26px rgba(47,157,246,0.08), inset 0 0 0 1px rgba(47,157,246,0.06);
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  select.input { padding-right: 44px; }
+}
+
+
 
 .registration-panel,
 .workshop-row {
@@ -194,4 +242,17 @@ app-footer, footer, .site-footer {
 
 @media (min-width: 1200px) {
   .container { padding-top: 130px; }
+}
+
+
+app-footer, footer, .site-footer {
+  position: fixed !important;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1100;
+  transform: translateY(0);
+  transition: transform .28s ease, opacity .28s ease;
+  opacity: 1;
 }
