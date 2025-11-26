@@ -25,13 +25,13 @@ export class WorkshopComponent implements OnInit {
   readonly ASSET_ZIP_URL = '/mnt/data/tudsat.zip';
 
   workshops: Workshop[] = [
-    { id: 'w1', slot: 1, time: '1100–1400', title: 'How to design a high power rocket', max: 15, seatsLeft: 15, registered: 0 },
+    { id: 'w1', slot: 1, time: '1100–1400', title: 'How to design a high power rocket', max: 20, seatsLeft: 20, registered: 0 },
     { id: 'w2', slot: 1, time: '1100–1400', title: 'Hybrid propulsion', max: null, seatsLeft: null, registered: 0 },
-    { id: 'w3', slot: 2, time: '1500–1800', title: 'Fusion', max: 15, seatsLeft: 15, registered: 0 },
+    { id: 'w3', slot: 2, time: '1500–1800', title: 'Fusion', max: 20, seatsLeft: 20, registered: 0 },
     { id: 'w4', slot: 2, time: '1500–1800', title: 'KiCAD', max: null, seatsLeft: null, registered: 0 }
   ];
 
-  SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzkVO0q92C9Lj9ES_Z1pbeJ0YCIgf7OyqVGYtHFdPfOJVglvdone8kiotz4nMo5RY079Q/exec';
+  SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzAxob4Nnh_FbfzI6y5M5NQh6kDB_nqXPOpPC3RkRFw0HGCHtS3ZF0tOkiBg87BvNglQA/exec';
 
   form: FormGroup;
   submitting = false;
