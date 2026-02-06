@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://bvsr.tudsat.space/sitemap.xml
+
+# Disallow admin or private areas if any
+# Disallow: /admin/

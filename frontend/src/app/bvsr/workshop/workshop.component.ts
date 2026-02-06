@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { FooterComponent } from "../footer/footer.component";
+import { SeoService } from '../../services/seo.service';
 
 interface Workshop {
   id: string;
@@ -38,7 +39,10 @@ export class WorkshopComponent implements OnInit {
   serverMessage = '';
   serverError = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private seoService: SeoService
+  ) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(120)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(200)]],
@@ -49,7 +53,9 @@ export class WorkshopComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    document.title = 'Workshops · BVSR Conference 2026';
+    this.seoService.updateSEO({
+      title: 'Workshops · BVSR Conference 2026'
+    });
     this.loadCounts();
   }
 
