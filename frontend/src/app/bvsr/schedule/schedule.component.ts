@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { FooterComponent } from "../footer/footer.component";
+import { SeoService } from '../../services/seo.service';
 
 @Component({
   selector: 'app-schedule',
@@ -9,9 +10,13 @@ import { FooterComponent } from "../footer/footer.component";
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.css'
 })
-export class ScheduleComponent {
+export class ScheduleComponent implements OnInit {
+  constructor(private seoService: SeoService) {}
+
   ngOnInit() {
-    document.title = "Schedule · BVSR Conference 2026";
+    this.seoService.updateSEO({
+      title: 'Schedule · BVSR Conference 2026'
+    });
   }
 
 
