@@ -19,8 +19,7 @@ import { FooterComponent } from "../footer/footer.component";
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
-  timelineItemsVisible: boolean[] = [false, false, false, false];
-  pastConferencesVisible: boolean[] = [false, false, false, false];
+  timelineItemsVisible: boolean[] = [false, false, false, false, false, false, false];
   timelineFooterVisible: boolean = false;
   private observers: IntersectionObserver[] = [];
 
@@ -59,12 +58,12 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
             timelineItems.forEach((item, index) => {
               setTimeout(() => {
                 this.timelineItemsVisible[index] = true;
-              }, index * 300);
+              }, index * 200);
             });
 
             setTimeout(() => {
-              this.setupPastConferencesAnimations();
-            }, timelineItemsCount * 300 + 200);
+              this.timelineFooterVisible = true;
+            }, timelineItemsCount * 200 + 300);
 
             sectionObserver.unobserve(entry.target);
           }
@@ -76,39 +75,5 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     sectionObserver.observe(timelineSection);
     this.observers.push(sectionObserver);
-  }
-
-  private setupPastConferencesAnimations() {
-    const pastConferenceItems = document.querySelectorAll('.past-conference-item');
-    if (pastConferenceItems.length === 0) return;
-
-    const containerObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            pastConferenceItems.forEach((item, index) => {
-              setTimeout(() => {
-                this.pastConferencesVisible[index] = true;
-              }, index * 200);
-            });
-
-            setTimeout(() => {
-              this.timelineFooterVisible = true;
-            }, pastConferenceItems.length * 200 + 300);
-
-            containerObserver.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.1
-      }
-    );
-
-    const pastConferencesContainer = document.querySelector('.past-conferences');
-    if (pastConferencesContainer) {
-      containerObserver.observe(pastConferencesContainer);
-      this.observers.push(containerObserver);
-    }
   }
 }
