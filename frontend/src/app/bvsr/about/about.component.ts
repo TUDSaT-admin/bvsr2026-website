@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
+import { SeoService } from '../../services/seo.service';
 
 @Component({
   selector: 'app-about',

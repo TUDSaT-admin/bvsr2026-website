@@ -5,6 +5,7 @@ import { MaterialModule } from '../../material/material.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from "../footer/footer.component";
+import { SeoService } from '../../services/seo.service';
 
 @Component({
   selector: 'app-contact',
@@ -21,7 +22,10 @@ export class ContactComponent implements OnInit {
 
   private scriptURL = 'https://script.google.com/macros/s/AKfycbzpHFeCwTOemg62tM5CWmBGrPw3T7TUqqWOVMHKlLiJshYX6wH5tenjWzM2J76PaBWzAw/exec';
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private seoService: SeoService
+  ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -30,7 +34,9 @@ export class ContactComponent implements OnInit {
   }
 
   ngOnInit() {
-    document.title = "Contact · BVSR Conference 2026";
+    this.seoService.updateSEO({
+      title: 'Contact · BVSR Conference 2026'
+    });
   }
 
   onSubmit() {
