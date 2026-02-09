@@ -1,0 +1,189 @@
+<app-navbar></app-navbar>
+
+<section class="register-section">
+  <div class="container">
+    <h1 class="page-title">Get Your Conference Pass</h1>
+    
+    <div class="progress-bar" *ngIf="!registrationComplete">
+      <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
+        <div class="step-number">1</div>
+        <div class="step-label">Personal Information</div>
+      </div>
+      <div class="step-line" [class.completed]="currentStep > 1"></div>
+      <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
+        <div class="step-number">2</div>
+        <div class="step-label">CV Upload (Optional)</div>
+      </div>
+    </div>
+
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form" *ngIf="!registrationComplete">
+      
+      <!-- Step 1: Personal Information -->
+      <div *ngIf="currentStep === 1" class="form-step">
+        <h2>Personal Information</h2>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>First Name *</mat-label>
+            <input matInput formControlName="firstName" required>
+            <mat-error *ngIf="registrationForm.get('firstName')?.hasError('required')">
+              First name is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('firstName')?.hasError('minlength')">
+              First name must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Last Name *</mat-label>
+            <input matInput formControlName="lastName" required>
+            <mat-error *ngIf="registrationForm.get('lastName')?.hasError('required')">
+              Last name is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('lastName')?.hasError('minlength')">
+              Last name must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Email *</mat-label>
+          <input matInput type="email" formControlName="email" required>
+          <mat-error *ngIf="registrationForm.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('email')?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Association *</mat-label>
+          <mat-select formControlName="association" required>
+            <mat-option *ngFor="let assoc of associations" [value]="assoc">
+              {{ assoc }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="registrationForm.get('association')?.hasError('required')">
+            Please select an association
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field 
+          *ngIf="registrationForm.get('association')?.value === 'Others'" 
+          appearance="outline" 
+          class="form-field full-width">
+          <mat-label>Please specify your association *</mat-label>
+          <input matInput formControlName="otherAssociation" required>
+          <mat-error *ngIf="registrationForm.get('otherAssociation')?.hasError('required')">
+            Please specify your association
+          </mat-error>
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button type="button" (click)="nextStep()" [disabled]="registrationForm.get('firstName')?.invalid || registrationForm.get('lastName')?.invalid || registrationForm.get('email')?.invalid || registrationForm.get('association')?.invalid || (registrationForm.get('association')?.value === 'Others' && registrationForm.get('otherAssociation')?.invalid)">
+            Next
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: CV Upload -->
+      <div *ngIf="currentStep === 2" class="form-step">
+        <h2>CV Upload (Optional)</h2>
+        <p class="info-text">
+          Upload your CV to join our job pool. You can also do this later using the "Upload CV" option in the navbar.
+        </p>
+
+        <div class="cv-upload-section">
+          <mat-checkbox formControlName="uploadCV">
+            I want to upload my CV for the job pool
+          </mat-checkbox>
+
+          <div *ngIf="registrationForm.get('uploadCV')?.value" class="file-upload">
+            <input 
+              type="file" 
+              #fileInput
+              id="cvFile" 
+              accept=".pdf,.doc,.docx" 
+              (change)="onFileSelected($event)"
+              style="display: none;">
+            <button mat-raised-button type="button" class="upload-button" (click)="fileInput.click()">
+              <mat-icon>upload</mat-icon>
+              Choose File
+            </button>
+            <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+            <p class="file-hint">Maximum file size: 5MB (PDF, DOC, DOCX)</p>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button mat-button type="button" (click)="previousStep()">Previous</button>
+          <button mat-raised-button type="submit" [disabled]="submitting">
+            <span *ngIf="!submitting">Complete Registration</span>
+            <span *ngIf="submitting">Processing...</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <div *ngIf="successMsg && !registrationComplete" class="message success">
+        {{ successMsg }}
+      </div>
+      <div *ngIf="errorMsg" class="message error">
+        {{ errorMsg }}
+      </div>
+    </form>
+
+    <!-- Success Page (Outside Form) -->
+    <div *ngIf="registrationComplete && registrationData" class="success-page">
+      <div class="success-header">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+        <h2>Registration Successful!</h2>
+        <p class="success-message">Your registration has been confirmed. A confirmation email has been sent to your inbox.</p>
+      </div>
+
+      <div class="registration-details-card">
+        <h3>Your Registration Details</h3>
+        
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Name:</span>
+            <span class="detail-value">{{ registrationData.firstName }} {{ registrationData.lastName }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">{{ registrationData.email }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Association:</span>
+            <span class="detail-value">{{ registrationData.association }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Registration ID:</span>
+            <span class="detail-value reg-id">{{ registrationData.registrationId }}</span>
+          </div>
+        </div>
+
+        <div class="qr-section">
+          <h4>Your Conference Pass QR Code</h4>
+          <div class="qr-container">
+            <img [src]="qrCodeDataUrl" alt="QR Code" class="qr-code">
+          </div>
+          <p class="qr-hint">Scan this QR code at the conference for entry</p>
+        </div>
+
+        <div class="action-buttons">
+          <button mat-raised-button class="download-button" (click)="downloadPDF()">
+            <mat-icon>download</mat-icon>
+            Download PDF Pass
+          </button>
+          <button mat-button class="home-button" routerLink="/">
+            Return to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
