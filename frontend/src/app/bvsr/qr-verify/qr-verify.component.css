@@ -1,0 +1,151 @@
+.qr-verify-section {
+  min-height: 100vh;
+  padding-top: 72px;
+  padding-bottom: 40px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%);
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.page-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(28px, 4vw, 40px);
+  color: #f1d85b;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 0 12px rgba(241, 216, 91, 0.5);
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.verify-form {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-form-field {
+  --mdc-outlined-text-field-label-text-color: rgba(255, 255, 255, 0.7);
+  --mdc-outlined-text-field-input-text-color: #fff;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.button-group button {
+  min-width: 150px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.scan-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.verification-result {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  border: 2px solid;
+}
+
+.verification-result.valid {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+.verification-result.invalid {
+  background: rgba(244, 67, 54, 0.1);
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.verification-result mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.result-content {
+  flex: 1;
+}
+
+.result-content h3 {
+  margin: 0 0 10px 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+}
+
+.result-content p {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+.reg-id {
+  font-family: 'monospace';
+  font-size: 14px;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+.message {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.message.error {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid #f44336;
+}
+
+@media (max-width: 768px) {
+  .verify-form {
+    padding: 20px;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
+}

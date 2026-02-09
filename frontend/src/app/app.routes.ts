@@ -8,6 +8,9 @@ import { SponsersComponent } from './bvsr/sponsers/sponsers.component';
 import { ImpressumComponent } from './bvsr/impressum/impressum.component';
 import { PrivacyPolicyComponent } from './bvsr/privacy-policy/privacy-policy.component';
 import { WorkshopComponent } from './bvsr/workshop/workshop.component';
+import { RegisterComponent } from './bvsr/register/register.component';
+import { CvUploadComponent } from './bvsr/cv-upload/cv-upload.component';
+import { QrVerifyComponent } from './bvsr/qr-verify/qr-verify.component';
 
 export const routes: Routes = [
   {path: '' ,  component: HomeComponent},
@@ -18,6 +21,9 @@ export const routes: Routes = [
   {path: 'contact', component:ContactComponent},
   {path: 'privacy-policy', component: PrivacyPolicyComponent },
   {path: 'impressum', component: ImpressumComponent },
-  {path: 'workshop', component: WorkshopComponent}
+  {path: 'workshop', component: WorkshopComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: 'upload-cv', component: CvUploadComponent},
+  {path: 'verify', component: QrVerifyComponent}
 
 ];
