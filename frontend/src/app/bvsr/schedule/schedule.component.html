@@ -1,12 +1,109 @@
 <app-navbar></app-navbar>
-
-<section class="coming-soon">
-  <div class="coming-card">
-    <h1>COMING SOON</h1>
-    <p>Our conference schedule is currently being finalized. <br>
-      Stay tuned for the latest updates on sessions, workshops, and events </p>
-    <!-- <img src="assets/icons/rocket.svg" alt="Rocket" class="rocket" /> -->
+ 
+<div class="schedule-container" [class.day1]="activeDay === 1" [class.day2]="activeDay === 2" [class.day3]="activeDay === 3" [class.day4]="activeDay === 4">
+ 
+  <div class="overlay overlay-day1" [style.opacity]="overlay1Opacity"></div>
+  <div class="overlay overlay-day2" [style.opacity]="overlay2Opacity"></div>
+  <div class="overlay overlay-day3" [style.opacity]="overlay3Opacity"></div>
+  <div class="overlay overlay-day4" [style.opacity]="overlay4Opacity"></div>
+ 
+  <div class="day-panel">
+    <div class="day-list">
+      <div class="day-item" [class.active]="activeDay === 1" (click)="setDay(1)">
+        <span class="day-item-date">14 MAY</span>
+        <span class="day-item-day">Thursday</span>
+      </div>
+      <div class="day-item" [class.active]="activeDay === 2" (click)="setDay(2)">
+        <span class="day-item-date">15 MAY</span>
+        <span class="day-item-day">Friday</span>
+      </div>
+      <div class="day-item" [class.active]="activeDay === 3" (click)="setDay(3)">
+        <span class="day-item-date">16 MAY</span>
+        <span class="day-item-day">Saturday</span>
+      </div>
+      <div class="day-item" [class.active]="activeDay === 4" (click)="setDay(4)">
+        <span class="day-item-date">17 MAY</span>
+        <span class="day-item-day">Sunday</span>
+      </div>
+    </div>
   </div>
-</section>
-
-<app-footer></app-footer>
+ 
+  <div class="content">
+    <div class="schedule" [class.active]="activeDay === 1">
+      <h2>Day 1 : Kick-off Day</h2>
+      <div class="session">
+        <div class="time scramble-text">13:00 - 14:00</div>
+        <div class="title scramble-text">Registration</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">14:00 - 16:30</div>
+        <div class="title scramble-text">General Meeting</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">16:00 - 18:00</div>
+        <div class="title scramble-text">Club Introductions</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">From 20:00</div>
+        <div class="title scramble-text">Pub Night</div>
+      </div>
+    </div>
+ 
+    <div class="schedule" [class.active]="activeDay === 2">
+      <h2>Day 2 : Tours & Workshops</h2>
+      <div class="session">
+        <div class="time scramble-text">08:30 – 10:30</div>
+        <div class="title scramble-text">Tour Slot 1</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">11:00 – 13:00</div>
+        <div class="title scramble-text">Tour Slot 2</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">14:00 – 16:00</div>
+        <div class="title scramble-text">Workshop Slot 1</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">16:15 – 18:15</div>
+        <div class="title scramble-text">Workshop Slot 2</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">From 19:00</div>
+        <div class="title scramble-text">Movie Night</div>
+      </div>
+    </div>
+ 
+    <div class="schedule" [class.active]="activeDay === 3">
+      <h2>Day 3 : Public Forum</h2>
+      <div class="session">
+        <div class="time scramble-text">08:00 – 11:00</div>
+        <div class="title scramble-text">Setup & Group Photo</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">11:00 – 16:00</div>
+        <div class="title scramble-text">Public Forum</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">From 18:00</div>
+        <div class="title scramble-text">BBQ Party</div>
+      </div>
+    </div>
+ 
+    <div class="schedule" [class.active]="activeDay === 4">
+      <h2>Day 4 : Wrap-up</h2>
+      <div class="session">
+        <div class="time scramble-text">10:00 – 12:30</div>
+        <div class="title scramble-text">Space-Ups</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">12:30 – 13:30</div>
+        <div class="title scramble-text">Workshop Presentations</div>
+      </div>
+      <div class="session">
+        <div class="time scramble-text">13:30 – 14:30</div>
+        <div class="title scramble-text">Closing Program & Banner Ceremony</div>
+      </div>
+    </div>
+  </div>
+ 
+</div>
