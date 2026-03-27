@@ -34,9 +34,6 @@
                 </div>
                 <div class="supporter-meta">
                   <span class="supporter-name">{{ s.name }}</span>
-                  @if (s.amount) {
-                    <span class="supporter-amount">{{ s.amount }}</span>
-                  }
                   @if (s.tier) {
                     <span class="tier-pill tier-pill-sponsor">{{ s.tier }}</span>
                   }
@@ -64,9 +61,6 @@
                 </div>
                 <div class="supporter-meta">
                   <span class="supporter-name">{{ p.name }}</span>
-                  @if (p.amount) {
-                    <span class="supporter-amount">{{ p.amount }}</span>
-                  }
                 </div>
               </li>
             }

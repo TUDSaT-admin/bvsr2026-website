@@ -36,9 +36,9 @@ export interface SupporterLogo {
 })
 export class SponsersComponent implements OnInit {
   sponsors: SupporterLogo[] = [
-    { name: 'Serco', amount: '5 000 €', tier: 'Sponsor', logoSize: 'tier-sponsor', logoSrc: 'assets/sponsors/serco.png' },
-    { name: 'Würth Elektronik', amount: '1 500 €', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/wurth.png' },
-    { name: 'Merck', amount: '1 500 €', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/merck.JPG' },
+    { name: 'Serco', tier: 'Sponsor', logoSize: 'tier-sponsor', logoSrc: 'assets/sponsors/serco.png' },
+    { name: 'Würth Elektronik', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/wurth.png' },
+    { name: 'Merck', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/merck.JPG' },
   ];
 
   donations: SupporterLogo[] = [
@@ -47,9 +47,8 @@ export class SponsersComponent implements OnInit {
   ];
 
   partners: SupporterLogo[] = [
-    { name: 'DLR', amount: '6 500 €', logoSize: 'partner-large', logoSrc: 'assets/sponsors/dlr.jpg' },
+    { name: 'DLR', logoSize: 'partner-large', logoSrc: 'assets/sponsors/dlr.jpg' },
     { name: 'GSI', logoSize: 'partner', logoSrc: 'assets/sponsors/gsi.png' },
-    { name: 'BDI NewSpace', logoSize: 'partner' },
   ];
 
   constructor(
