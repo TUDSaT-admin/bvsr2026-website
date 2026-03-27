@@ -26,18 +26,25 @@ export class SponsorFormDialogComponent {
       lastName: ['', Validators.required],
       companyName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      sponsorTier: [{ value: '', disabled: true }],
+      sponsorTier: ['', Validators.required],
       message: ['']
     });
   }
 
   onSubmit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.submitting = true;
+    const raw = this.form.getRawValue();
     const formData = new FormData();
-    Object.keys(this.form.value).forEach((key) => {
-      formData.append(key, this.form.value[key]);
+    Object.keys(raw).forEach((key) => {
+      const value = raw[key as keyof typeof raw];
+      if (value !== null && value !== undefined) {
+        formData.append(key, String(value));
+      }
     });
 
     fetch(this.scriptURL, { method: 'POST', body: formData })
