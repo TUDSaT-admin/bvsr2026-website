@@ -3,6 +3,11 @@
   margin-bottom: 12px;
 }
 
+.field-hint {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 12px;
+}
+
 ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
   background: rgba(7, 1, 55, 0.167);
   backdrop-filter: blur(12px);

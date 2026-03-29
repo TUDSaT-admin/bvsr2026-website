@@ -22,15 +22,17 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Sponsor Tier</mat-label>
-      <mat-select formControlName="sponsorTier">
-        <mat-option value="1">Tier 1</mat-option>
-        <mat-option value="2">Tier 2</mat-option>
-        <mat-option value="3">Tier 3</mat-option>
+      <mat-label>Sponsorship tier</mat-label>
+      <mat-select formControlName="sponsorTier" placeholder="Select a tier">
+        <mat-option value="tier1-friends">Tier 1 — Friends (from 1 000 €)</mat-option>
+        <mat-option value="tier2-sponsors">Tier 2 — Sponsors (from 5 000 €)</mat-option>
+        <mat-option value="tier3-primary">Tier 3 — Primary sponsors (from 15 000 €)</mat-option>
+        <mat-option value="donation">Donation (monetary or in-kind)</mat-option>
+        <mat-option value="additional-services">Additional services only (booth, workshop, job wall, …)</mat-option>
+        <mat-option value="custom">Other / custom — we will contact you</mat-option>
       </mat-select>
-      <mat-hint align="start" style="color: rgba(255, 255, 255, 0.7); font-style: italic;">
-        Sponsor tier details coming soon
-      </mat-hint>
+      <mat-hint align="start" class="field-hint">See the Sponsors page for full package details.</mat-hint>
+      <mat-error *ngIf="form.get('sponsorTier')?.hasError('required')">Please choose an option</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">

@@ -1,18 +1,239 @@
 <app-navbar></app-navbar>
 
-<section class="sponsers">
-  <h1 class="head">Sponsors &nbsp; & &nbsp; Partners</h1>
+<section class="sponsors-page">
+  <header class="hero">
+    <h1 class="hero-title">Sponsors &amp; Partners</h1>
+    <p class="hero-lead">
+      The BVSR Conference is made possible through the support of industry, research institutions, and partner organizations.
+      Thank you to everyone helping us grow the student space community in Germany.
+    </p>
+    <button mat-raised-button class="cta-button" (click)="openPopup()">Become a sponsor</button>
+  </header>
 
-  <p class="text">
-    The BVSR Conference is made possible through the support of industry, research institutions,
-    and partner organizations. Want to support the <br>student space community?
-  </p>
+  <div class="page-inner">
+    <section class="panel supporters-panel" aria-labelledby="supporters-heading">
+      <h2 id="supporters-heading" class="section-title">Our supporters 2026</h2>
+      <p class="section-intro">We are grateful for the organizations backing BVSR 2026. Logos will appear here as we finalize artwork.</p>
 
-  <div class="inline">
-    <button mat-raised-button class="button sponserbut" (click)="openPopup()">Become a Sponsor</button>
+      <div class="supporters-stack">
+        <div class="supporter-block">
+          <h3 class="block-heading">Sponsors</h3>
+          <ul class="supporter-list supporter-list--row">
+            @for (s of sponsors; track s.name) {
+              <li class="supporter-card">
+                <div
+                  [class]="'logo-frame logo-frame--' + (s.logoSize || 'tier-friends')"
+                  [class.has-image]="s.logoSrc && !s.showPlaceholder"
+                >
+                  @if (s.logoSrc && !s.showPlaceholder) {
+                    <img [src]="s.logoSrc" [alt]="s.name + ' logo'" (error)="onLogoError(s)" />
+                  }
+                  @if (!s.logoSrc || s.showPlaceholder) {
+                    <span class="logo-placeholder" aria-hidden="true">Logo</span>
+                  }
+                </div>
+                <div class="supporter-meta">
+                  <span class="supporter-name">{{ s.name }}</span>
+                  @if (s.tier) {
+                    <span class="tier-pill tier-pill-sponsor">{{ s.tier }}</span>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="supporter-block">
+          <h3 class="block-heading">Partners</h3>
+          <ul class="supporter-list supporter-list--row">
+            @for (p of partners; track p.name) {
+              <li class="supporter-card">
+                <div
+                  [class]="'logo-frame logo-frame--' + (p.logoSize || 'partner')"
+                  [class.has-image]="p.logoSrc && !p.showPlaceholder"
+                >
+                  @if (p.logoSrc && !p.showPlaceholder) {
+                    <img [src]="p.logoSrc" [alt]="p.name + ' logo'" (error)="onLogoError(p)" />
+                  }
+                  @if (!p.logoSrc || p.showPlaceholder) {
+                    <span class="logo-placeholder" aria-hidden="true">Logo</span>
+                  }
+                </div>
+                <div class="supporter-meta">
+                  <span class="supporter-name">{{ p.name }}</span>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="supporter-block">
+          <h3 class="block-heading">Donations</h3>
+          <ul class="supporter-list supporter-list--row">
+            @for (d of donations; track d.name) {
+              <li class="supporter-card supporter-card--compact">
+                <div
+                  [class]="'logo-frame logo-frame--' + (d.logoSize || 'donation')"
+                  [class.has-image]="d.logoSrc && !d.showPlaceholder"
+                >
+                  @if (d.logoSrc && !d.showPlaceholder) {
+                    <img [src]="d.logoSrc" [alt]="d.name + ' logo'" (error)="onLogoError(d)" />
+                  }
+                  @if (!d.logoSrc || d.showPlaceholder) {
+                    <span class="logo-placeholder" aria-hidden="true">Logo</span>
+                  }
+                </div>
+                <div class="supporter-meta">
+                  <span class="supporter-name">{{ d.name }}</span>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel intro-panel" aria-labelledby="program-heading">
+      <h2 id="program-heading" class="section-title">Partnership &amp; support</h2>
+      <div class="prose">
+        <p>
+          The BVSR Conference is an annual event that brings together space enthusiasts from all over Germany. Both size
+          and impact of this conference are growing steadily from year to year, which also increases the financial resources
+          required. Therefore, we highly appreciate your interest in helping us organize this conference. Your influence can
+          take various forms, which are explained in more detail below:
+        </p>
+        <ol class="numbered-list">
+          <li>Monetary or in-kind donations</li>
+          <li>Sponsorship (various tiers available)</li>
+          <li>Additional services</li>
+        </ol>
+        <p class="note">
+          Please also understand that this catalog is not yet final and we reserve the right to make changes. Should this be
+          the case, we will of course consult with you to find a satisfactory solution.
+        </p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="donations-heading">
+      <h2 id="donations-heading" class="section-title">Donations</h2>
+      <div class="prose">
+        <p>
+          If you would like to make a monetary or in-kind donation outside of the packages listed below, simply get in touch with
+          us. We are grateful for your help! As a token of our gratitude, we usually list all our supporters on our conference
+          website and publish a social media post containing all supporters. If requested, we will happily issue a donation
+          receipt. You will also be explicitly invited to participate in the forum of academic spaceflight.
+        </p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="sponsoring-heading">
+      <h2 id="sponsoring-heading" class="section-title">Sponsoring</h2>
+      <div class="prose prose-spaced">
+        <p>
+          The conference sponsorship packages are divided into three categories. Each package opens up new opportunities
+          for you and your company to participate in the BVSR conference and its potential benefits. We are open to your
+          personal suggestions and requests in order to put together a package that suits you as well as possible.
+        </p>
+      </div>
+
+      <div class="tier-cards">
+        <article class="tier-card tier-friends">
+          <div class="tier-card-header">
+            <span class="tier-label">Tier 1</span>
+            <h3 class="tier-name">Friends</h3>
+            <p class="tier-price">Starting at 1 000 €</p>
+          </div>
+          <ul class="tier-benefits">
+            <li>Large logo on the conference website</li>
+            <li>Acknowledgment in the form of a dedicated post on social media</li>
+            <li>VIP seat at the forum of academic spaceflight</li>
+          </ul>
+        </article>
+
+        <article class="tier-card tier-sponsors">
+          <div class="tier-card-header">
+            <span class="tier-label">Tier 2</span>
+            <h3 class="tier-name">Sponsors</h3>
+            <p class="tier-price">Starting at 5 000 €</p>
+            <span class="tier-badge">Popular</span>
+          </div>
+          <ul class="tier-benefits">
+            <li>Large logo on the conference website</li>
+            <li>Acknowledgment in the form of a dedicated post on social media</li>
+            <li>Exclusive access to the BVSR CV pool</li>
+            <li>Job posting on our Job Wall (conference website) included</li>
+            <li>Opportunity to organize a workshop included</li>
+            <li>Approx. 3 m² booth at the forum of academic spaceflight included, including private parking at the venue</li>
+            <li>VIP seating at the forum of academic spaceflight</li>
+            <li>Access to the networking lounge at the forum</li>
+            <li>Acknowledgment during the opening ceremony</li>
+            <li>Significant support for the next “Giant Leap”</li>
+          </ul>
+        </article>
+
+        <article class="tier-card tier-primary">
+          <div class="tier-card-header">
+            <span class="tier-label">Tier 3</span>
+            <h3 class="tier-name">Primary sponsors</h3>
+            <p class="tier-price">Starting at 15 000 €</p>
+          </div>
+          <ul class="tier-benefits">
+            <li>Main sponsor logo on the conference website</li>
+            <li>Logo placement at the conference (print media, presentation, lanyards/badges, flyers)</li>
+            <li>Acknowledgment in the form of a dedicated post on social media</li>
+            <li>Exclusive access to the BVSR CV pool</li>
+            <li>Pinned job posting on our Job Wall (conference website) for maximum reach</li>
+            <li>Opportunity to organize a workshop included</li>
+            <li>Approx. 6 m² booth at the forum of academic spaceflight with preferred placement, including private parking at the venue</li>
+            <li>VIP seating at the forum of academic spaceflight</li>
+            <li>Access to the networking lounge at the forum</li>
+            <li>Fifteen-minute speaker slot during the opening ceremony</li>
+            <li>Maximum support for the next “Giant Leap”</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="extras-heading">
+      <h2 id="extras-heading" class="section-title">Additional services</h2>
+      <div class="prose prose-spaced">
+        <p>
+          In addition to donations and standard sponsorship, we offer the following services that allow you to tailor your
+          presence at the conference to your specific needs.
+        </p>
+      </div>
+
+      <div class="extra-grid">
+        <article class="extra-card">
+          <h3 class="extra-title">Booths at the forum of academic spaceflight</h3>
+          <ul class="tier-benefits">
+            <li>Approx. 3 m² for 1 500 €</li>
+            <li>Approx. 6 m² for 2 500 €; Sponsors only pay the difference of €1 000 to upgrade their booth to 6 m².</li>
+          </ul>
+        </article>
+        <article class="extra-card">
+          <h3 class="extra-title">Workshop slot — 2 000 €</h3>
+          <p class="extra-text">
+            Organization of a two-hour workshop for approximately 5–20 members of the BVSR on a topic of your choice. We
+            are happy to work with you to develop ideas that will appeal to as many interested individuals as possible.
+          </p>
+        </article>
+        <article class="extra-card">
+          <h3 class="extra-title">Job / internship wall — 2 000 €</h3>
+          <p class="extra-text">
+            Get the opportunity to upload job vacancies (both for jobs and internships) directly to the BVSR conference website.
+            This website is mainly used for the registration and the program, which means that your job advertisement will be
+            brought directly to the attention of interested individuals from all over Germany.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="closing-cta">
+      <p class="closing-text">Questions or a custom package? We would love to hear from you.</p>
+      <button mat-raised-button class="cta-button" (click)="openPopup()">Get in touch</button>
+    </footer>
   </div>
-
 </section>
-
 
 <app-footer></app-footer>
