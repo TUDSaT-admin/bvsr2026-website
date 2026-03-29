@@ -34,7 +34,14 @@
               "src/styles.css"
             ],
             "scripts": [],
-            "baseHref": ""
+            "baseHref": "",
+            "allowedCommonJsDependencies": [
+              "qrcode",
+              "canvg",
+              "core-js",
+              "raf",
+              "rgbcolor"
+            ]
           },
           "configurations": {
             "production": {

@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 export interface RegistrationData {
   firstName: string;
@@ -23,13 +21,6 @@ export class RegistrationService {
   // Set to same as registrationScriptURL if using one script for all
   private cvUploadScriptURL = 'https://script.google.com/macros/s/AKfycbws1151EnnuvS-hqOvKLhJJJ-JC_6TJkETXYDbvByxueQQ4AyCJUki-20VsvwkS2ttVVg/exec';
 
-  // Replace with your Google Apps Script URL for email
-  // Set to same as registrationScriptURL if using one script for all
-  // Leave as empty string to disable email sending
-  private emailScriptURL = 'https://script.google.com/macros/s/AKfycbws1151EnnuvS-hqOvKLhJJJ-JC_6TJkETXYDbvByxueQQ4AyCJUki-20VsvwkS2ttVVg/exec';
-
-  constructor(private http: HttpClient) {}
-
   private isConfigured(url: string): boolean {
     return !!(url && !url.includes('YOUR_') && url.includes('script.google.com'));
   }
@@ -42,16 +33,13 @@ export class RegistrationService {
     }
 
     const formData = new FormData();
+    formData.append('action', 'register');
     Object.keys(data).forEach(key => {
       formData.append(key, (data as any)[key]);
     });
 
     try {
-      const response = await fetch(this.registrationScriptURL, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors' // Google Apps Script requires no-cors for form submissions
-      });
+      await this.fetchPostNoCors(this.registrationScriptURL, formData, 35_000);
 
       // Since no-cors doesn't return response body, we assume success
       // In production, you might want to use a different approach
@@ -83,18 +71,22 @@ export class RegistrationService {
     formData.append('timestamp', new Date().toISOString());
 
     try {
-      const response = await fetch(this.cvUploadScriptURL, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors'
-      });
-
+      await this.fetchPostNoCors(this.cvUploadScriptURL, formData, 120_000);
       return { success: true };
     } catch (error) {
       console.error('CV upload error:', error);
       // Don't throw - allow registration to continue
       return { success: false, warning: 'CV upload failed but registration continues' };
     }
+  }
+
+  /** POST with no-cors; aborts after timeoutMs so the UI never waits indefinitely. */
+  private fetchPostNoCors(url: string, body: FormData, timeoutMs: number): Promise<void> {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+    return fetch(url, { method: 'POST', body, mode: 'no-cors', signal: ctrl.signal })
+      .finally(() => clearTimeout(timer))
+      .then(() => undefined);
   }
 
   private fileToBase64(file: File): Promise<string> {
@@ -111,59 +103,26 @@ export class RegistrationService {
     });
   }
 
-  async sendConfirmationEmail(data: RegistrationData, pdfBlob?: Blob): Promise<any> {
-    if (!this.isConfigured(this.emailScriptURL)) {
-      console.warn('Email script URL not configured. Email sending is disabled.');
-      return { success: false, message: 'Email service not configured' };
-    }
-
-    const formData = new FormData();
-    formData.append('action', 'sendEmail');
-    formData.append('to', data.email);
-    formData.append('firstName', data.firstName);
-    formData.append('lastName', data.lastName);
-    formData.append('registrationId', data.registrationId);
-    formData.append('association', data.association);
-
-    // Add PDF as attachment if provided
-    if (pdfBlob) {
-      formData.append('pdfFile', pdfBlob, `BVSR2026-Pass-${data.registrationId}.pdf`);
-      formData.append('hasPdf', 'true');
-    }
-
-    try {
-      const response = await fetch(this.emailScriptURL, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors'
-      });
-
-      return { success: true };
-    } catch (error) {
-      console.error('Email sending error:', error);
-      // Don't throw error for email - registration is still successful
-      return { success: false, message: 'Email could not be sent' };
-    }
-  }
-
   async uploadCVByEmail(file: File, email: string): Promise<any> {
     if (!this.isConfigured(this.cvUploadScriptURL)) {
       console.warn('CV upload script URL not configured.');
       throw new Error('CV upload service is not configured. Please contact the administrator.');
     }
 
+    // Same payload as uploadCV during registration: base64 + metadata is what GAS receives reliably with fetch/no-cors
+    const base64File = await this.fileToBase64(file);
     const formData = new FormData();
+    formData.append('action', 'uploadCV');
     formData.append('cvFile', file);
+    formData.append('cvFileBase64', base64File);
+    formData.append('fileName', file.name);
+    formData.append('fileType', file.type || 'application/pdf');
     formData.append('email', email);
+    formData.append('registrationId', '');
     formData.append('timestamp', new Date().toISOString());
 
     try {
-      const response = await fetch(this.cvUploadScriptURL, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors'
-      });
-
+      await this.fetchPostNoCors(this.cvUploadScriptURL, formData, 120_000);
       return { success: true };
     } catch (error) {
       console.error('CV upload error:', error);
