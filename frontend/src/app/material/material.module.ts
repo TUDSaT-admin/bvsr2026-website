@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 
@@ -21,14 +22,14 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatButtonModule,
     MatToolbarModule,
     MatCardModule,MatDialogModule,MatFormFieldModule,MatInputModule,MatSelectModule,
-    MatGridListModule
+    MatGridListModule,MatCheckboxModule
   ],
   exports: [
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
     MatCardModule,MatDialogModule,MatFormFieldModule,MatInputModule,MatSelectModule,
-    MatGridListModule
+    MatGridListModule,MatCheckboxModule
   ]
 })
 export class MaterialModule { }

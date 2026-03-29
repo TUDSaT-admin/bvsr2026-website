@@ -1,0 +1,53 @@
+<app-navbar></app-navbar>
+
+<section class="cv-upload-section">
+  <div class="container">
+    <h1 class="page-title">Upload Your CV</h1>
+    <p class="subtitle">Join our job pool by uploading your CV. Please use the same email address you used during registration.</p>
+
+    <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" class="upload-form">
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Email *</mat-label>
+        <input matInput type="email" formControlName="email" required>
+        <mat-error *ngIf="uploadForm.get('email')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="uploadForm.get('email')?.hasError('email')">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+
+      <div class="file-upload">
+        <input 
+          type="file" 
+          #fileInput
+          id="cvFile" 
+          accept=".pdf,.doc,.docx" 
+          (change)="onFileSelected($event)"
+          style="display: none;">
+        <button mat-raised-button type="button" class="upload-button" (click)="fileInput.click()">
+          <mat-icon>upload</mat-icon>
+          Choose CV File
+        </button>
+        <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+        <p class="file-hint">Maximum file size: 5MB (PDF, DOC, DOCX)</p>
+      </div>
+
+      <div class="button-group">
+        <button mat-raised-button type="submit" [disabled]="submitting || !selectedFile">
+          <span *ngIf="!submitting">Upload CV</span>
+          <span *ngIf="submitting">Uploading...</span>
+        </button>
+      </div>
+
+      <div *ngIf="successMsg" class="message success">
+        {{ successMsg }}
+      </div>
+      <div *ngIf="errorMsg" class="message error">
+        {{ errorMsg }}
+      </div>
+    </form>
+  </div>
+</section>
+
+<app-footer></app-footer>
