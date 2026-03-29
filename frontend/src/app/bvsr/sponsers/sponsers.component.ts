@@ -35,8 +35,13 @@ export interface SupporterLogo {
   styleUrls: ['./sponsers.component.css']
 })
 export class SponsersComponent implements OnInit {
-  sponsors: SupporterLogo[] = [
+  /** Tier 2 — Sponsors package */
+  sponsorsSponsorTier: SupporterLogo[] = [
     { name: 'Serco', tier: 'Sponsor', logoSize: 'tier-sponsor', logoSrc: 'assets/sponsors/serco.png' },
+  ];
+
+  /** Tier 1 — Friends package */
+  sponsorsFriendsTier: SupporterLogo[] = [
     { name: 'Würth Elektronik', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/wurth.png' },
     { name: 'Merck', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/merck.JPG' },
   ];
@@ -48,7 +53,7 @@ export class SponsersComponent implements OnInit {
 
   partners: SupporterLogo[] = [
     { name: 'DLR', logoSize: 'partner-large', logoSrc: 'assets/sponsors/dlr.jpg' },
-    { name: 'GSI', logoSize: 'partner', logoSrc: 'assets/sponsors/gsi.png' },
+    { name: 'GSI', logoSize: 'partner-large', logoSrc: 'assets/sponsors/gsi.png' },
   ];
 
   constructor(

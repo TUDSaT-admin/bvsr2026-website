@@ -13,34 +13,65 @@
   <div class="page-inner">
     <section class="panel supporters-panel" aria-labelledby="supporters-heading">
       <h2 id="supporters-heading" class="section-title">Our supporters 2026</h2>
-      <p class="section-intro">We are grateful for the organizations backing BVSR 2026. Logos will appear here as we finalize artwork.</p>
+      <p class="section-intro">We are grateful for the organizations backing BVSR 2026.</p>
 
       <div class="supporters-stack">
         <div class="supporter-block">
           <h3 class="block-heading">Sponsors</h3>
-          <ul class="supporter-list supporter-list--row">
-            @for (s of sponsors; track s.name) {
-              <li class="supporter-card">
-                <div
-                  [class]="'logo-frame logo-frame--' + (s.logoSize || 'tier-friends')"
-                  [class.has-image]="s.logoSrc && !s.showPlaceholder"
-                >
-                  @if (s.logoSrc && !s.showPlaceholder) {
-                    <img [src]="s.logoSrc" [alt]="s.name + ' logo'" (error)="onLogoError(s)" />
-                  }
-                  @if (!s.logoSrc || s.showPlaceholder) {
-                    <span class="logo-placeholder" aria-hidden="true">Logo</span>
-                  }
-                </div>
-                <div class="supporter-meta">
-                  <span class="supporter-name">{{ s.name }}</span>
-                  @if (s.tier) {
-                    <span class="tier-pill tier-pill-sponsor">{{ s.tier }}</span>
-                  }
-                </div>
-              </li>
-            }
-          </ul>
+          <div class="sponsor-tier-groups">
+            <div class="sponsor-tier-group">
+              <p class="tier-sublabel" id="sponsors-tier-sponsor">Sponsor tier</p>
+              <ul class="supporter-list supporter-list--row" aria-labelledby="sponsors-tier-sponsor">
+                @for (s of sponsorsSponsorTier; track s.name) {
+                  <li class="supporter-card">
+                    <div
+                      [class]="'logo-frame logo-frame--' + (s.logoSize || 'tier-friends')"
+                      [class.has-image]="s.logoSrc && !s.showPlaceholder"
+                    >
+                      @if (s.logoSrc && !s.showPlaceholder) {
+                        <img [src]="s.logoSrc" [alt]="s.name + ' logo'" (error)="onLogoError(s)" />
+                      }
+                      @if (!s.logoSrc || s.showPlaceholder) {
+                        <span class="logo-placeholder" aria-hidden="true">Logo</span>
+                      }
+                    </div>
+                    <div class="supporter-meta">
+                      <span class="supporter-name">{{ s.name }}</span>
+                      @if (s.tier) {
+                        <span class="tier-pill tier-pill-sponsor">{{ s.tier }}</span>
+                      }
+                    </div>
+                  </li>
+                }
+              </ul>
+            </div>
+            <div class="sponsor-tier-group">
+              <p class="tier-sublabel" id="sponsors-tier-friends">Friends tier</p>
+              <ul class="supporter-list supporter-list--row" aria-labelledby="sponsors-tier-friends">
+                @for (s of sponsorsFriendsTier; track s.name) {
+                  <li class="supporter-card">
+                    <div
+                      [class]="'logo-frame logo-frame--' + (s.logoSize || 'tier-friends')"
+                      [class.has-image]="s.logoSrc && !s.showPlaceholder"
+                    >
+                      @if (s.logoSrc && !s.showPlaceholder) {
+                        <img [src]="s.logoSrc" [alt]="s.name + ' logo'" (error)="onLogoError(s)" />
+                      }
+                      @if (!s.logoSrc || s.showPlaceholder) {
+                        <span class="logo-placeholder" aria-hidden="true">Logo</span>
+                      }
+                    </div>
+                    <div class="supporter-meta">
+                      <span class="supporter-name">{{ s.name }}</span>
+                      @if (s.tier) {
+                        <span class="tier-pill tier-pill-sponsor">{{ s.tier }}</span>
+                      }
+                    </div>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div class="supporter-block">
