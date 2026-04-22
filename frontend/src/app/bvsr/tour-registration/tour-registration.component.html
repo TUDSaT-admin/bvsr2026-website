@@ -1,0 +1,104 @@
+<app-navbar></app-navbar>
+
+<section class="tour-page">
+  <div class="container">
+    <h1 class="page-title">Tour Registration</h1>
+    <p class="subtitle">
+      To help us plan tours, please provide your nationality, country of origin, and the days you will attend.
+      Use the same name and email as your registration so we can match your details.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="tour-form">
+      <div class="field-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>First name *</mat-label>
+          <input matInput formControlName="firstName" autocomplete="given-name" />
+          <mat-error *ngIf="form.get('firstName')?.hasError('required') && form.get('firstName')?.touched">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Last name *</mat-label>
+          <input matInput formControlName="lastName" autocomplete="family-name" />
+          <mat-error *ngIf="form.get('lastName')?.hasError('required') && form.get('lastName')?.touched">Required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Email *</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" />
+        <mat-error *ngIf="form.get('email')?.hasError('required') && form.get('email')?.touched">Required</mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email') && form.get('email')?.touched">Enter a valid email</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Country of origin *</mat-label>
+        <input matInput formControlName="countryOfOrigin" autocomplete="country-name" />
+        <mat-error *ngIf="form.get('countryOfOrigin')?.hasError('required') && form.get('countryOfOrigin')?.touched">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Nationality *</mat-label>
+        <input matInput formControlName="nationality" />
+        <mat-error *ngIf="form.get('nationality')?.hasError('required') && form.get('nationality')?.touched">Required</mat-error>
+      </mat-form-field>
+
+      <fieldset class="days-fieldset">
+        <legend class="days-legend">Conference days attendance</legend>
+        <p class="days-hint">Select Yes if you will be there that day.</p>
+        <div class="days-grid">
+          <mat-form-field appearance="outline" class="form-field day-field">
+            <mat-label>May 14, 2026</mat-label>
+            <mat-select formControlName="may14">
+              <mat-option *ngFor="let o of yesNoOptions" [value]="o">{{ o }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field day-field">
+            <mat-label>May 15, 2026</mat-label>
+            <mat-select formControlName="may15">
+              <mat-option *ngFor="let o of yesNoOptions" [value]="o">{{ o }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field day-field">
+            <mat-label>May 16, 2026</mat-label>
+            <mat-select formControlName="may16">
+              <mat-option *ngFor="let o of yesNoOptions" [value]="o">{{ o }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field day-field">
+            <mat-label>May 17, 2026</mat-label>
+            <mat-select formControlName="may17">
+              <mat-option *ngFor="let o of yesNoOptions" [value]="o">{{ o }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </fieldset>
+
+      <div *ngIf="nameMismatchAwaitingConfirm" class="mismatch-panel" role="alert">
+        <p class="mismatch-text">
+          The name you entered does not match the name we have for this email. You can verify your first and last name
+          and submit again, or confirm that you still want to save your tour details using the name you entered.
+        </p>
+        <div class="mismatch-actions">
+          <button mat-stroked-button type="button" class="mismatch-btn" (click)="onVerifyNamesAgain()">
+            Verify Name and try again
+          </button>
+          <button mat-raised-button type="button" class="mismatch-btn primary" (click)="onSaveWithEnteredName()" [disabled]="submitting || form.invalid">
+            <span *ngIf="!submitting">Save with the name I entered</span>
+            <span *ngIf="submitting">Saving…</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button mat-raised-button type="submit" [disabled]="submitting || form.invalid || nameMismatchAwaitingConfirm">
+          <span *ngIf="!submitting">Submit</span>
+          <span *ngIf="submitting">Sending…</span>
+        </button>
+      </div>
+
+      <div *ngIf="successMsg" class="message success">{{ successMsg }}</div>
+      <div *ngIf="errorMsg" class="message error">{{ errorMsg }}</div>
+    </form>
+  </div>
+</section>
+
+<app-footer></app-footer>
