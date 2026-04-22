@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { MaterialModule } from '../../material/material.module';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { SeoService } from '../../services/seo.service';
@@ -15,6 +15,8 @@ import { RegistrationService, TourRegistrationPayload } from '../../services/reg
   styleUrls: ['./tour-registration.component.css']
 })
 export class TourRegistrationComponent implements OnInit {
+  @ViewChild(FormGroupDirective) private formGroupDir?: FormGroupDirective;
+
   form: FormGroup;
   submitting = false;
   successMsg = '';
@@ -64,19 +66,26 @@ export class TourRegistrationComponent implements OnInit {
   }
 
   private afterSaved(): void {
-    this.successMsg = 'Your tour and attendance details have been saved.';
+    this.successMsg = 'Your details have been saved.';
     this.nameMismatchAwaitingConfirm = false;
-    this.form.reset({
+    const empty = {
       firstName: '',
       lastName: '',
       email: '',
       countryOfOrigin: '',
       nationality: '',
-      may14: 'No',
-      may15: 'No',
-      may16: 'No',
-      may17: 'No'
-    });
+      may14: 'No' as const,
+      may15: 'No' as const,
+      may16: 'No' as const,
+      may17: 'No' as const
+    };
+    // resetForm() clears FormGroupDirective.submitted (set true by ngSubmit); plain form.reset() does not.
+    this.formGroupDir?.resetForm(empty);
+    if (!this.formGroupDir) {
+      this.form.reset(empty);
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
+    }
     setTimeout(() => (this.successMsg = ''), 8000);
   }
 
@@ -95,6 +104,7 @@ export class TourRegistrationComponent implements OnInit {
       const result = await this.registrationService.submitTourRegistration(this.payloadFromForm(false));
       if (result.status === 'name_mismatch') {
         this.nameMismatchAwaitingConfirm = true;
+        this.formGroupDir?.resetForm(this.form.getRawValue());
         return;
       }
       this.afterSaved();
@@ -113,6 +123,7 @@ export class TourRegistrationComponent implements OnInit {
     this.nameMismatchAwaitingConfirm = false;
     this.errorMsg = '';
     this.successMsg = '';
+    this.formGroupDir?.resetForm(this.form.getRawValue());
   }
 
   async onSaveWithEnteredName(): Promise<void> {
