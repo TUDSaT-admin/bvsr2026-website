@@ -79,7 +79,7 @@ export class TourRegistrationComponent implements OnInit {
       may16: 'No' as const,
       may17: 'No' as const
     };
-    // resetForm() clears FormGroupDirective.submitted (set true by ngSubmit); plain form.reset() does not.
+
     this.formGroupDir?.resetForm(empty);
     if (!this.formGroupDir) {
       this.form.reset(empty);
