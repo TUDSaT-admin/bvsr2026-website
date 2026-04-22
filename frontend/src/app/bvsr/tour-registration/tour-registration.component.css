@@ -1,0 +1,176 @@
+.tour-page {
+  min-height: 100vh;
+  padding-top: 72px;
+  padding-bottom: 40px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%);
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.page-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(26px, 3.5vw, 38px);
+  color: #f1d85b;
+  text-align: center;
+  margin-bottom: 16px;
+  text-shadow: 0 0 12px rgba(241, 216, 91, 0.5);
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.82);
+  text-align: center;
+  margin-bottom: 32px;
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+.tour-form {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 36px 32px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-form-field {
+  --mdc-outlined-text-field-label-text-color: rgba(255, 255, 255, 0.7);
+  --mdc-outlined-text-field-input-text-color: #fff;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.days-fieldset {
+  border: 1px solid rgba(241, 216, 91, 0.2);
+  border-radius: 10px;
+  padding: 16px 14px 8px;
+  margin: 16px 0 8px;
+}
+
+.days-legend {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(241, 216, 91, 0.9);
+  padding: 0 8px;
+}
+
+.days-hint {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 12px;
+}
+
+@media (max-width: 480px) {
+  .days-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.day-field {
+  margin-bottom: 4px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.button-group button {
+  min-width: 160px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.message {
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.message.success {
+  background: rgba(76, 175, 80, 0.2);
+  color: #81c784;
+  border: 1px solid rgba(76, 175, 80, 0.45);
+}
+
+.mismatch-panel {
+  margin: 20px 0 8px;
+  padding: 18px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 193, 7, 0.45);
+  background: rgba(255, 193, 7, 0.08);
+}
+
+.mismatch-text {
+  margin: 0 0 16px;
+  color: rgba(255, 248, 220, 0.95);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.mismatch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.mismatch-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+}
+
+.mismatch-btn.primary {
+  color: #1a1a1a !important;
+  background: linear-gradient(135deg, #f1d85b 0%, #c9a227 100%) !important;
+}
+
+.message.error {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid #f44336;
+}
+
+@media (max-width: 768px) {
+  .tour-form {
+    padding: 24px 18px;
+  }
+}
