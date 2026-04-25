@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RouterTestingModule } from '@angular/router/testing';
 import { SponsersComponent } from './sponsers.component';
+import { httpClientTestProviders } from '../../testing/http-test-providers';
 
 describe('SponsersComponent', () => {
   let component: SponsersComponent;
@@ -8,7 +10,8 @@ describe('SponsersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SponsersComponent]
+      imports: [SponsersComponent, RouterTestingModule],
+      providers: [...httpClientTestProviders]
     })
     .compileComponents();
 

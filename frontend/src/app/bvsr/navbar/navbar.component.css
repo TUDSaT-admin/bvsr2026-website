@@ -52,6 +52,43 @@
   .brand-logo { width: clamp(64px, 4vw, 84px); }
 }
 
+.lang-switch,
+.mobile-lang {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mobile-lang {
+  padding: 8px 20px 12px;
+  justify-content: center;
+}
+
+.lang-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 245, 245, 0.35);
+  background: transparent;
+  color: whitesmoke;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.lang-btn:hover {
+  border-color: rgba(245, 245, 245, 0.65);
+  background: rgba(245, 245, 245, 0.08);
+}
+
+.lang-btn.active {
+  border-color: rgba(245, 245, 245, 0.85);
+  background: rgba(245, 245, 245, 0.18);
+}
+
 .menu-icon {
   display: none;
   background: none;
@@ -89,6 +126,10 @@
 
 @media (max-width: 900px) {
   .desktop-links {
+    display: none;
+  }
+
+  .lang-switch {
     display: none;
   }
 

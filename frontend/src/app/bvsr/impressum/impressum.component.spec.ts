@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RouterTestingModule } from '@angular/router/testing';
 import { ImpressumComponent } from './impressum.component';
+import { httpClientTestProviders } from '../../testing/http-test-providers';
 
 describe('ImpressumComponent', () => {
   let component: ImpressumComponent;
@@ -8,7 +10,8 @@ describe('ImpressumComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ImpressumComponent]
+      imports: [ImpressumComponent, RouterTestingModule],
+      providers: [...httpClientTestProviders]
     })
     .compileComponents();
 

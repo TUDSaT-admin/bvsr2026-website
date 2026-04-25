@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material/material.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-sponsor-form-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './sponsor-form-dialog.component.html',
   styleUrls: ['./sponsor-form-dialog.component.css']
 })
@@ -20,7 +22,11 @@ export class SponsorFormDialogComponent {
   private scriptURL =
     'https://script.google.com/macros/s/AKfycbzg8tFMijrWWNMRzKnHNsWUaLvBuHDjWz12CI4s6qSUmqsxyZfm0N3owqKy6lWGsCHnLg/exec';
 
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<SponsorFormDialogComponent>) {
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<SponsorFormDialogComponent>,
+    private i18n: I18nService
+  ) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -49,7 +55,7 @@ export class SponsorFormDialogComponent {
 
     fetch(this.scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        this.successMsg = 'Form submitted successfully!';
+        this.successMsg = this.i18n.translate('dialogSponsor.success');
         this.submitting = false;
 
         setTimeout(() => {
@@ -59,7 +65,7 @@ export class SponsorFormDialogComponent {
       })
       .catch((err) => {
         console.error('Error!', err);
-        this.errorMsg = 'Submission failed. Please try again.';
+        this.errorMsg = this.i18n.translate('dialogSponsor.error');
         this.submitting = false;
       });
   }

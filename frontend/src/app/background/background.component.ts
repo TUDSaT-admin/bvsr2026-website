@@ -22,8 +22,10 @@ export class BackgroundComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    cancelAnimationFrame(this.animationId);
-    this.renderer.dispose();
+    if (this.animationId != null) {
+      cancelAnimationFrame(this.animationId);
+    }
+    this.renderer?.dispose();
   }
 
   private initScene(): void {

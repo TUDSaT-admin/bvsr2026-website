@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { SeoService } from '../../services/seo.service';
 import { RegistrationService, TourRegistrationPayload } from '../../services/registration.service';
+import { I18nService } from '../../services/i18n.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-tour-registration',
   standalone: true,
-  imports: [NavbarComponent, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent],
+  imports: [NavbarComponent, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent, TranslatePipe],
   templateUrl: './tour-registration.component.html',
   styleUrls: ['./tour-registration.component.css']
 })
@@ -28,7 +30,8 @@ export class TourRegistrationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private seoService: SeoService,
-    private registrationService: RegistrationService
+    private registrationService: RegistrationService,
+    private i18n: I18nService
   ) {
     this.form = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(120)]],
@@ -66,7 +69,7 @@ export class TourRegistrationComponent implements OnInit {
   }
 
   private afterSaved(): void {
-    this.successMsg = 'Your details have been saved.';
+    this.successMsg = this.i18n.translate('tour.saved');
     this.nameMismatchAwaitingConfirm = false;
     const empty = {
       firstName: '',
@@ -92,7 +95,7 @@ export class TourRegistrationComponent implements OnInit {
   async onSubmit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorMsg = 'Please fill in all required fields.';
+      this.errorMsg = this.i18n.translate('tour.fillRequired');
       return;
     }
 
@@ -109,10 +112,10 @@ export class TourRegistrationComponent implements OnInit {
       }
       this.afterSaved();
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'Submission failed. Please try again.';
+      const msg = e instanceof Error ? e.message : this.i18n.translate('tour.submitFailed');
       this.errorMsg =
         msg.includes('abort') || msg.includes('timed out')
-          ? 'Request timed out. Check your connection and try again.'
+          ? this.i18n.translate('tour.timeout')
           : msg;
     } finally {
       this.submitting = false;
@@ -139,10 +142,10 @@ export class TourRegistrationComponent implements OnInit {
         this.afterSaved();
       }
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'Submission failed. Please try again.';
+      const msg = e instanceof Error ? e.message : this.i18n.translate('tour.submitFailed');
       this.errorMsg =
         msg.includes('abort') || msg.includes('timed out')
-          ? 'Request timed out. Check your connection and try again.'
+          ? this.i18n.translate('tour.timeout')
           : msg;
     } finally {
       this.submitting = false;

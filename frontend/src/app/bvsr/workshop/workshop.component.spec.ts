@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RouterTestingModule } from '@angular/router/testing';
 import { WorkshopComponent } from './workshop.component';
+import { httpClientTestProviders } from '../../testing/http-test-providers';
 
 describe('WorkshopComponent', () => {
   let component: WorkshopComponent;
@@ -8,7 +10,8 @@ describe('WorkshopComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WorkshopComponent]
+      imports: [WorkshopComponent, RouterTestingModule],
+      providers: [...httpClientTestProviders]
     })
     .compileComponents();
 

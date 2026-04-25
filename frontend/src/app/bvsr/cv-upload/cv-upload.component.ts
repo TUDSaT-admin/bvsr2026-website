@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
 import { RegistrationService } from '../../services/registration.service';
+import { I18nService } from '../../services/i18n.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-cv-upload',
   standalone: true,
-  imports: [NavbarComponent, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent],
+  imports: [NavbarComponent, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent, TranslatePipe],
   templateUrl: './cv-upload.component.html',
   styleUrls: ['./cv-upload.component.css']
 })
@@ -24,7 +26,8 @@ export class CvUploadComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private seoService: SeoService,
-    private registrationService: RegistrationService
+    private registrationService: RegistrationService,
+    private i18n: I18nService
   ) {
     this.uploadForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
@@ -40,8 +43,8 @@ export class CvUploadComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        this.errorMsg = 'File size must be less than 5MB';
+      if (file.size > 5 * 1024 * 1024) {
+        this.errorMsg = this.i18n.translate('cv.fileTooLarge');
         return;
       }
       this.selectedFile = file;
@@ -51,7 +54,7 @@ export class CvUploadComponent implements OnInit {
 
   async onSubmit() {
     if (this.uploadForm.invalid || !this.selectedFile) {
-      this.errorMsg = 'Please provide a valid email and select a file.';
+      this.errorMsg = this.i18n.translate('cv.needFile');
       return;
     }
 
@@ -65,7 +68,7 @@ export class CvUploadComponent implements OnInit {
         this.uploadForm.get('email')?.value
       );
 
-      this.successMsg = 'CV uploaded successfully!';
+      this.successMsg = this.i18n.translate('cv.success');
       this.uploadForm.reset();
       this.selectedFile = null;
 
@@ -75,7 +78,7 @@ export class CvUploadComponent implements OnInit {
 
     } catch (error: any) {
       console.error('Upload error:', error);
-      this.errorMsg = error.message || 'Failed to upload CV. Please try again.';
+      this.errorMsg = error.message || this.i18n.translate('cv.uploadFailedGeneric');
     } finally {
       this.submitting = false;
     }

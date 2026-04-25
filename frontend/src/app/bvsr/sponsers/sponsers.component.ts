@@ -6,6 +6,7 @@ import { SponsorFormDialogComponent } from '../sponsor-form-dialog/sponsor-form-
 import { MatDialog } from '@angular/material/dialog';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 /** Logo frame size on the page (reflects sponsorship / partnership level) */
 export type LogoDisplaySize =
@@ -30,11 +31,17 @@ export interface SupporterLogo {
 @Component({
   selector: 'app-sponsers',
   standalone: true,
-  imports: [NavbarComponent, MaterialModule, CommonModule, FooterComponent],
+  imports: [NavbarComponent, MaterialModule, CommonModule, FooterComponent, TranslatePipe],
   templateUrl: './sponsers.component.html',
   styleUrls: ['./sponsers.component.css']
 })
 export class SponsersComponent implements OnInit {
+  readonly programListIndices = [0, 1, 2];
+  readonly tier1BenefitIndices = [0, 1, 2];
+  readonly tier2BenefitIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  readonly tier3BenefitIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  readonly extraBoothIndices = [0, 1];
+
   /** Tier 2 — Sponsors package */
   sponsorsSponsorTier: SupporterLogo[] = [
     { name: 'Serco', tier: 'Sponsor', logoSize: 'tier-sponsor', logoSrc: 'assets/sponsors/serco.png' },

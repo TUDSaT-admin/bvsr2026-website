@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RouterTestingModule } from '@angular/router/testing';
 import { SpeakersComponent } from './speakers.component';
+import { httpClientTestProviders } from '../../testing/http-test-providers';
 
 describe('SpeakersComponent', () => {
   let component: SpeakersComponent;
@@ -8,7 +10,8 @@ describe('SpeakersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SpeakersComponent]
+      imports: [SpeakersComponent, RouterTestingModule],
+      providers: [...httpClientTestProviders]
     })
     .compileComponents();
 

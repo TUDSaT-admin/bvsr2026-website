@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
 import { RegistrationService } from '../../services/registration.service';
+import { I18nService } from '../../services/i18n.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-qr-verify',
   standalone: true,
-  imports: [NavbarComponent, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent],
+  imports: [NavbarComponent, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent, TranslatePipe],
   templateUrl: './qr-verify.component.html',
   styleUrls: ['./qr-verify.component.css']
 })
@@ -23,7 +25,8 @@ export class QrVerifyComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private seoService: SeoService,
-    private registrationService: RegistrationService
+    private registrationService: RegistrationService,
+    private i18n: I18nService
   ) {
     this.verifyForm = this.fb.group({
       registrationId: ['', [Validators.required]]
@@ -38,7 +41,7 @@ export class QrVerifyComponent implements OnInit {
 
   async onSubmit() {
     if (this.verifyForm.invalid) {
-      this.errorMsg = 'Please enter a registration ID.';
+      this.errorMsg = this.i18n.translate('verify.errorEnterId');
       return;
     }
 
@@ -54,7 +57,7 @@ export class QrVerifyComponent implements OnInit {
       this.verificationResult = {
         valid: true,
         registrationId: this.verifyForm.get('registrationId')?.value,
-        message: 'Registration verified successfully!'
+        message: this.i18n.translate('verify.verifiedMsg')
       };
 
       // Reset form after successful verification
@@ -66,7 +69,7 @@ export class QrVerifyComponent implements OnInit {
     } catch (error: any) {
       this.verificationResult = {
         valid: false,
-        message: error.message || 'Invalid registration ID. Please check and try again.'
+        message: error.message || this.i18n.translate('verify.invalidMsg')
       };
     } finally {
       this.verifying = false;
@@ -76,6 +79,6 @@ export class QrVerifyComponent implements OnInit {
   onScanQR() {
     // This would integrate with a QR scanner library
     // For now, we'll use manual entry
-    alert('QR scanner integration coming soon. Please enter the registration ID manually.');
+    alert(this.i18n.translate('verify.scanSoon'));
   }
 }

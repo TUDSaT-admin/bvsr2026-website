@@ -1,42 +1,42 @@
-<h2 mat-dialog-title>Sponsor Form</h2>
+<h2 mat-dialog-title>{{ 'dialogSponsor.title' | translate }}</h2>
 <mat-dialog-content>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>First Name</mat-label>
+      <mat-label>{{ 'dialogSponsor.firstName' | translate }}</mat-label>
       <input matInput formControlName="firstName" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Last Name</mat-label>
+      <mat-label>{{ 'dialogSponsor.lastName' | translate }}</mat-label>
       <input matInput formControlName="lastName" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Company Name</mat-label>
+      <mat-label>{{ 'dialogSponsor.company' | translate }}</mat-label>
       <input matInput formControlName="companyName" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ 'dialogSponsor.email' | translate }}</mat-label>
       <input matInput type="email" formControlName="email" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Sponsorship tier</mat-label>
-      <mat-select formControlName="sponsorTier" placeholder="Select a tier">
-        <mat-option value="tier1-friends">Tier 1 — Friends (from 1 000 €)</mat-option>
-        <mat-option value="tier2-sponsors">Tier 2 — Sponsors (from 5 000 €)</mat-option>
-        <mat-option value="tier3-primary">Tier 3 — Primary sponsors (from 15 000 €)</mat-option>
-        <mat-option value="donation">Donation (monetary or in-kind)</mat-option>
-        <mat-option value="additional-services">Additional services only (booth, workshop, job wall, …)</mat-option>
-        <mat-option value="custom">Other / custom — we will contact you</mat-option>
+      <mat-label>{{ 'dialogSponsor.tier' | translate }}</mat-label>
+      <mat-select formControlName="sponsorTier" [placeholder]="'dialogSponsor.tierPlaceholder' | translate">
+        <mat-option value="tier1-friends">{{ 'dialogSponsor.tierOpt1' | translate }}</mat-option>
+        <mat-option value="tier2-sponsors">{{ 'dialogSponsor.tierOpt2' | translate }}</mat-option>
+        <mat-option value="tier3-primary">{{ 'dialogSponsor.tierOpt3' | translate }}</mat-option>
+        <mat-option value="donation">{{ 'dialogSponsor.tierOpt4' | translate }}</mat-option>
+        <mat-option value="additional-services">{{ 'dialogSponsor.tierOpt5' | translate }}</mat-option>
+        <mat-option value="custom">{{ 'dialogSponsor.tierOpt6' | translate }}</mat-option>
       </mat-select>
-      <mat-hint align="start" class="field-hint">See the Sponsors page for full package details.</mat-hint>
-      <mat-error *ngIf="form.get('sponsorTier')?.hasError('required')">Please choose an option</mat-error>
+      <mat-hint align="start" class="field-hint">{{ 'dialogSponsor.tierHint' | translate }}</mat-hint>
+      <mat-error *ngIf="form.get('sponsorTier')?.hasError('required')">{{ 'dialogSponsor.tierError' | translate }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Message</mat-label>
+      <mat-label>{{ 'dialogSponsor.message' | translate }}</mat-label>
       <textarea matInput rows="3" formControlName="message"></textarea>
     </mat-form-field>
 
@@ -48,12 +48,10 @@
     </div>
 
     <mat-dialog-actions align="center">
-      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button mat-dialog-close>{{ 'dialogSponsor.cancel' | translate }}</button>
       <button mat-stroked-button type="submit" [disabled]="submitting">
-        Submit
+        {{ 'dialogSponsor.submit' | translate }}
       </button>
     </mat-dialog-actions>
   </form>
 </mat-dialog-content>
-
-

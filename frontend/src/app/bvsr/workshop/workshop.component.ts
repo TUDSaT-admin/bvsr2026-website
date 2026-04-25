@@ -4,21 +4,22 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, 
 import { NavbarComponent } from "../navbar/navbar.component";
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { I18nService } from '../../services/i18n.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 interface Workshop {
   id: string;
   slot: number;
   time: string;
-  title: string;
-  max: number | null;       // null for unlimited (dont remove the comments)
-  seatsLeft: number | null; // for limited workshops
+  max: number | null;
+  seatsLeft: number | null;
   registered: number;
 }
 
 @Component({
   selector: 'app-workshop',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NavbarComponent, FooterComponent],
+  imports: [CommonModule, ReactiveFormsModule, NavbarComponent, FooterComponent, TranslatePipe],
   templateUrl: './workshop.component.html',
   styleUrls: ['./workshop.component.css']
 })
@@ -26,10 +27,10 @@ export class WorkshopComponent implements OnInit {
   readonly ASSET_ZIP_URL = '/mnt/data/tudsat.zip';
 
   workshops: Workshop[] = [
-    { id: 'w1', slot: 1, time: '1100–1400', title: 'How to design a high power rocket', max: 20, seatsLeft: 20, registered: 0 },
-    { id: 'w2', slot: 1, time: '1100–1400', title: 'Hybrid propulsion', max: null, seatsLeft: null, registered: 0 },
-    { id: 'w3', slot: 2, time: '1500–1800', title: 'Fusion', max: 20, seatsLeft: 20, registered: 0 },
-    { id: 'w4', slot: 2, time: '1500–1800', title: 'KiCAD', max: null, seatsLeft: null, registered: 0 }
+    { id: 'w1', slot: 1, time: '1100–1400', max: 20, seatsLeft: 20, registered: 0 },
+    { id: 'w2', slot: 1, time: '1100–1400', max: null, seatsLeft: null, registered: 0 },
+    { id: 'w3', slot: 2, time: '1500–1800', max: 20, seatsLeft: 20, registered: 0 },
+    { id: 'w4', slot: 2, time: '1500–1800', max: null, seatsLeft: null, registered: 0 }
   ];
 
   SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzAxob4Nnh_FbfzI6y5M5NQh6kDB_nqXPOpPC3RkRFw0HGCHtS3ZF0tOkiBg87BvNglQA/exec';
@@ -41,7 +42,8 @@ export class WorkshopComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private i18n: I18nService
   ) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(120)]],
@@ -126,7 +128,8 @@ export class WorkshopComponent implements OnInit {
     if (slot1) {
       const w = this.findWorkshop(slot1);
       if (w && w.max !== null && (w.seatsLeft ?? 0) <= 0) {
-        this.serverMessage = `No seats left for ${w.title}`;
+        const title = this.i18n.translate(`workshop.titles.${w.id}`);
+        this.serverMessage = this.i18n.translate('workshop.noSeatsLeft', { title });
         this.serverError = true;
         return;
       }
@@ -134,7 +137,8 @@ export class WorkshopComponent implements OnInit {
     if (slot2) {
       const w = this.findWorkshop(slot2);
       if (w && w.max !== null && (w.seatsLeft ?? 0) <= 0) {
-        this.serverMessage = `No seats left for ${w.title}`;
+        const title = this.i18n.translate(`workshop.titles.${w.id}`);
+        this.serverMessage = this.i18n.translate('workshop.noSeatsLeft', { title });
         this.serverError = true;
         return;
       }
@@ -157,7 +161,7 @@ export class WorkshopComponent implements OnInit {
       const result = await res.json();
 
       if (!result || !result.success) {
-        this.serverMessage = result?.message || 'Registration error.';
+        this.serverMessage = result?.message || this.i18n.translate('workshop.registrationError');
         this.serverError = true;
         return;
       }
@@ -174,14 +178,14 @@ export class WorkshopComponent implements OnInit {
         await this.loadCounts();
       }
 
-      this.serverMessage = 'Successfully registered!';
+      this.serverMessage = this.i18n.translate('workshop.success');
       this.serverError = false;
 
       this.form.reset({ name: '', email: '', slot1Choice: '', slot2Choice: '', agree: false });
 
     } catch (err) {
       console.error('[workshop] submit error', err);
-      this.serverMessage = 'Network or server error. Please try again.';
+      this.serverMessage = this.i18n.translate('workshop.networkError');
       this.serverError = true;
     } finally {
       this.submitting = false;

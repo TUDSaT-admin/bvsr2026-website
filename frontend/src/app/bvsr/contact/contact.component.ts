@@ -6,11 +6,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { I18nService } from '../../services/i18n.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [NavbarComponent, RouterModule, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent],
+  imports: [NavbarComponent, RouterModule, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent, TranslatePipe],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css']
 })
@@ -24,7 +26,8 @@ export class ContactComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private i18n: I18nService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -50,14 +53,14 @@ export class ContactComponent implements OnInit {
 
     fetch(this.scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        this.successMsg = '✅ Message sent successfully!';
+        this.successMsg = this.i18n.translate('contact.success');
         this.form.reset();
         this.submitting = false;
         setTimeout(() => (this.successMsg = ''), 5000);
       })
       .catch((err) => {
         console.error('Error!', err);
-        this.errorMsg = '❌ Submission failed. Please try again.';
+        this.errorMsg = this.i18n.translate('contact.error');
         this.submitting = false;
       });
   }

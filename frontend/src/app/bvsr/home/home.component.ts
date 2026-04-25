@@ -5,11 +5,12 @@ import { MaterialModule } from '../../material/material.module';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, MaterialModule, RouterModule, FooterComponent],
+  imports: [NavbarComponent, MaterialModule, RouterModule, FooterComponent, TranslatePipe],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
