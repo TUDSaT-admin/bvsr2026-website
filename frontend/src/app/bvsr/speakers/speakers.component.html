@@ -1,13 +1,45 @@
 <app-navbar></app-navbar>
 
-<section class="coming-soon">
-  <div class="coming-card">
-    <h1>COMING SOON</h1>
-    <p>
-      Stay tuned — exciting updates are on the way! <br>
-      Check back soon for the latest information.
-    </p>
-    <!-- <img src="assets/icons/rocket.svg" alt="Rocket" class="rocket" /> -->
+<section class="speakers-page">
+  <div class="speakers-wrapper">
+    <div class="page-heading">
+      <h1 class="page-title">Speakers</h1>
+    </div>
+
+    <div class="cards-grid">
+      <button
+        *ngFor="let speaker of speakers"
+        type="button"
+        class="speaker-card"
+        [class.active]="selectedSpeakerId === speaker.id"
+        (click)="selectSpeaker(speaker.id)">
+        <img
+          [src]="speaker.image"
+          [alt]="speaker.name"
+          class="speaker-image"
+          [class.speaker-image-volker]="speaker.id === 'volker-schmid'" />
+        <div class="speaker-info">
+          <h2 class="speaker-name">{{ speaker.name }}</h2>
+          <p class="speaker-position">{{ speaker.position }}</p>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="speaker-modal-overlay" *ngIf="selectedSpeaker as speaker" (click)="closeSpeaker()">
+    <div class="speaker-modal" (click)="$event.stopPropagation()">
+      <button type="button" class="modal-close" aria-label="Close dialog" (click)="closeSpeaker()">×</button>
+
+      <div class="details-head">
+        <h2 class="details-name">{{ speaker.name }}</h2>
+        <p class="details-position">{{ speaker.position }}</p>
+        <p class="details-talk" *ngIf="speaker.talkTitle">{{ speaker.talkTitle }}</p>
+      </div>
+
+      <div class="details-content">
+        <p *ngFor="let paragraph of speaker.content">{{ paragraph }}</p>
+      </div>
+    </div>
   </div>
 </section>
 
