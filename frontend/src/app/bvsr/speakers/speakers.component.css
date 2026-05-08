@@ -76,6 +76,10 @@
   object-position: 92% center;
 }
 
+.speaker-image-michael {
+  object-position: center 5%;
+}
+
 .speaker-info {
   padding: 18px 20px 22px;
 }

@@ -17,7 +17,8 @@
           [src]="speaker.image"
           [alt]="speaker.name"
           class="speaker-image"
-          [class.speaker-image-volker]="speaker.id === 'volker-schmid'" />
+          [class.speaker-image-volker]="speaker.id === 'volker-schmid'"
+          [class.speaker-image-michael]="speaker.name === 'Michael Boss'" />
         <div class="speaker-info">
           <h2 class="speaker-name">{{ speaker.name }}</h2>
           <p class="speaker-position">{{ speaker.position }}</p>
