@@ -53,6 +53,20 @@ export class SpeakersComponent implements OnInit {
         'His responsibilities include defining programme strategy, coordinating with international partners, managing resources and contracts, and representing ESA globally on space safety matters.',
         'Through his work, Holger Krag contributes to shaping the future of space as a secure, sustainable, and operational environment for science, industry, and society.'
       ]
+    },
+    {
+      id: 'michael-boss',
+      name: 'Michael Boss',
+      position: 'Chief Commercial Officer Europa, Starlab Space GmbH',
+      image: 'assets/images/michaelBoss.png',
+      talkTitle: '',
+      content: [
+        'He is part of the world-wide Starlab Joint-Venture in USA, Japan and Canada.',
+        'Michael contributes to the development of the "NEWSpace LEO-Economy" market and is responsible for the fundraising at governments, institutions and private investors in Europe, as part of the overall investment in Starlab infrastructure, commercial services and utilization for the Post-ISS period.',
+        'Prior to this he conducted the development programme at TESAT-Spacecom GmbH & Co.KG, a subsidiary of Airbus, comprising world-wide leading communication equipment for satellites mainly for the commercial market and "NewSpace"-constellations.',
+        'Michael Boss holds a degree in Electrical Engineering and joined Airbus Defence and Space in 1998.',
+        'He held numerous technical and management positions in Satellite Operation, and for Space Equipment as Head of Lean Management and Business Development.'
+      ]
     }
   ];
 
