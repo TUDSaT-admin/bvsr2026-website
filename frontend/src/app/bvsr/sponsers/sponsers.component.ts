@@ -38,6 +38,12 @@ export class SponsersComponent implements OnInit {
   /** Tier 2 — Sponsors package */
   sponsorsSponsorTier: SupporterLogo[] = [
     { name: 'Serco', tier: 'Sponsor', logoSize: 'tier-sponsor', logoSrc: 'assets/sponsors/serco.png' },
+    {
+      name: 'Momentum Aerospace',
+      tier: 'Sponsor',
+      logoSize: 'tier-sponsor',
+      logoSrc: 'assets/sponsors/MALandscape.jpg',
+    },
   ];
 
   /** Tier 1 — Friends package */
