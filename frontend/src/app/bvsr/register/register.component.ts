@@ -240,10 +240,16 @@ export class RegisterComponent implements OnInit {
 
       setTimeout(() => {
         this.dialog.open(TourRegistrationPromptDialogComponent, {
-          width: 'min(480px, 92vw)',
+          width: 'min(640px, 94vw)',
+          maxHeight: '90vh',
           panelClass: 'bvsr-tour-dialog',
           backdropClass: 'bvsr-tour-dialog-backdrop',
           autoFocus: 'dialog',
+          data: {
+            email: registrationData.email,
+            firstName: registrationData.firstName,
+            lastName: registrationData.lastName
+          }
         });
       }, 0);
 

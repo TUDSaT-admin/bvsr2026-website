@@ -13,6 +13,7 @@ import { CvUploadComponent } from './bvsr/cv-upload/cv-upload.component';
 import { QrVerifyComponent } from './bvsr/qr-verify/qr-verify.component';
 import { TourRegistrationComponent } from './bvsr/tour-registration/tour-registration.component';
 import { AnnouncementsComponent } from './bvsr/announcements/announcements.component';
+import { TourSelectionComponent } from './bvsr/tour-selection/tour-selection.component';
 
 export const routes: Routes = [
   {path: '' ,  component: HomeComponent},
@@ -26,6 +27,7 @@ export const routes: Routes = [
   {path: 'workshop', component: WorkshopComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'upload-cv', component: CvUploadComponent},
+  {path: 'tour-selection', component: TourSelectionComponent},
   {path: 'tour-registration', component: TourRegistrationComponent},
   {path: 'verify', component: QrVerifyComponent},
   {path: 'announcements', component: AnnouncementsComponent}

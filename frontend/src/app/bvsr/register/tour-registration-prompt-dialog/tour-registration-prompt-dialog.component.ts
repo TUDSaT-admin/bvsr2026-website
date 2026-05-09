@@ -1,29 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { TourSelectionWizardComponent } from '../../tour-selection/tour-selection-wizard.component';
 
-export const TOUR_REGISTRATION_URL = 'https://bvsr.tudsat.space/tour-registration';
+export interface TourRegistrationPromptDialogData {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+}
 
 @Component({
   selector: 'app-tour-registration-prompt-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, TourSelectionWizardComponent],
   templateUrl: './tour-registration-prompt-dialog.component.html',
-  styleUrls: ['./tour-registration-prompt-dialog.component.css'],
+  styleUrls: ['./tour-registration-prompt-dialog.component.css']
 })
 export class TourRegistrationPromptDialogComponent {
-  readonly tourUrl = TOUR_REGISTRATION_URL;
+  constructor(
+    private dialogRef: MatDialogRef<TourRegistrationPromptDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: TourRegistrationPromptDialogData | null
+  ) {}
 
-  constructor(private dialogRef: MatDialogRef<TourRegistrationPromptDialogComponent>) {}
-
-  openTourRegistration(): void {
-    window.open(this.tourUrl, '_blank', 'noopener,noreferrer');
+  onWizardCompleted(): void {
     this.dialogRef.close(true);
-  }
-
-  dismiss(): void {
-    this.dialogRef.close(false);
   }
 }

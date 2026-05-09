@@ -1,0 +1,175 @@
+<div class="tour-wizard" [class.tour-wizard--dialog]="appearance === 'dialog'">
+  <!-- Email -->
+  <ng-container *ngIf="step === 'email'">
+    <p class="lead">Enter your conference registration email.</p>
+    <form [formGroup]="emailForm" (ngSubmit)="continueFromEmail()" class="stack">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" />
+        <mat-error *ngIf="emailForm.get('email')?.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="emailForm.get('email')?.hasError('email')">Enter a valid email</mat-error>
+      </mat-form-field>
+      <div class="wizard-actions">
+        <button mat-flat-button type="submit" class="btn-primary" [disabled]="emailForm.invalid">Continue</button>
+      </div>
+    </form>
+  </ng-container>
+
+  <!-- Checking -->
+  <div *ngIf="step === 'checking'" class="checking">
+    <mat-progress-spinner diameter="40" mode="indeterminate" />
+    <p>Checking registration…</p>
+  </div>
+
+  <!-- Not registered -->
+  <ng-container *ngIf="step === 'notRegistered'">
+    <p class="lead error">{{ eligibilityError }}</p>
+    <div class="wizard-actions">
+      <button mat-stroked-button type="button" (click)="retryEmailAfterFailure()">
+        Try another email
+      </button>
+      <a mat-flat-button class="btn-primary" routerLink="/register">Conference registration</a>
+    </div>
+  </ng-container>
+
+  <!-- Nationality -->
+  <ng-container *ngIf="step === 'nationality'">
+    <p class="lead">
+      We do not yet have your nationality and country of origin on file. Please add them below, then continue to tour
+      selection.
+    </p>
+    <form [formGroup]="nationalityForm" (ngSubmit)="continueFromNationality()" class="stack">
+      <div class="field-row" *ngIf="nationalityForm.get('firstName')?.enabled">
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>First name</mat-label>
+          <input matInput formControlName="firstName" autocomplete="given-name" />
+          <mat-error *ngIf="nationalityForm.get('firstName')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>Last name</mat-label>
+          <input matInput formControlName="lastName" autocomplete="family-name" />
+          <mat-error *ngIf="nationalityForm.get('lastName')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Country of origin</mat-label>
+        <input matInput formControlName="countryOfOrigin" autocomplete="country-name" />
+        <mat-error *ngIf="nationalityForm.get('countryOfOrigin')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Nationality</mat-label>
+        <input matInput formControlName="nationality" />
+        <mat-error *ngIf="nationalityForm.get('nationality')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <div class="wizard-actions">
+        <button mat-flat-button type="submit" class="btn-primary" [disabled]="nationalityForm.invalid">
+          Continue to tour selection
+        </button>
+      </div>
+    </form>
+  </ng-container>
+
+  <!-- Tours -->
+  <ng-container *ngIf="step === 'tours'">
+    <div class="tour-attendee-strip">
+      <p class="tour-greeting">
+        Hi <span class="tour-greeting-name">{{ displayNameForGreeting() }}</span>, Please select one of the below tours.
+      </p>
+      <p class="tour-attendee-club" *ngIf="associationSubtitle()">
+        Association: {{ associationSubtitle() }}
+      </p>
+    </div>
+
+    <div class="tour-cards-grid">
+      <button
+        *ngFor="let card of tourCards"
+        type="button"
+        class="tour-card"
+        [class.active]="selectedCardId === card.id"
+        [class.greyed]="isCardGreyed(card.id)"
+        (click)="selectCard(card.id)">
+        <figure class="tour-card-image-wrap">
+          <img
+            *ngIf="card.image; else placeholder"
+            [src]="card.image"
+            [alt]="card.imageAlt"
+            class="tour-card-image"
+            [class.tour-card-image-esoc]="card.id === 'ESOC'"
+          />
+          <ng-template #placeholder>
+            <div class="tour-card-placeholder" aria-hidden="true"></div>
+          </ng-template>
+        </figure>
+        <div class="tour-card-cap" *ngIf="selectedCardId === card.id">{{ cardCapacityLine(card.id) }}</div>
+        <div class="tour-card-info">
+          <h3 class="tour-card-name">{{ card.name }}</h3>
+        </div>
+      </button>
+    </div>
+
+    <div class="esoc-slots" *ngIf="selectedCardId === 'ESOC'" (click)="$event.stopPropagation()">
+      <p class="slots-label">ESOC slot</p>
+      <div class="slot-row">
+        <button
+          type="button"
+          class="slot-btn"
+          [class.active]="esocSlot === 1"
+          [class.greyed-slot]="isEsocSlotGreyed(1)"
+          (click)="pickEsocSlot(1)">
+          <span class="slot-btn-title">Slot 1 · 08:30–09:15</span>
+        </button>
+        <button
+          type="button"
+          class="slot-btn"
+          [class.active]="esocSlot === 2"
+          [class.greyed-slot]="isEsocSlotGreyed(2)"
+          (click)="pickEsocSlot(2)">
+          <span class="slot-btn-title">Slot 2 · 09:30–10:15</span>
+        </button>
+      </div>
+    </div>
+
+    <p class="tour-blurb" *ngIf="selectedCardId">{{ selectedDescription() }}</p>
+
+    <div *ngIf="nameMismatchAwaitingConfirm" class="mismatch-panel" role="alert">
+      <p>
+        The name we have on file for this email does not match what you entered. Please correct your name and try
+        again, or confirm to save your tour choice with the name you entered.
+      </p>
+      <div class="mismatch-actions">
+        <button mat-stroked-button type="button" (click)="dismissNameMismatch()">Edit and retry</button>
+        <button mat-flat-button type="button" class="btn-primary" (click)="confirmTourWithEnteredName()" [disabled]="submitting">
+          Save with the name I entered
+        </button>
+      </div>
+    </div>
+
+    <p class="error" *ngIf="submitError && !nameMismatchAwaitingConfirm">{{ submitError }}</p>
+
+    <div class="wizard-actions">
+      <button
+        mat-flat-button
+        type="button"
+        class="btn-primary"
+        (click)="submitTourChoice()"
+        [disabled]="submitting || !canSubmitTour() || nameMismatchAwaitingConfirm">
+        <span *ngIf="!submitting">Save tour choice</span>
+        <span *ngIf="submitting">Saving…</span>
+      </button>
+    </div>
+  </ng-container>
+
+  <!-- Success -->
+  <ng-container *ngIf="step === 'success'">
+    <p class="lead success">Your tour choice has been saved. Thank you!</p>
+    <div class="wizard-actions" *ngIf="appearance === 'dialog'">
+      <button mat-flat-button type="button" class="btn-primary" (click)="onSuccessDone()">Done</button>
+    </div>
+    <div class="wizard-actions" *ngIf="appearance === 'page'">
+      <a mat-flat-button routerLink="/" class="btn-primary">Back to home</a>
+    </div>
+  </ng-container>
+</div>
