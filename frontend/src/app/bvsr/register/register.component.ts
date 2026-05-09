@@ -6,7 +6,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
-import { RegistrationService } from '../../services/registration.service';
+import { BVSR_MAX_CONFERENCE_TICKETS, RegistrationCapacity, RegistrationService } from '../../services/registration.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TourRegistrationPromptDialogComponent } from './tour-registration-prompt-dialog/tour-registration-prompt-dialog.component';
 import QRCode from 'qrcode';
 import jsPDF from 'jspdf';
 
@@ -29,6 +31,12 @@ export class RegisterComponent implements OnInit {
   registrationComplete = false;
   registrationData: any = null;
   qrCodeDataUrl: string = '';
+
+  capacityLoading = true;
+  registrationSoldOut = false;
+  capacity: RegistrationCapacity | null = null;
+
+  readonly maxTicketsUi = BVSR_MAX_CONFERENCE_TICKETS;
 
   associations = [
     'FAR eV',
@@ -56,7 +64,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private seoService: SeoService,
-    private registrationService: RegistrationService
+    private registrationService: RegistrationService,
+    private dialog: MatDialog
   ) {
     this.registrationForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -84,6 +93,24 @@ export class RegisterComponent implements OnInit {
     this.seoService.updateSEO({
       title: 'Register · BVSR Conference 2026'
     });
+    void this.loadRegistrationCapacity();
+  }
+
+  async loadRegistrationCapacity() {
+    this.capacityLoading = true;
+    const cap = await this.registrationService.fetchRegistrationCapacity();
+    this.capacityLoading = false;
+    this.capacity = cap;
+    if (cap?.soldOut) {
+      this.registrationSoldOut = true;
+      this.registrationForm.disable({ emitEvent: false });
+    }
+  }
+
+  private setSoldOutFromServer(message?: string) {
+    this.registrationSoldOut = true;
+    this.registrationForm.disable({ emitEvent: false });
+    this.errorMsg = message || `Conference registration is sold out. All ${BVSR_MAX_CONFERENCE_TICKETS} passes have been allocated.`;
   }
 
   onFileSelected(event: any) {
@@ -100,6 +127,10 @@ export class RegisterComponent implements OnInit {
   }
 
   nextStep() {
+    if (this.capacityLoading || this.registrationSoldOut) {
+      return;
+    }
+
     if (this.currentStep === 1) {
       // Validate step 1 fields
       const step1Fields = ['firstName', 'lastName', 'email', 'association'];
@@ -135,6 +166,9 @@ export class RegisterComponent implements OnInit {
   }
 
   async onSubmit() {
+    if (this.registrationSoldOut) {
+      return;
+    }
     if (this.registrationForm.invalid) {
       this.errorMsg = 'Please fill in all required fields correctly.';
       return;
@@ -145,6 +179,13 @@ export class RegisterComponent implements OnInit {
     this.successMsg = '';
 
     try {
+      const refreshed = await this.registrationService.fetchRegistrationCapacity();
+      if (refreshed?.soldOut) {
+        this.capacity = refreshed;
+        this.setSoldOutFromServer();
+        return;
+      }
+
       const formData = this.registrationForm.value;
 
       // Generate unique registration ID
@@ -160,8 +201,18 @@ export class RegisterComponent implements OnInit {
         timestamp: new Date().toISOString()
       };
 
-      // Submit registration
-      await this.registrationService.register(registrationData);
+      const regResult = await this.registrationService.register(registrationData);
+
+      if (!regResult.success) {
+        if (regResult.code === 'SOLD_OUT') {
+          this.setSoldOutFromServer(regResult.message);
+        } else if (regResult.message === 'Email already registered') {
+          this.errorMsg = regResult.message;
+        } else {
+          this.errorMsg = regResult.message || 'Registration failed. Please try again.';
+        }
+        return;
+      }
 
       // CV upload can be very slow (large base64 POST to Apps Script). Do not block the success screen.
       if (this.selectedFile && formData.uploadCV) {
@@ -186,6 +237,15 @@ export class RegisterComponent implements OnInit {
 
       // Generate and download PDF
       await this.generateAndDownloadPDF(registrationData);
+
+      setTimeout(() => {
+        this.dialog.open(TourRegistrationPromptDialogComponent, {
+          width: 'min(480px, 92vw)',
+          panelClass: 'bvsr-tour-dialog',
+          backdropClass: 'bvsr-tour-dialog-backdrop',
+          autoFocus: 'dialog',
+        });
+      }, 0);
 
     } catch (error: any) {
       console.error('Registration error:', error);

@@ -1,25 +1,37 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { NavbarComponent } from "../navbar/navbar.component";
 import { MaterialModule } from '../../material/material.module';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { RegistrationService } from '../../services/registration.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, MaterialModule, RouterModule, FooterComponent],
+  imports: [CommonModule, NavbarComponent, MaterialModule, RouterModule, FooterComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 
 export class HomeComponent implements OnInit {
-  constructor(private seoService: SeoService) {}
+  registrationSoldOut = false;
+
+  constructor(
+    private seoService: SeoService,
+    private registrationService: RegistrationService
+  ) {}
 
   ngOnInit() {
     this.seoService.updateSEO({
       title: 'BVSR Conference 2026'
+    });
+    void this.registrationService.fetchRegistrationCapacity().then((cap) => {
+      if (cap?.soldOut) {
+        this.registrationSoldOut = true;
+      }
     });
   }
 
