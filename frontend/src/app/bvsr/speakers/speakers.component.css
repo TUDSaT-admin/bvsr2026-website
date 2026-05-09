@@ -65,11 +65,32 @@
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.42), 0 0 20px rgba(241, 216, 91, 0.3);
 }
 
+.speaker-image-wrap {
+  margin: 0;
+  position: relative;
+  width: 100%;
+}
+
 .speaker-image {
   display: block;
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
+}
+
+.speaker-image-credit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 8px 10px 10px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  line-height: 1.3;
+  text-align: right;
+  color: rgba(248, 248, 248, 0.92);
+  background: linear-gradient(to top, rgba(4, 8, 22, 0.88), transparent);
 }
 
 .speaker-image-volker {
@@ -90,6 +111,11 @@
   font-size: clamp(18px, 2.5vw, 24px);
   color: #f1d85b;
   letter-spacing: 0.02em;
+}
+
+/* Slightly smaller title so “Momentum Aerospace” stays on one line in the card */
+.speaker-name.speaker-title-compact {
+  font-size: clamp(17px, 2.35vw, 23px);
 }
 
 .speaker-position {
@@ -180,6 +206,10 @@
   font-family: 'Orbitron', sans-serif;
   font-size: clamp(24px, 3.5vw, 34px);
   color: #f1d85b;
+}
+
+.details-name.details-title-compact {
+  font-size: clamp(23px, 3.35vw, 32px);
 }
 
 .details-position {
