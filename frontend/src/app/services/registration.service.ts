@@ -9,6 +9,23 @@ export interface RegistrationData {
   timestamp: string;
 }
 
+export const BVSR_MAX_CONFERENCE_TICKETS = 250;
+
+export interface RegistrationCapacity {
+  soldOut: boolean;
+  registeredCount: number;
+  maxTickets: number;
+  remaining: number;
+}
+
+export interface RegisterSubmitResult {
+  success: boolean;
+  code?: string;
+  message?: string;
+  registrationId?: string;
+  simulated?: boolean;
+}
+
 export type TourRegistrationResult =
   | { status: 'saved' }
   | { status: 'name_mismatch' };
@@ -37,24 +54,98 @@ export class RegistrationService {
     return !!(url && !url.includes('YOUR_') && url.includes('script.google.com'));
   }
 
-  async register(data: RegistrationData): Promise<any> {
+  async fetchRegistrationCapacity(): Promise<RegistrationCapacity | null> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      return null;
+    }
+
+    const url =
+      this.registrationScriptURL + (this.registrationScriptURL.includes('?') ? '&' : '?') + 'checkCapacity=true';
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 18_000);
+      const res = await fetch(url, { method: 'GET', mode: 'cors', signal: ctrl.signal });
+      clearTimeout(timer);
+      const text = await res.text();
+      let data: RegistrationCapacity & { success?: boolean };
+      try {
+        data = JSON.parse(text) as RegistrationCapacity & { success?: boolean };
+      } catch {
+        return null;
+      }
+      if (data.success === false) return null;
+      if (typeof data.registeredCount !== 'number' || typeof data.soldOut !== 'boolean') {
+        return null;
+      }
+
+      const maxTickets = typeof data.maxTickets === 'number' ? data.maxTickets : BVSR_MAX_CONFERENCE_TICKETS;
+      const registeredCount = typeof data.registeredCount === 'number' ? data.registeredCount : 0;
+      const remaining =
+        typeof data.remaining === 'number' ? Math.max(0, data.remaining) : Math.max(0, maxTickets - registeredCount);
+
+      const soldOut = Boolean(data.soldOut) || registeredCount >= maxTickets;
+
+      return { soldOut, registeredCount, maxTickets, remaining };
+    } catch {
+      return null;
+    }
+  }
+
+  async register(data: RegistrationData): Promise<RegisterSubmitResult> {
     if (!this.isConfigured(this.registrationScriptURL)) {
       console.warn('Registration script URL not configured. Registration will be simulated.');
       return { success: true, simulated: true };
     }
 
-    const formData = new FormData();
-    formData.append('action', 'register');
-    Object.keys(data).forEach(key => {
-      formData.append(key, (data as any)[key]);
-    });
+    const params = new URLSearchParams();
+    params.set('action', 'register');
+    params.set('firstName', data.firstName.trim());
+    params.set('lastName', data.lastName.trim());
+    params.set('email', data.email.trim());
+    params.set('association', data.association.trim());
+    params.set('registrationId', data.registrationId.trim());
+    params.set('timestamp', data.timestamp);
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 35_000);
 
     try {
-      await this.fetchPostNoCors(this.registrationScriptURL, formData, 35_000);
-      return { success: true };
-    } catch (error) {
-      console.error('Registration error:', error);
-      return { success: true, warning: 'Registration submitted but backend confirmation pending' };
+      const res = await fetch(this.registrationScriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: params.toString(),
+        mode: 'cors',
+        signal: ctrl.signal,
+      });
+
+      const text = await res.text();
+      let json: { success?: boolean; message?: string; code?: string; registrationId?: string };
+      try {
+        json = JSON.parse(text);
+      } catch {
+        console.error('[register] Non-JSON response', text.slice(0, 200));
+        throw new Error('Unexpected response from the registration server. Please try again later.');
+      }
+
+      if (!json.success) {
+        return {
+          success: false,
+          code: json.code,
+          message:
+            json.message ||
+            'Registration failed. Please verify your details or try again later.',
+        };
+      }
+
+      return { success: true, registrationId: json.registrationId };
+    } catch (e: unknown) {
+      console.error('Registration error:', e);
+      if (e instanceof Error && e.name === 'AbortError') {
+        throw new Error('Registration request timed out. Check your connection and try again.');
+      }
+      throw e instanceof Error ? e : new Error('Registration failed.');
+    } finally {
+      clearTimeout(timer);
     }
   }
 

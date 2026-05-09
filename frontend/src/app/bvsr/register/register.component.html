@@ -3,8 +3,24 @@
 <section class="register-section">
   <div class="container">
     <h1 class="page-title">Get Your Conference Pass</h1>
+
+    <div *ngIf="capacityLoading && !registrationComplete" class="capacity-loading">
+      <p>Checking registration availability…</p>
+    </div>
+
+    <div *ngIf="!capacityLoading && registrationSoldOut && !registrationComplete" class="sold-out-block">
+      <h2 class="sold-out-heading">Sold out</h2>
+      <p class="sold-out-text">
+        Conference registration has closed. All {{ maxTicketsUi }} passes have been allocated.
+      </p>
+      <button mat-stroked-button type="button" class="sold-out-home-link" routerLink="/">Return to home</button>
+    </div>
+
+    <p *ngIf="!capacityLoading && !registrationSoldOut && capacity && !registrationComplete" class="spots-remaining">
+      Passes remaining: {{ capacity.remaining }} / {{ capacity.maxTickets }}
+    </p>
     
-    <div class="progress-bar" *ngIf="!registrationComplete">
+    <div class="progress-bar" *ngIf="!registrationComplete && !capacityLoading && !registrationSoldOut">
       <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
         <div class="step-number">1</div>
         <div class="step-label">Personal Information</div>
@@ -16,7 +32,11 @@
       </div>
     </div>
 
-    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form" *ngIf="!registrationComplete">
+    <form
+      [formGroup]="registrationForm"
+      (ngSubmit)="onSubmit()"
+      class="registration-form"
+      *ngIf="!capacityLoading && !registrationSoldOut && !registrationComplete">
       
       <!-- Step 1: Personal Information -->
       <div *ngIf="currentStep === 1" class="form-step">
@@ -118,8 +138,9 @@
 
         <div class="button-group">
           <button mat-button type="button" (click)="previousStep()">Previous</button>
-          <button mat-raised-button type="submit" [disabled]="submitting">
-            <span *ngIf="!submitting">Complete Registration</span>
+          <button mat-raised-button type="submit" [disabled]="submitting || registrationSoldOut || capacityLoading">
+            <span *ngIf="registrationSoldOut && !submitting">Sold out</span>
+            <span *ngIf="!registrationSoldOut && !submitting">Complete Registration</span>
             <span *ngIf="submitting">Processing...</span>
           </button>
         </div>

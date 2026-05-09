@@ -1,0 +1,18 @@
+<div class="tour-dialog-shell">
+  <h2 mat-dialog-title class="tour-dialog-heading">
+    <span class="tour-dialog-heading-text">Tour Registration</span>
+  </h2>
+  <div class="tour-dialog-accent" aria-hidden="true"></div>
+  <mat-dialog-content class="tour-dialog-body">
+    <p>
+      We need a few more details for planning tours during the conference.
+    </p>
+    <p>Please open the tour registration form and complete it using the same details you used here.</p>
+  </mat-dialog-content>
+  <mat-dialog-actions class="tour-dialog-actions">
+    <button mat-stroked-button type="button" class="tour-dialog-dismiss" (click)="dismiss()">Not now</button>
+    <button mat-flat-button type="button" class="tour-dialog-cta" (click)="openTourRegistration()">
+      Open tour registration
+    </button>
+  </mat-dialog-actions>
+</div>
