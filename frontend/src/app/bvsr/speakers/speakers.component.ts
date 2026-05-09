@@ -20,6 +20,7 @@ export class SpeakersComponent implements OnInit {
       name: 'Volker Schmid',
       position: 'Deutsches Zentrum fur Luft- und Raumfahrt (DLR)',
       image: 'assets/images/volkerSchmid.jpg',
+      imageCredit: '© DLR/A.Schütz',
       talkTitle: 'The ISS Missions of Alexander Gerst and Matthias Maurer and Their Societal Relevance',
       content: [
         'In 1998, the first module of the International Space Station (ISS) was launched. The largest project in human spaceflight initially progressed slowly and faced strong criticism, especially in Europe and Germany, where many questioned its cost-benefit ratio.',
@@ -66,6 +67,16 @@ export class SpeakersComponent implements OnInit {
         'Prior to this he conducted the development programme at TESAT-Spacecom GmbH & Co.KG, a subsidiary of Airbus, comprising world-wide leading communication equipment for satellites mainly for the commercial market and "NewSpace"-constellations.',
         'Michael Boss holds a degree in Electrical Engineering and joined Airbus Defence and Space in 1998.',
         'He held numerous technical and management positions in Satellite Operation, and for Space Equipment as Head of Lean Management and Business Development.'
+      ]
+    },
+    {
+      id: 'momentum-aerospace',
+      name: 'Momentum Aerospace',
+      position: '',
+      image: 'assets/images/MAVertical.jpg',
+      talkTitle: '',
+      content: [
+        'Momentum Aerospace will provide an industry perspective as a young startup operating in Germany\'s aerospace sector.'
       ]
     }
   ];

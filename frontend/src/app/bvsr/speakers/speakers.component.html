@@ -13,15 +13,21 @@
         class="speaker-card"
         [class.active]="selectedSpeakerId === speaker.id"
         (click)="selectSpeaker(speaker.id)">
-        <img
-          [src]="speaker.image"
-          [alt]="speaker.name"
-          class="speaker-image"
-          [class.speaker-image-volker]="speaker.id === 'volker-schmid'"
-          [class.speaker-image-michael]="speaker.name === 'Michael Boss'" />
+        <figure class="speaker-image-wrap">
+          <img
+            [src]="speaker.image"
+            [alt]="speaker.name"
+            class="speaker-image"
+            [class.speaker-image-volker]="speaker.id === 'volker-schmid'"
+            [class.speaker-image-michael]="speaker.name === 'Michael Boss'" />
+          <figcaption *ngIf="speaker.imageCredit" class="speaker-image-credit">{{ speaker.imageCredit }}</figcaption>
+        </figure>
         <div class="speaker-info">
-          <h2 class="speaker-name">{{ speaker.name }}</h2>
-          <p class="speaker-position">{{ speaker.position }}</p>
+          <h2
+            class="speaker-name"
+            [class.speaker-title-compact]="speaker.id === 'momentum-aerospace'">
+            {{ speaker.name }}</h2>
+          <p class="speaker-position" *ngIf="speaker.position">{{ speaker.position }}</p>
         </div>
       </button>
     </div>
@@ -32,8 +38,11 @@
       <button type="button" class="modal-close" aria-label="Close dialog" (click)="closeSpeaker()">×</button>
 
       <div class="details-head">
-        <h2 class="details-name">{{ speaker.name }}</h2>
-        <p class="details-position">{{ speaker.position }}</p>
+        <h2
+          class="details-name"
+          [class.details-title-compact]="speaker.id === 'momentum-aerospace'">
+          {{ speaker.name }}</h2>
+        <p class="details-position" *ngIf="speaker.position">{{ speaker.position }}</p>
         <p class="details-talk" *ngIf="speaker.talkTitle">{{ speaker.talkTitle }}</p>
       </div>
 
