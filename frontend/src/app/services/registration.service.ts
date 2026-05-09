@@ -29,6 +29,53 @@ export interface RegisterSubmitResult {
 export type TourRegistrationResult =
   | { status: 'saved' }
   | { status: 'name_mismatch' };
+export type BvsrTourCode = 'GSI' | 'ESOC1' | 'ESOC2' | 'CASIMAR' | 'CITY';
+
+export const BVSR_TOUR_MAX_CAPACITY: Record<BvsrTourCode, number> = {
+  GSI: 125,
+  ESOC1: 50,
+  ESOC2: 50,
+  CASIMAR: 30,
+  CITY: 20
+};
+
+export const BVSR_TOUR_CODES: BvsrTourCode[] = ['GSI', 'ESOC1', 'ESOC2', 'CASIMAR', 'CITY'];
+
+export interface TourEligibilityResult {
+  success: boolean;
+  found: boolean;
+  hasNationality: boolean;
+  firstName?: string;
+  lastName?: string;
+  association?: string;
+  code?: string;
+  message?: string;
+}
+
+export interface TourAvailabilitySnapshot {
+  success: boolean;
+  remaining: Partial<Record<BvsrTourCode, number>>;
+  max: Partial<Record<BvsrTourCode, number>>;
+  booked?: Partial<Record<BvsrTourCode, number>>;
+  liveData?: boolean;
+  message?: string;
+}
+
+export type SaveTourSelectionResult =
+  | { status: 'saved' }
+  | { status: 'name_mismatch' }
+  | { status: 'tour_full'; message?: string }
+  | { status: 'error'; message?: string };
+export interface SaveTourSelectionPayload {
+  email: string;
+  tourSelected: BvsrTourCode;
+  firstName?: string;
+  lastName?: string;
+  countryOfOrigin?: string;
+  nationality?: string;
+  confirmNameMismatch?: boolean;
+}
+
 export interface TourRegistrationPayload {
   firstName: string;
   lastName: string;
@@ -40,6 +87,8 @@ export interface TourRegistrationPayload {
   may16: 'Yes' | 'No';
   may17: 'Yes' | 'No';
   confirmNameMismatch?: boolean;
+  /** When set, persisted to TOUR SELECTED alongside tour / attendance fields. */
+  tourSelected?: BvsrTourCode;
 }
 
 @Injectable({
@@ -222,6 +271,196 @@ export class RegistrationService {
     }
   }
 
+
+  async fetchTourAvailability(): Promise<TourAvailabilitySnapshot> {
+    const fallback = this.buildFallbackTourAvailability_();
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      return fallback;
+    }
+
+    const url =
+      this.registrationScriptURL +
+      (this.registrationScriptURL.includes('?') ? '&' : '?') +
+      'action=tourAvailability';
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 18_000);
+    try {
+      const res = await fetch(url, { method: 'GET', mode: 'cors', signal: ctrl.signal });
+      const text = await res.text();
+      let raw: unknown;
+      try {
+        raw = JSON.parse(text);
+      } catch {
+        console.warn('[tourAvailability] Non-JSON response; using fallback caps.', text.slice(0, 120));
+        return fallback;
+      }
+      const live = this.normalizeTourAvailabilityPayload_(raw);
+      if (live) {
+        return live;
+      }
+      console.warn('[tourAvailability] Unexpected payload; using fallback caps.', raw);
+      return fallback;
+    } catch (e: unknown) {
+      console.warn('[tourAvailability] Request failed; using fallback caps.', e);
+      return fallback;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  private buildFallbackTourAvailability_(): TourAvailabilitySnapshot {
+    const max: Partial<Record<BvsrTourCode, number>> = {};
+    const remaining: Partial<Record<BvsrTourCode, number>> = {};
+    for (const c of BVSR_TOUR_CODES) {
+      const cap = BVSR_TOUR_MAX_CAPACITY[c];
+      max[c] = cap;
+      remaining[c] = cap;
+    }
+    return { success: true, max, remaining, liveData: false };
+  }
+
+  private normalizeTourAvailabilityPayload_(raw: unknown): TourAvailabilitySnapshot | null {
+    if (!raw || typeof raw !== 'object') {
+      return null;
+    }
+    const o = raw as Record<string, unknown>;
+    if (o['success'] === false) {
+      return null;
+    }
+    const rawMax = o['max'];
+    const rawRem = o['remaining'];
+    if (!rawMax || typeof rawMax !== 'object' || !rawRem || typeof rawRem !== 'object') {
+      return null;
+    }
+    const maxObj = rawMax as Record<string, unknown>;
+    const remObj = rawRem as Record<string, unknown>;
+
+    const max: Partial<Record<BvsrTourCode, number>> = {};
+    const remaining: Partial<Record<BvsrTourCode, number>> = {};
+
+    for (const c of BVSR_TOUR_CODES) {
+      const m = Number(maxObj[c]);
+      const r = Number(remObj[c]);
+      if (!Number.isFinite(m) || m < 0 || !Number.isFinite(r) || r < 0) {
+        return null;
+      }
+      max[c] = Math.floor(m);
+      remaining[c] = Math.floor(r);
+    }
+
+    let booked: Partial<Record<BvsrTourCode, number>> | undefined;
+    const rawBooked = o['booked'];
+    if (rawBooked && typeof rawBooked === 'object') {
+      const bObj = rawBooked as Record<string, unknown>;
+      booked = {};
+      for (const c of BVSR_TOUR_CODES) {
+        const b = Number(bObj[c]);
+        if (Number.isFinite(b) && b >= 0) {
+          booked[c] = Math.floor(b);
+        }
+      }
+    }
+
+    return { success: true, max, remaining, booked, liveData: true };
+  }
+
+  async checkTourEligibility(email: string): Promise<TourEligibilityResult> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      throw new Error('Registration service is not configured. Please contact the administrator.');
+    }
+
+    const trimmed = email.trim();
+    const url =
+      this.registrationScriptURL +
+      (this.registrationScriptURL.includes('?') ? '&' : '?') +
+      'action=checkTourEligibility&email=' +
+      encodeURIComponent(trimmed);
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 18_000);
+    try {
+      const res = await fetch(url, { method: 'GET', mode: 'cors', signal: ctrl.signal });
+      const text = await res.text();
+      let data: TourEligibilityResult;
+      try {
+        data = JSON.parse(text) as TourEligibilityResult;
+      } catch {
+        throw new Error('Unexpected response from server. Please try again later.');
+      }
+      return data;
+    } catch (e: unknown) {
+      if (e instanceof Error && e.name === 'AbortError') {
+        throw new Error('Request timed out. Check your connection and try again.');
+      }
+      throw e instanceof Error ? e : new Error('Failed to check tour eligibility.');
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async saveTourSelection(payload: SaveTourSelectionPayload): Promise<SaveTourSelectionResult> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      throw new Error('Registration service is not configured. Please contact the administrator.');
+    }
+
+    const params = new URLSearchParams();
+    params.set('action', 'saveTourSelection');
+    params.set('email', payload.email.trim());
+    params.set('tourSelected', payload.tourSelected);
+    params.set('confirmNameMismatch', payload.confirmNameMismatch ? 'true' : 'false');
+    if (payload.firstName != null && payload.firstName !== '') {
+      params.set('firstName', payload.firstName.trim());
+    }
+    if (payload.lastName != null && payload.lastName !== '') {
+      params.set('lastName', payload.lastName.trim());
+    }
+    if (payload.countryOfOrigin != null && payload.countryOfOrigin !== '') {
+      params.set('countryOfOrigin', payload.countryOfOrigin.trim());
+    }
+    if (payload.nationality != null && payload.nationality !== '') {
+      params.set('nationality', payload.nationality.trim());
+    }
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 35_000);
+    try {
+      const res = await fetch(this.registrationScriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: params.toString(),
+        mode: 'cors',
+        signal: ctrl.signal
+      });
+
+      const text = await res.text();
+      let data: { success?: boolean; message?: string; code?: string };
+      try {
+        data = JSON.parse(text) as { success?: boolean; message?: string; code?: string };
+      } catch {
+        return { status: 'error', message: 'Unexpected response from server. Please try again later.' };
+      }
+
+      if (data.success) {
+        return { status: 'saved' };
+      }
+      if (data.code === 'NAME_MISMATCH') {
+        return { status: 'name_mismatch' };
+      }
+      if (data.code === 'TOUR_FULL' || data.code === 'SOLD_OUT_TOUR') {
+        return { status: 'tour_full', message: data.message };
+      }
+      return { status: 'error', message: data.message || 'Could not save tour selection.' };
+    } catch (e: unknown) {
+      if (e instanceof Error && e.name === 'AbortError') {
+        return { status: 'error', message: 'Request timed out. Check your connection and try again.' };
+      }
+      throw e instanceof Error ? e : new Error('Tour selection failed.');
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   async submitTourRegistration(payload: TourRegistrationPayload): Promise<TourRegistrationResult> {
     if (!this.isConfigured(this.registrationScriptURL)) {
       throw new Error('Registration service is not configured. Please contact the administrator.');
@@ -239,6 +478,9 @@ export class RegistrationService {
     params.set('may16', payload.may16);
     params.set('may17', payload.may17);
     params.set('confirmNameMismatch', payload.confirmNameMismatch ? 'true' : 'false');
+    if (payload.tourSelected) {
+      params.set('tourSelected', payload.tourSelected);
+    }
 
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 35_000);

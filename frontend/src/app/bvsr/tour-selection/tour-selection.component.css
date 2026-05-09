@@ -1,0 +1,30 @@
+.tour-selection-page {
+  min-height: 100vh;
+  padding: 100px 24px 64px;
+  box-sizing: border-box;
+}
+
+.wrap {
+  max-width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.page-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.page-title {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(30px, 4vw, 44px);
+  color: #f1d85b;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(241, 216, 91, 0.55);
+}
+
+@media (max-width: 768px) {
+  .tour-selection-page {
+    padding: 90px 16px 50px;
+  }
+}
