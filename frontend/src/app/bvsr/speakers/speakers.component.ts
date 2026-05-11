@@ -85,6 +85,7 @@ export class SpeakersComponent implements OnInit {
       name: 'Jan Wörner',
       position: '',
       image: 'assets/images/janWoerner.png',
+      talkTitle: 'Future of Spaceflight',
       content: [
         'Director General of ESA 2015 - 2021 and Raumfahrtkoordinator des Landes Hessen. He was also the President of TU Darmstadt from 2007 - 2014'
       ]
