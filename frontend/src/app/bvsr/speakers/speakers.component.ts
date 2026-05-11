@@ -60,13 +60,14 @@ export class SpeakersComponent implements OnInit {
       name: 'Michael Boss',
       position: 'Chief Commercial Officer Europa, Starlab Space GmbH',
       image: 'assets/images/michaelBoss.png',
-      talkTitle: '',
+      talkTitle:
+        'Strategic access to space and microgravity: from Artemis 2 and the Moon to Starlab and commercial LEO',
       content: [
-        'He is part of the world-wide Starlab Joint-Venture in USA, Japan and Canada.',
-        'Michael contributes to the development of the "NEWSpace LEO-Economy" market and is responsible for the fundraising at governments, institutions and private investors in Europe, as part of the overall investment in Starlab infrastructure, commercial services and utilization for the Post-ISS period.',
-        'Prior to this he conducted the development programme at TESAT-Spacecom GmbH & Co.KG, a subsidiary of Airbus, comprising world-wide leading communication equipment for satellites mainly for the commercial market and "NewSpace"-constellations.',
-        'Michael Boss holds a degree in Electrical Engineering and joined Airbus Defence and Space in 1998.',
-        'He held numerous technical and management positions in Satellite Operation, and for Space Equipment as Head of Lean Management and Business Development.'
+        'This presentation highlights Airbus\'s contribution in Germany to international collaborations within the current era of human spaceflight—from the return to the Moon to the establishment of a permanent commercial infrastructure in Earth orbit.',
+
+        'Artemis 2: The return to the Moon begins in Bremen. The first part covers Airbus Bremen\'s crucial role in the Artemis 2 mission, centered on the European Service Module (ESM), the technological heart of the Orion spacecraft. Beyond an overview of the overall system and lunar orbit—including perspectives often summarized in outreach as the "dark side" of the Moon—the talk stresses how international cooperation is essential to mission success.',
+
+        'Starlab: a next-generation space station. The transition from the International Space Station to NASA\'s Commercial LEO Destination (CLD) program marks a paradigm shift. The presentation introduces the Starlab joint venture between Voyager Technologies, Mitsubishi Corporation, and Airbus. With a planned service life of more than 30 years, Starlab is a next-generation platform that secures Europe\'s strategic access to the microgravity environment and our contribution to the global LEO economy. The emerging LEO ecosystem offers opportunities especially for students, academia, institutions and agencies, startups, and SMEs.'
       ]
     },
     {
