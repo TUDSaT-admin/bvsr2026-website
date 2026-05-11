@@ -79,6 +79,15 @@ export class SpeakersComponent implements OnInit {
       content: [
         'Momentum Aerospace will provide an industry perspective as a young startup operating in Germany\'s aerospace sector.'
       ]
+    },
+    {
+      id: 'Jan Wörner',
+      name: 'Jan Wörner',
+      position: '',
+      image: 'assets/images/janWoerner.png',
+      content: [
+        'Director General of ESA 2015 - 2021 and Raumfahrtkoordinator des Landes Hessen. He was also the President of TU Darmstadt from 2007 - 2014'
+      ]
     }
   ];
 
