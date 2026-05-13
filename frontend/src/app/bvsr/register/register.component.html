@@ -2,33 +2,33 @@
 
 <section class="register-section">
   <div class="container">
-    <h1 class="page-title">Get Your Conference Pass</h1>
+    <h1 class="page-title">{{ 'register.title' | translate }}</h1>
 
     <div *ngIf="capacityLoading && !registrationComplete" class="capacity-loading">
-      <p>Checking registration availability…</p>
+      <p>{{ 'register.capacityLoading' | translate }}</p>
     </div>
 
     <div *ngIf="!capacityLoading && registrationSoldOut && !registrationComplete" class="sold-out-block">
-      <h2 class="sold-out-heading">Sold out</h2>
+      <h2 class="sold-out-heading">{{ 'register.soldOutHeading' | translate }}</h2>
       <p class="sold-out-text">
-        Conference registration has closed. All {{ maxTicketsUi }} passes have been allocated.
+        {{ 'register.soldOutText' | translate:{ max: maxTicketsUi.toString() } }}
       </p>
-      <button mat-stroked-button type="button" class="sold-out-home-link" routerLink="/">Return to home</button>
+      <button mat-stroked-button type="button" class="sold-out-home-link" routerLink="/">{{ 'register.returnHome' | translate }}</button>
     </div>
 
     <p *ngIf="!capacityLoading && !registrationSoldOut && capacity && !registrationComplete" class="spots-remaining">
-      Passes remaining: {{ capacity.remaining }} / {{ capacity.maxTickets }}
+      {{ 'register.passesRemaining' | translate:{ remaining: capacity.remaining.toString(), max: capacity.maxTickets.toString() } }}
     </p>
     
     <div class="progress-bar" *ngIf="!registrationComplete && !capacityLoading && !registrationSoldOut">
       <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
         <div class="step-number">1</div>
-        <div class="step-label">Personal Information</div>
+        <div class="step-label">{{ 'register.step1Label' | translate }}</div>
       </div>
       <div class="step-line" [class.completed]="currentStep > 1"></div>
       <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
         <div class="step-number">2</div>
-        <div class="step-label">CV Upload (Optional)</div>
+        <div class="step-label">{{ 'register.step2Label' | translate }}</div>
       </div>
     </div>
 
@@ -40,52 +40,52 @@
       
       <!-- Step 1: Personal Information -->
       <div *ngIf="currentStep === 1" class="form-step">
-        <h2>Personal Information</h2>
+        <h2>{{ 'register.step1Heading' | translate }}</h2>
         
         <div class="form-row">
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>First Name *</mat-label>
+            <mat-label>{{ 'register.firstName' | translate }}</mat-label>
             <input matInput formControlName="firstName" required>
             <mat-error *ngIf="registrationForm.get('firstName')?.hasError('required')">
-              First name is required
+              {{ 'register.errFirstNameRequired' | translate }}
             </mat-error>
             <mat-error *ngIf="registrationForm.get('firstName')?.hasError('minlength')">
-              First name must be at least 2 characters
+              {{ 'register.errFirstNameMin' | translate }}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Last Name *</mat-label>
+            <mat-label>{{ 'register.lastName' | translate }}</mat-label>
             <input matInput formControlName="lastName" required>
             <mat-error *ngIf="registrationForm.get('lastName')?.hasError('required')">
-              Last name is required
+              {{ 'register.errLastNameRequired' | translate }}
             </mat-error>
             <mat-error *ngIf="registrationForm.get('lastName')?.hasError('minlength')">
-              Last name must be at least 2 characters
+              {{ 'register.errLastNameMin' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
 
         <mat-form-field appearance="outline" class="form-field full-width">
-          <mat-label>Email *</mat-label>
+          <mat-label>{{ 'register.email' | translate }}</mat-label>
           <input matInput type="email" formControlName="email" required>
           <mat-error *ngIf="registrationForm.get('email')?.hasError('required')">
-            Email is required
+            {{ 'register.errEmailRequired' | translate }}
           </mat-error>
           <mat-error *ngIf="registrationForm.get('email')?.hasError('email')">
-            Please enter a valid email address
+            {{ 'register.errEmailInvalid' | translate }}
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field full-width">
-          <mat-label>Association *</mat-label>
+          <mat-label>{{ 'register.association' | translate }}</mat-label>
           <mat-select formControlName="association" required>
             <mat-option *ngFor="let assoc of associations" [value]="assoc">
               {{ assoc }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="registrationForm.get('association')?.hasError('required')">
-            Please select an association
+            {{ 'register.errAssociationRequired' | translate }}
           </mat-error>
         </mat-form-field>
 
@@ -93,30 +93,28 @@
           *ngIf="registrationForm.get('association')?.value === 'Others'" 
           appearance="outline" 
           class="form-field full-width">
-          <mat-label>Please specify your association *</mat-label>
+          <mat-label>{{ 'register.otherAssociation' | translate }}</mat-label>
           <input matInput formControlName="otherAssociation" required>
           <mat-error *ngIf="registrationForm.get('otherAssociation')?.hasError('required')">
-            Please specify your association
+            {{ 'register.errOtherAssociationRequired' | translate }}
           </mat-error>
         </mat-form-field>
 
         <div class="button-group">
           <button mat-raised-button type="button" (click)="nextStep()" [disabled]="registrationForm.get('firstName')?.invalid || registrationForm.get('lastName')?.invalid || registrationForm.get('email')?.invalid || registrationForm.get('association')?.invalid || (registrationForm.get('association')?.value === 'Others' && registrationForm.get('otherAssociation')?.invalid)">
-            Next
+            {{ 'register.next' | translate }}
           </button>
         </div>
       </div>
 
       <!-- Step 2: CV Upload -->
       <div *ngIf="currentStep === 2" class="form-step">
-        <h2>CV Upload (Optional)</h2>
-        <p class="info-text">
-          Upload your CV to join our job pool. You can also do this later using the "Upload CV" option in the navbar.
-        </p>
+        <h2>{{ 'register.step2Heading' | translate }}</h2>
+        <p class="info-text">{{ 'register.cvInfo' | translate }}</p>
 
         <div class="cv-upload-section">
           <mat-checkbox formControlName="uploadCV">
-            I want to upload my CV for the job pool
+            {{ 'register.uploadCheckbox' | translate }}
           </mat-checkbox>
 
           <div *ngIf="registrationForm.get('uploadCV')?.value" class="file-upload">
@@ -129,19 +127,19 @@
               style="display: none;">
             <button mat-raised-button type="button" class="upload-button" (click)="fileInput.click()">
               <mat-icon>upload</mat-icon>
-              Choose File
+              {{ 'register.chooseFile' | translate }}
             </button>
             <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
-            <p class="file-hint">Maximum file size: 5MB (PDF, DOC, DOCX)</p>
+            <p class="file-hint">{{ 'register.fileHint' | translate }}</p>
           </div>
         </div>
 
         <div class="button-group">
-          <button mat-button type="button" (click)="previousStep()">Previous</button>
+          <button mat-button type="button" (click)="previousStep()">{{ 'register.previous' | translate }}</button>
           <button mat-raised-button type="submit" [disabled]="submitting || registrationSoldOut || capacityLoading">
-            <span *ngIf="registrationSoldOut && !submitting">Sold out</span>
-            <span *ngIf="!registrationSoldOut && !submitting">Complete Registration</span>
-            <span *ngIf="submitting">Processing...</span>
+            <span *ngIf="registrationSoldOut && !submitting">{{ 'register.soldOut' | translate }}</span>
+            <span *ngIf="!registrationSoldOut && !submitting">{{ 'register.complete' | translate }}</span>
+            <span *ngIf="submitting">{{ 'register.processing' | translate }}</span>
           </button>
         </div>
       </div>
@@ -159,47 +157,47 @@
     <div *ngIf="registrationComplete && registrationData" class="success-page">
       <div class="success-header">
         <mat-icon class="success-icon">check_circle</mat-icon>
-        <h2>Registration Successful!</h2>
-        <p class="success-message">Your registration has been confirmed. Download your pass below if you need another copy.</p>
+        <h2>{{ 'register.successTitle' | translate }}</h2>
+        <p class="success-message">{{ 'register.successMessage' | translate }}</p>
       </div>
 
       <div class="registration-details-card">
-        <h3>Your Registration Details</h3>
+        <h3>{{ 'register.detailsHeading' | translate }}</h3>
         
         <div class="details-grid">
           <div class="detail-item">
-            <span class="detail-label">Name:</span>
+            <span class="detail-label">{{ 'register.labelName' | translate }}</span>
             <span class="detail-value">{{ registrationData.firstName }} {{ registrationData.lastName }}</span>
           </div>
           <div class="detail-item">
-            <span class="detail-label">Email:</span>
+            <span class="detail-label">{{ 'register.labelEmail' | translate }}</span>
             <span class="detail-value">{{ registrationData.email }}</span>
           </div>
           <div class="detail-item">
-            <span class="detail-label">Association:</span>
+            <span class="detail-label">{{ 'register.labelAssociation' | translate }}</span>
             <span class="detail-value">{{ registrationData.association }}</span>
           </div>
           <div class="detail-item">
-            <span class="detail-label">Registration ID:</span>
+            <span class="detail-label">{{ 'register.labelRegId' | translate }}</span>
             <span class="detail-value reg-id">{{ registrationData.registrationId }}</span>
           </div>
         </div>
 
         <div class="qr-section">
-          <h4>Your Conference Pass QR Code</h4>
+          <h4>{{ 'register.qrHeading' | translate }}</h4>
           <div class="qr-container">
-            <img [src]="qrCodeDataUrl" alt="QR Code" class="qr-code">
+            <img [src]="qrCodeDataUrl" [alt]="'register.qrAlt' | translate" class="qr-code">
           </div>
-          <p class="qr-hint">Scan this QR code at the conference for entry</p>
+          <p class="qr-hint">{{ 'register.qrHint' | translate }}</p>
         </div>
 
         <div class="action-buttons">
           <button mat-raised-button class="download-button" (click)="downloadPDF()">
             <mat-icon>download</mat-icon>
-            Download PDF Pass
+            {{ 'register.downloadPdf' | translate }}
           </button>
           <button mat-button class="home-button" routerLink="/">
-            Return to Home
+            {{ 'register.returnHomeBtn' | translate }}
           </button>
         </div>
       </div>

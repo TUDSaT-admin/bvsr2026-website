@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material/material.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-sponsor-form-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './sponsor-form-dialog.component.html',
   styleUrls: ['./sponsor-form-dialog.component.css']
 })
@@ -16,6 +18,7 @@ export class SponsorFormDialogComponent {
   submitting = false;
   successMsg = '';
   errorMsg = '';
+  private readonly i18n = inject(I18nService);
 
   private scriptURL =
     'https://script.google.com/macros/s/AKfycbzg8tFMijrWWNMRzKnHNsWUaLvBuHDjWz12CI4s6qSUmqsxyZfm0N3owqKy6lWGsCHnLg/exec';
@@ -49,7 +52,7 @@ export class SponsorFormDialogComponent {
 
     fetch(this.scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        this.successMsg = 'Form submitted successfully!';
+        this.successMsg = this.i18n.translate('dialogSponsor.success');
         this.submitting = false;
 
         setTimeout(() => {
@@ -59,7 +62,7 @@ export class SponsorFormDialogComponent {
       })
       .catch((err) => {
         console.error('Error!', err);
-        this.errorMsg = 'Submission failed. Please try again.';
+        this.errorMsg = this.i18n.translate('dialogSponsor.error');
         this.submitting = false;
       });
   }

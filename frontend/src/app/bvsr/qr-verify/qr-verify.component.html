@@ -2,33 +2,33 @@
 
 <section class="qr-verify-section">
   <div class="container">
-    <h1 class="page-title">Verify Registration</h1>
-    <p class="subtitle">Enter the registration ID or scan the QR code to verify a conference pass.</p>
+    <h1 class="page-title">{{ 'verify.title' | translate }}</h1>
+    <p class="subtitle">{{ 'verify.subtitle' | translate }}</p>
 
     <form [formGroup]="verifyForm" (ngSubmit)="onSubmit()" class="verify-form">
       <mat-form-field appearance="outline" class="form-field full-width">
-        <mat-label>Registration ID</mat-label>
-        <input matInput formControlName="registrationId" placeholder="BVSR2026-xxxxx-xxxxx" required>
+        <mat-label>{{ 'verify.idLabel' | translate }}</mat-label>
+        <input matInput formControlName="registrationId" [placeholder]="'verify.idPlaceholder' | translate" required>
         <mat-error *ngIf="verifyForm.get('registrationId')?.hasError('required')">
-          Registration ID is required
+          {{ 'verify.idRequired' | translate }}
         </mat-error>
       </mat-form-field>
 
       <div class="button-group">
         <button mat-raised-button type="button" (click)="onScanQR()" class="scan-button">
           <mat-icon>qr_code_scanner</mat-icon>
-          Scan QR Code
+          {{ 'verify.scan' | translate }}
         </button>
         <button mat-raised-button type="submit" [disabled]="verifying">
-          <span *ngIf="!verifying">Verify</span>
-          <span *ngIf="verifying">Verifying...</span>
+          <span *ngIf="!verifying">{{ 'verify.verify' | translate }}</span>
+          <span *ngIf="verifying">{{ 'verify.verifying' | translate }}</span>
         </button>
       </div>
 
       <div *ngIf="verificationResult" class="verification-result" [class.valid]="verificationResult.valid" [class.invalid]="!verificationResult.valid">
         <mat-icon>{{ verificationResult.valid ? 'check_circle' : 'error' }}</mat-icon>
         <div class="result-content">
-          <h3>{{ verificationResult.valid ? 'Valid Registration' : 'Invalid Registration' }}</h3>
+          <h3>{{ verificationResult.valid ? ('verify.validTitle' | translate) : ('verify.invalidTitle' | translate) }}</h3>
           <p>{{ verificationResult.message }}</p>
           <p *ngIf="verificationResult.valid && verificationResult.registrationId" class="reg-id">
             ID: {{ verificationResult.registrationId }}

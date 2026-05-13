@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { SeoService } from '../../services/seo.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-impressum',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, TranslatePipe],
   templateUrl: './impressum.component.html',
   styleUrl: './impressum.component.css'
 })

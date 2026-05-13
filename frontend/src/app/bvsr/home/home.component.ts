@@ -7,11 +7,12 @@ import { RouterModule } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
 import { RegistrationService } from '../../services/registration.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, MaterialModule, RouterModule, FooterComponent],
+  imports: [CommonModule, NavbarComponent, MaterialModule, RouterModule, FooterComponent, TranslatePipe],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

@@ -8,15 +8,20 @@
   <span class="spacer"></span>
 
   <nav class="links desktop-links">
-    <button mat-button class="link" routerLink="/about">About</button>
-    <button mat-button class="link" routerLink="/schedule">Schedule</button>
-    <button mat-button class="link" routerLink="/speakers">Speakers & Guests</button>
-    <button mat-button class="link" routerLink="/sponsers">Sponsors</button>
-    <button mat-button class="link" routerLink="/contact">Contact</button>
-    <button mat-button class="link" routerLink="/upload-cv">Upload CV</button>
-    <button mat-button class="link" routerLink="/tour-selection">Tour selection</button>
+    <button mat-button class="link" routerLink="/about">{{ 'nav.about' | translate }}</button>
+    <button mat-button class="link" routerLink="/schedule">{{ 'nav.schedule' | translate }}</button>
+    <button mat-button class="link" routerLink="/speakers">{{ 'nav.speakersGuests' | translate }}</button>
+    <button mat-button class="link" routerLink="/sponsers">{{ 'nav.sponsors' | translate }}</button>
+    <button mat-button class="link" routerLink="/contact">{{ 'nav.contact' | translate }}</button>
+    <button mat-button class="link" routerLink="/upload-cv">{{ 'nav.uploadCv' | translate }}</button>
+    <button mat-button class="link" routerLink="/tour-selection">{{ 'nav.tourSelection' | translate }}</button>
   </nav>
 
+  <div class="lang-switch desktop-lang" [attr.aria-label]="'nav.language' | translate">
+    <button type="button" class="lang-btn" [class.active]="i18n.lang() === 'en'" (click)="onLang('en')">EN</button>
+    <span class="lang-sep">|</span>
+    <button type="button" class="lang-btn" [class.active]="i18n.lang() === 'de'" (click)="onLang('de')">DE</button>
+  </div>
 
   <button class="menu-icon" (click)="toggleMenu()">
     <mat-icon>menu</mat-icon>
@@ -25,16 +30,18 @@
 
   <div class="mobile-menu" [class.open]="menuOpen">
 
-    <button mat-button class="link" routerLink="/about" (click)="toggleMenu()">About</button>
-    <button mat-button class="link" routerLink="/schedule" (click)="toggleMenu()">Schedule</button>
-    <button mat-button class="link" routerLink="/speakers" (click)="toggleMenu()">Speakers & Guests</button>
-    <button mat-button class="link" routerLink="/sponsers" (click)="toggleMenu()">Sponsors</button>
-    <button mat-button class="link" routerLink="/contact" (click)="toggleMenu()">Contact</button>
-    <button mat-button class="link" routerLink="/upload-cv" (click)="toggleMenu()">Upload CV</button>
-    <button mat-button class="link" routerLink="/tour-selection" (click)="toggleMenu()">Tour selection</button>
+    <button mat-button class="link" routerLink="/about" (click)="toggleMenu()">{{ 'nav.about' | translate }}</button>
+    <button mat-button class="link" routerLink="/schedule" (click)="toggleMenu()">{{ 'nav.schedule' | translate }}</button>
+    <button mat-button class="link" routerLink="/speakers" (click)="toggleMenu()">{{ 'nav.speakersGuests' | translate }}</button>
+    <button mat-button class="link" routerLink="/sponsers" (click)="toggleMenu()">{{ 'nav.sponsors' | translate }}</button>
+    <button mat-button class="link" routerLink="/contact" (click)="toggleMenu()">{{ 'nav.contact' | translate }}</button>
+    <button mat-button class="link" routerLink="/upload-cv" (click)="toggleMenu()">{{ 'nav.uploadCv' | translate }}</button>
+    <button mat-button class="link" routerLink="/tour-selection" (click)="toggleMenu()">{{ 'nav.tourSelection' | translate }}</button>
+
+    <div class="lang-switch mobile-lang" [attr.aria-label]="'nav.language' | translate">
+      <button type="button" class="lang-btn" [class.active]="i18n.lang() === 'en'" (click)="onLang('en')">EN</button>
+      <span class="lang-sep">|</span>
+      <button type="button" class="lang-btn" [class.active]="i18n.lang() === 'de'" (click)="onLang('de')">DE</button>
+    </div>
   </div>
-
-
-
-
 </mat-toolbar>

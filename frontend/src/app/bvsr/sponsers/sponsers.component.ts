@@ -6,6 +6,7 @@ import { SponsorFormDialogComponent } from '../sponsor-form-dialog/sponsor-form-
 import { MatDialog } from '@angular/material/dialog';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 /** Logo frame size on the page (reflects sponsorship / partnership level) */
 export type LogoDisplaySize =
@@ -30,7 +31,7 @@ export interface SupporterLogo {
 @Component({
   selector: 'app-sponsers',
   standalone: true,
-  imports: [NavbarComponent, MaterialModule, CommonModule, FooterComponent],
+  imports: [NavbarComponent, MaterialModule, CommonModule, FooterComponent, TranslatePipe],
   templateUrl: './sponsers.component.html',
   styleUrls: ['./sponsers.component.css']
 })

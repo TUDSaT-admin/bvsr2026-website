@@ -3,7 +3,7 @@
 <section class="speakers-page">
   <div class="speakers-wrapper">
     <div class="page-heading">
-      <h1 class="page-title">Speakers</h1>
+      <h1 class="page-title">{{ 'speakers.title' | translate }}</h1>
     </div>
 
     <div class="cards-grid">
@@ -27,7 +27,7 @@
             class="speaker-name"
             [class.speaker-title-compact]="speaker.id === 'momentum-aerospace'">
             {{ speaker.name }}</h2>
-          <p class="speaker-position" *ngIf="speaker.position">{{ speaker.position }}</p>
+          <p class="speaker-position" *ngIf="tr(speaker, 'position') as positionText">{{ positionText }}</p>
         </div>
       </button>
     </div>
@@ -35,19 +35,19 @@
 
   <div class="speaker-modal-overlay" *ngIf="selectedSpeaker as speaker" (click)="closeSpeaker()">
     <div class="speaker-modal" (click)="$event.stopPropagation()">
-      <button type="button" class="modal-close" aria-label="Close dialog" (click)="closeSpeaker()">×</button>
+      <button type="button" class="modal-close" [attr.aria-label]="'speakers.closeDialog' | translate" (click)="closeSpeaker()">×</button>
 
       <div class="details-head">
         <h2
           class="details-name"
           [class.details-title-compact]="speaker.id === 'momentum-aerospace'">
           {{ speaker.name }}</h2>
-        <p class="details-position" *ngIf="speaker.position">{{ speaker.position }}</p>
-        <p class="details-talk" *ngIf="speaker.talkTitle">{{ speaker.talkTitle }}</p>
+        <p class="details-position" *ngIf="tr(speaker, 'position') as positionText">{{ positionText }}</p>
+        <p class="details-talk" *ngIf="tr(speaker, 'talkTitle') as talkTitleText">{{ talkTitleText }}</p>
       </div>
 
       <div class="details-content">
-        <p *ngFor="let paragraph of speaker.content">{{ paragraph }}</p>
+        <p *ngFor="let paragraph of contentParagraphs(speaker)">{{ paragraph }}</p>
       </div>
     </div>
   </div>

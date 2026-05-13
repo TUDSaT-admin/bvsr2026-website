@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, 
 import { NavbarComponent } from "../navbar/navbar.component";
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 interface Workshop {
   id: string;
@@ -18,7 +19,7 @@ interface Workshop {
 @Component({
   selector: 'app-workshop',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NavbarComponent, FooterComponent],
+  imports: [CommonModule, ReactiveFormsModule, NavbarComponent, FooterComponent, TranslatePipe],
   templateUrl: './workshop.component.html',
   styleUrls: ['./workshop.component.css']
 })

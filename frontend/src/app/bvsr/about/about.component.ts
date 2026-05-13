@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-about',
@@ -14,7 +15,8 @@ import { SeoService } from '../../services/seo.service';
     NavbarComponent,
     MatButtonModule,
     RouterModule,
-    FooterComponent
+    FooterComponent,
+    TranslatePipe
 ],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.css']

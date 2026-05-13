@@ -1,16 +1,13 @@
 <app-navbar></app-navbar>
 
 <section class="contact-section">
-  <h1 class="constellation-title">TRACE YOUR PATH</h1>
+  <h1 class="constellation-title">{{ 'contact.title' | translate }}</h1>
 
   <div class="contact-container">
     <!-- Left side panel -->
     <div class="contact-info">
-      <h2>Connect With Us</h2>
-      <p>
-        Join us at the BVSR Conference 2026, organized by TUDSaT, and be part of a unique platform where students,
-        researchers, and industry leaders collaborate on the future of aerospace.
-      </p>
+      <h2>{{ 'contact.connectTitle' | translate }}</h2>
+      <p>{{ 'contact.connectP' | translate }}</p>
 
       <div class="socials">
         <a href="https://www.youtube.com/@tudsat" target="_blank">
@@ -34,20 +31,20 @@
 
     <!-- Right side panel -->
     <div class="contact-form">
-  <h2 class="yellow-title">Launch Your Queries</h2>
+  <h2 class="yellow-title">{{ 'contact.formTitle' | translate }}</h2>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Name</mat-label>
+      <mat-label>{{ 'contact.name' | translate }}</mat-label>
       <input matInput formControlName="name" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ 'contact.email' | translate }}</mat-label>
       <input matInput type="email" formControlName="email" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Fuel our inbox with your thoughts...</mat-label>
+      <mat-label>{{ 'contact.message' | translate }}</mat-label>
       <textarea matInput rows="3" formControlName="questions"></textarea>
     </mat-form-field>
 
@@ -59,7 +56,7 @@
     </div>
 
     <button class="launch-btn" type="submit" [disabled]="submitting">
-      LAUNCH
+      {{ 'contact.submit' | translate }}
     </button>
   </form>
 </div>

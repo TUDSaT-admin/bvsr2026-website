@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, HostListener, AfterViewInit } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { SeoService } from '../../services/seo.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
  
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, TranslatePipe],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.css'
 })

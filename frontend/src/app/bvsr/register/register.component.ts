@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material/material.module';
@@ -9,13 +9,15 @@ import { SeoService } from '../../services/seo.service';
 import { BVSR_MAX_CONFERENCE_TICKETS, RegistrationCapacity, RegistrationService } from '../../services/registration.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TourRegistrationPromptDialogComponent } from './tour-registration-prompt-dialog/tour-registration-prompt-dialog.component';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { I18nService } from '../../services/i18n.service';
 import QRCode from 'qrcode';
 import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [NavbarComponent, RouterModule, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent],
+  imports: [NavbarComponent, RouterModule, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent, TranslatePipe],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -37,6 +39,7 @@ export class RegisterComponent implements OnInit {
   capacity: RegistrationCapacity | null = null;
 
   readonly maxTicketsUi = BVSR_MAX_CONFERENCE_TICKETS;
+  private readonly i18n = inject(I18nService);
 
   associations = [
     'FAR eV',
@@ -110,14 +113,14 @@ export class RegisterComponent implements OnInit {
   private setSoldOutFromServer(message?: string) {
     this.registrationSoldOut = true;
     this.registrationForm.disable({ emitEvent: false });
-    this.errorMsg = message || `Conference registration is sold out. All ${BVSR_MAX_CONFERENCE_TICKETS} passes have been allocated.`;
+    this.errorMsg = message || this.i18n.translate('register.soldOutText', { max: String(BVSR_MAX_CONFERENCE_TICKETS) });
   }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        this.errorMsg = 'File size must be less than 5MB';
+        this.errorMsg = this.i18n.translate('cv.fileTooLarge');
         return;
       }
       this.selectedFile = file;
@@ -170,7 +173,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
     if (this.registrationForm.invalid) {
-      this.errorMsg = 'Please fill in all required fields correctly.';
+      this.errorMsg = this.i18n.translate('tour.fillRequired');
       return;
     }
 

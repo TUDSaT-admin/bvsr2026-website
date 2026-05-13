@@ -1,13 +1,13 @@
 <footer class="site-footer" role="contentinfo">
   <div class="footer-inner">
-    <p class="copyright">© 2026 BVSR Conference · Organized by TUDSaT</p>
-    <nav class="footer-links" aria-label="Footer links">
+    <p class="copyright">{{ 'footer.copyright' | translate }}</p>
+    <nav class="footer-links" [attr.aria-label]="'footer.ariaFooter' | translate">
       <a href="https://www.tudsat.space/privacy-policy" target="_blank" rel="noopener noreferrer">
-        Privacy Policy
+        {{ 'footer.privacy' | translate }}
       </a>
       <span class="sep">·</span>
       <a href="https://www.tudsat.space/imprint" target="_blank" rel="noopener noreferrer">
-        Impressum
+        {{ 'footer.impressum' | translate }}
       </a>
     </nav>
   </div>

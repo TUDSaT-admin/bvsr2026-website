@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material/material.module';
@@ -6,11 +6,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [NavbarComponent, RouterModule, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent],
+  imports: [NavbarComponent, RouterModule, MaterialModule, ReactiveFormsModule, CommonModule, FooterComponent, TranslatePipe],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css']
 })
@@ -20,6 +22,7 @@ export class ContactComponent implements OnInit {
   successMsg = '';
   errorMsg = '';
 
+  private readonly i18n = inject(I18nService);
   private scriptURL = 'https://script.google.com/macros/s/AKfycbzpHFeCwTOemg62tM5CWmBGrPw3T7TUqqWOVMHKlLiJshYX6wH5tenjWzM2J76PaBWzAw/exec';
 
   constructor(
@@ -50,14 +53,14 @@ export class ContactComponent implements OnInit {
 
     fetch(this.scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        this.successMsg = '✅ Message sent successfully!';
+        this.successMsg = '✅ ' + this.i18n.translate('contact.success');
         this.form.reset();
         this.submitting = false;
         setTimeout(() => (this.successMsg = ''), 5000);
       })
       .catch((err) => {
         console.error('Error!', err);
-        this.errorMsg = '❌ Submission failed. Please try again.';
+        this.errorMsg = '❌ ' + this.i18n.translate('contact.error');
         this.submitting = false;
       });
   }
