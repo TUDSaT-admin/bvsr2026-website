@@ -94,11 +94,19 @@ export class QrVerifyComponent implements OnInit, OnDestroy {
   private async startScanner() {
     this.scannerError = '';
     this.errorMsg = '';
+
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+      this.scannerError =
+        'Camera access is not available. Open the site over HTTPS in Chrome or Safari and try again.';
+      this.scannerActive = true;
+      return;
+    }
+
     this.scannerStarting = true;
     this.scannerActive = true;
 
-    // Wait a tick so the <video> element is rendered before we attach the stream.
-    await new Promise<void>(resolve => setTimeout(resolve, 0));
+
+    await Promise.resolve();
 
     const video = this.videoEl?.nativeElement;
     if (!video) {
@@ -137,11 +145,15 @@ export class QrVerifyComponent implements OnInit, OnDestroy {
       this.scannerActive = false;
       const err = e as { name?: string; message?: string };
       if (err?.name === 'NotAllowedError' || err?.name === 'PermissionDeniedError') {
-        this.scannerError = 'Camera access was denied. Allow camera permission and try again.';
+        this.scannerError =
+          'Camera access was denied. Allow camera permission in your browser settings and try again.';
       } else if (err?.name === 'NotFoundError' || err?.name === 'OverconstrainedError') {
         this.scannerError = 'No camera found on this device.';
       } else if (err?.name === 'NotReadableError') {
         this.scannerError = 'Camera is already in use by another application.';
+      } else if (err?.name === 'SecurityError') {
+        this.scannerError =
+          'Camera blocked by the browser. Make sure the site is loaded over HTTPS.';
       } else {
         this.scannerError = err?.message || 'Could not start the camera. Please try again.';
       }
