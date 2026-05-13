@@ -80,6 +80,25 @@ export interface VerifyRegistrationResult {
   code?: string;
   message?: string;
 }
+
+export interface Announcement {
+  timestamp: string;
+  title: string;
+  body: string;
+  priority?: 'high' | 'normal';
+}
+
+export interface SpaceUpRegistrationPayload {
+  title: string;
+  description: string;
+  email: string;
+  organisation: string;
+}
+
+export interface SpaceUpRegistrationResult {
+  success: boolean;
+  message?: string;
+}
 export interface SaveTourSelectionPayload {
   email: string;
   tourSelected: BvsrTourCode;
@@ -101,7 +120,6 @@ export interface TourRegistrationPayload {
   may16: 'Yes' | 'No';
   may17: 'Yes' | 'No';
   confirmNameMismatch?: boolean;
-  /** When set, persisted to TOUR SELECTED alongside tour / attendance fields. */
   tourSelected?: BvsrTourCode;
 }
 
@@ -544,21 +562,91 @@ export class RegistrationService {
     }
   }
 
-  /**
-   * Verifies a registration ID against the Google Sheet.
-   *
-   * The Google Apps Script must implement `action=verifyRegistration` and respond with JSON of shape:
-   *   {
-   *     success: true,
-   *     found: true,
-   *     alreadyVerified: boolean,
-   *     firstName, lastName, association, email, registrationId,
-   *     verifiedAt: ISO string  // when found or already verified
-   *   }
-   *   or { success: true, found: false, message: 'Not found' }
-   * On first successful verify, the script should write the verifiedAt timestamp into the sheet so
-   * subsequent scans return alreadyVerified: true.
-   */
+  async fetchAnnouncements(): Promise<Announcement[]> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      return [];
+    }
+
+    const url =
+      this.registrationScriptURL +
+      (this.registrationScriptURL.includes('?') ? '&' : '?') +
+      'action=getAnnouncements';
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15_000);
+
+    try {
+      const res = await fetch(url, { method: 'GET', mode: 'cors', signal: ctrl.signal });
+      const text = await res.text();
+      let data: { success?: boolean; announcements?: Announcement[]; message?: string };
+      try {
+        data = JSON.parse(text);
+      } catch {
+        return [];
+      }
+      if (!data.success || !Array.isArray(data.announcements)) {
+        return [];
+      }
+      return data.announcements
+        .filter(a => a && (a.title || a.body))
+        .map(a => ({
+          timestamp: String(a.timestamp || ''),
+          title: String(a.title || ''),
+          body: String(a.body || ''),
+          priority: a.priority === 'high' ? 'high' : 'normal'
+        }));
+    } catch (e) {
+      console.warn('[announcements] fetch failed', e);
+      return [];
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async submitSpaceUpRegistration(payload: SpaceUpRegistrationPayload): Promise<SpaceUpRegistrationResult> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      throw new Error('Registration service is not configured. Please contact the administrator.');
+    }
+
+    const params = new URLSearchParams();
+    params.set('action', 'submitSpaceUp');
+    params.set('title', payload.title.trim());
+    params.set('description', payload.description.trim());
+    params.set('email', payload.email.trim());
+    params.set('organisation', payload.organisation.trim());
+    params.set('timestamp', new Date().toISOString());
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 25_000);
+    try {
+      const res = await fetch(this.registrationScriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: params.toString(),
+        mode: 'cors',
+        signal: ctrl.signal
+      });
+      const text = await res.text();
+      let data: SpaceUpRegistrationResult;
+      try {
+        data = JSON.parse(text) as SpaceUpRegistrationResult;
+      } catch {
+        throw new Error('Unexpected response from server. Please try again later.');
+      }
+      if (!data.success) {
+        throw new Error(data.message || 'Could not submit SpaceUp. Please try again later.');
+      }
+      return data;
+    } catch (e: unknown) {
+      if (e instanceof Error && e.name === 'AbortError') {
+        throw new Error('Request timed out. Check your connection and try again.');
+      }
+      throw e instanceof Error ? e : new Error('SpaceUp submission failed.');
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   async verifyQRCode(registrationId: string): Promise<VerifyRegistrationResult> {
     if (!this.isConfigured(this.registrationScriptURL)) {
       console.warn('Verification script URL not configured.');
