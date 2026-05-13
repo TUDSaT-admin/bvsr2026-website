@@ -50,11 +50,13 @@ export class SponsersComponent implements OnInit {
   sponsorsFriendsTier: SupporterLogo[] = [
     { name: 'Würth Elektronik', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/wurth.png' },
     { name: 'Merck', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/merck.JPG' },
+    { name: 'STI', tier: 'Friends', logoSize: 'tier-friends', logoSrc: 'assets/sponsors/STI.png' },
   ];
 
   donations: SupporterLogo[] = [
     { name: 'Sparkasse', logoSize: 'donation', logoSrc: 'assets/sponsors/sparkasse.jpg' },
     { name: 'Kultur Förderkreis Darmstadt', logoSize: 'donation', logoSrc: 'assets/sponsors/KulturFörderkreisDarmstadt.png' },
+    { name: 'Freunde der TU Darmstadt', logoSize: 'donation', logoSrc: 'assets/sponsors/TU_Freunde_Logo.jpg' },
   ];
 
   partners: SupporterLogo[] = [
