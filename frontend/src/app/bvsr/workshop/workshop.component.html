@@ -6,44 +6,75 @@
   <div class="grid">
     <div>
       <section class="hero">
-        <!-- <div class="headline">Hands-on Workshop Day</div> -->
-       <br> <div class="sub">Choose one workshop from each time slot (One per slot).</div>
+        <div class="sub">
+          Workshops run <strong>13:00&nbsp;–&nbsp;17:30</strong> across two slots.
+          Pick <strong>one workshop per slot</strong>. Workshops marked
+          <span class="badge-inline">Slot&nbsp;1&nbsp;+&nbsp;2</span> span the
+          whole afternoon , if you choose one of those, you cannot attend a
+          second workshop.
+        </div>
       </section>
 
       <section class="workshops">
-        <div class="section-title">
-          <!-- <strong>WORKSHOPS</strong> -->
-          <span class="muted"><b>Date: </b>30.11.2025 <br>Other details will be shared via entered email.</span>
+        <div class="availability-bar" *ngIf="availabilityLoading || availabilityError">
+          <span *ngIf="availabilityLoading">Loading live seat counts…</span>
+          <span *ngIf="!availabilityLoading && availabilityError">{{ availabilityError }}</span>
         </div>
 
-        <h3 class="slot-heading">Slot 1 : 1100 - 1400</h3>
+        <h3 class="slot-heading">Slot 1 · 13:00 – 15:00</h3>
         <ng-container *ngFor="let w of slot1Workshops; trackBy: trackById">
-          <div class="workshop-row">
+          <div class="workshop-row" [class.workshop-full]="w.isFull">
             <div class="workshop-info">
               <div>
-                <div class="workshop-title">{{ w.title }}</div>
-                <div class="workshop-meta">Time: {{ w.time }}</div>
+                <div class="workshop-title">
+                  {{ w.title }}
+                  <span class="badge-both" *ngIf="w.slot === 'BOTH'">Slot 1 + 2</span>
+                </div>
+                <div class="workshop-meta">
+                  <span>{{ w.speaker }}</span>
+                  <span class="dot">·</span>
+                  <span>{{ w.room }}</span>
+                </div>
               </div>
             </div>
-            <div style="text-align:right">
-              <div *ngIf="w.max !== null" class="workshop-meta">Max: {{ w.max }} • Seats left: {{ w.seatsLeft }}</div>
-              <div *ngIf="w.max === null" class="workshop-meta">{{ w.registered }} Registered (No limit on Occupancy)</div>
+            <div class="workshop-cap">
+              <div class="cap-line">
+                <span class="cap-num" [class.cap-low]="w.seatsLeft <= 5 && !w.isFull" [class.cap-zero]="w.isFull">
+                  {{ w.seatsLeft }}
+                </span>
+                <span class="cap-of">/ {{ w.capacity }}</span>
+              </div>
+              <div class="cap-label" *ngIf="!w.isFull">seats left</div>
+              <div class="cap-label cap-full" *ngIf="w.isFull">Full</div>
             </div>
           </div>
         </ng-container>
 
-        <h3 class="slot-heading">Slot 2 : 1500 – 1800 </h3>
+        <h3 class="slot-heading">Slot 2 · 15:30 – 17:30</h3>
         <ng-container *ngFor="let w of slot2Workshops; trackBy: trackById">
-          <div class="workshop-row">
+          <div class="workshop-row" [class.workshop-full]="w.isFull">
             <div class="workshop-info">
               <div>
-                <div class="workshop-title">{{ w.title }}</div>
-                <div class="workshop-meta">Time: {{ w.time }}</div>
+                <div class="workshop-title">
+                  {{ w.title }}
+                  <span class="badge-both" *ngIf="w.slot === 'BOTH'">Slot 1 + 2</span>
+                </div>
+                <div class="workshop-meta">
+                  <span>{{ w.speaker }}</span>
+                  <span class="dot">·</span>
+                  <span>{{ w.room }}</span>
+                </div>
               </div>
             </div>
-            <div style="text-align:right">
-              <div *ngIf="w.max !== null" class="workshop-meta">Max: {{ w.max }} • Seats left: {{ w.seatsLeft }}</div>
-              <div *ngIf="w.max === null" class="workshop-meta">{{ w.registered }} Registered (No limit on Occupancy)</div>
+            <div class="workshop-cap">
+              <div class="cap-line">
+                <span class="cap-num" [class.cap-low]="w.seatsLeft <= 5 && !w.isFull" [class.cap-zero]="w.isFull">
+                  {{ w.seatsLeft }}
+                </span>
+                <span class="cap-of">/ {{ w.capacity }}</span>
+              </div>
+              <div class="cap-label" *ngIf="!w.isFull">seats left</div>
+              <div class="cap-label cap-full" *ngIf="w.isFull">Full</div>
             </div>
           </div>
         </ng-container>
@@ -52,20 +83,35 @@
 
     <aside class="registration-panel">
       <h2>Register for Workshops</h2>
+      <p class="panel-hint">
+        Use the same <strong>email address</strong> you used to register for
+        the conference, we'll match it to your registration and save your
+        workshop choices.
+      </p>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-        <div class="form-row">
-          <label class="label">Name</label>
-          <input class="input" formControlName="name" placeholder="Your full name" />
-          <div class="field-error" *ngIf="name?.touched && name?.invalid">
-            <div *ngIf="name?.errors?.['required']">Name is required.</div>
-            <div *ngIf="name?.errors?.['maxlength']">Name is too long.</div>
+        <div class="form-row-pair">
+          <div class="form-row">
+            <label class="label" for="ws-firstName">First name</label>
+            <input id="ws-firstName" class="input" formControlName="firstName" placeholder="Jane" autocomplete="given-name" />
+            <div class="field-error" *ngIf="firstName?.touched && firstName?.invalid">
+              <div *ngIf="firstName?.errors?.['required']">First name is required.</div>
+              <div *ngIf="firstName?.errors?.['maxlength']">First name is too long.</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="label" for="ws-lastName">Last name</label>
+            <input id="ws-lastName" class="input" formControlName="lastName" placeholder="Doe" autocomplete="family-name" />
+            <div class="field-error" *ngIf="lastName?.touched && lastName?.invalid">
+              <div *ngIf="lastName?.errors?.['required']">Last name is required.</div>
+              <div *ngIf="lastName?.errors?.['maxlength']">Last name is too long.</div>
+            </div>
           </div>
         </div>
 
         <div class="form-row">
-          <label class="label">Email</label>
-          <input class="input" type="email" formControlName="email" placeholder="you@example.com" />
+          <label class="label" for="ws-email">Email (must match your conference registration)</label>
+          <input id="ws-email" class="input" type="email" formControlName="email" placeholder="you@example.com" autocomplete="email" />
           <div class="field-error" *ngIf="email?.touched && email?.invalid">
             <div *ngIf="email?.errors?.['required']">Email is required.</div>
             <div *ngIf="email?.errors?.['email']">Enter a valid email.</div>
@@ -74,45 +120,91 @@
         </div>
 
         <div class="form-row">
-          <label class="label">Slot 1 — pick one (optional)</label>
-          <select class="input" formControlName="slot1Choice">
-            <option value="">None</option>
-            <option *ngFor="let w of slot1Workshops" [value]="w.id">{{ w.title }} </option>
+          <label class="label" for="ws-slot1">
+            Slot 1 — pick one
+            <span class="lock-note" *ngIf="isOtherSlotLocked(2)">
+              · locked by your Slot&nbsp;2 (Slot&nbsp;1&nbsp;+&nbsp;2 workshop)
+            </span>
+          </label>
+          <select id="ws-slot1" class="input" formControlName="slot1Choice">
+            <option value="">— None —</option>
+            <option
+              *ngFor="let w of slot1Workshops; trackBy: trackById"
+              [value]="w.id"
+              [disabled]="isOptionDisabled(w, 1)"
+            >
+              {{ w.title }}{{ w.slot === 'BOTH' ? ' (Slot 1 + 2)' : '' }} — {{ w.room }}{{ w.isFull ? ' · FULL' : '' }}
+            </option>
           </select>
         </div>
 
         <div class="form-row">
-          <label class="label">Slot 2 — pick one (optional)</label>
-          <select class="input" formControlName="slot2Choice">
-            <option value="">None</option>
-            <option *ngFor="let w of slot2Workshops" [value]="w.id">{{ w.title }} </option>
+          <label class="label" for="ws-slot2">
+            Slot 2 — pick one
+            <span class="lock-note" *ngIf="isOtherSlotLocked(1)">
+              · locked by your Slot&nbsp;1 (Slot&nbsp;1&nbsp;+&nbsp;2 workshop)
+            </span>
+          </label>
+          <select id="ws-slot2" class="input" formControlName="slot2Choice">
+            <option value="">— None —</option>
+            <option
+              *ngFor="let w of slot2Workshops; trackBy: trackById"
+              [value]="w.id"
+              [disabled]="isOptionDisabled(w, 2)"
+            >
+              {{ w.title }}{{ w.slot === 'BOTH' ? ' (Slot 1 + 2)' : '' }} — {{ w.room }}{{ w.isFull ? ' · FULL' : '' }}
+            </option>
           </select>
         </div>
 
-        <div class="field-error" *ngIf="form.touched && form.errors">
-          <div *ngIf="form.errors?.['atLeastOne']">Please select at least one workshop (one per slot).</div>
-          <div *ngIf="form.errors?.['sameWorkshop']">Cannot pick the same workshop twice.</div>
-          <div *ngIf="form.errors?.['sameSlot']">Selections conflict: please pick at most one per slot.</div>
+        <ng-container *ngIf="form.touched && form.errors as ferrors">
+          <div class="field-error">
+            <div *ngIf="ferrors['atLeastOne']">Please pick at least one workshop.</div>
+            <div *ngIf="ferrors['sameWorkshop']">Cannot pick the same workshop twice.</div>
+            <div *ngIf="ferrors['wrongSlot']">A workshop was assigned to the wrong slot — please pick again.</div>
+          </div>
+        </ng-container>
+
+        <div
+          class="name-mismatch-panel"
+          *ngIf="nameMismatchAwaitingConfirm"
+        >
+          <div class="nm-title">Name doesn't match the registration</div>
+          <div class="nm-body">
+            We found a registration for this email but the name we have is
+            different from what you entered. Double-check your first &amp; last
+            name above, then either correct it or press <em>Save anyway</em>.
+          </div>
+          <div class="nm-actions">
+            <button type="button" class="btn-secondary" (click)="dismissNameMismatch()">
+              Edit name
+            </button>
+            <button type="submit" class="btn-primary nm-confirm" [disabled]="submitting">
+              {{ submitting ? 'Saving…' : 'Save anyway' }}
+            </button>
+          </div>
         </div>
 
-        <div class="privacy">
-          <input type="checkbox" formControlName="agree" id="agree" />
-          <label for="agree">I have read and agree to the
-            <a href="https://www.tudsat.space/privacy-policy" target="_blank" rel="noopener noreferrer">
-                privacy policy
-            </a>.
-          </label>
-        </div>
-        <div class="field-error" *ngIf="agree?.touched && agree?.invalid">
-          <div *ngIf="agree?.errors?.['required']">You must agree to the policy.</div>
-        </div>
+        <button
+          *ngIf="!nameMismatchAwaitingConfirm"
+          class="btn-primary"
+          type="submit"
+          [disabled]="form.invalid || submitting"
+        >
+          {{ submitting ? 'Submitting…' : 'Confirm Workshop Selection' }}
+        </button>
 
-        <button class="btn-primary" type="submit" [disabled]="form.invalid || submitting">{{ submitting ? 'Submitting...' : 'Confirm Registration' }}</button>
-
-        <div *ngIf="serverMessage" [class.result-banner]="serverError" style="margin-top:12px;">
+        <div
+          *ngIf="serverMessage && !nameMismatchAwaitingConfirm"
+          [class.result-banner]="serverError"
+          [class.result-success]="!serverError"
+          style="margin-top:14px;"
+        >
           {{ serverMessage }}
         </div>
       </form>
     </aside>
   </div>
 </section>
+
+<app-footer></app-footer>

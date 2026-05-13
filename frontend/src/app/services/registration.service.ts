@@ -99,6 +99,31 @@ export interface SpaceUpRegistrationResult {
   success: boolean;
   message?: string;
 }
+
+export interface WorkshopAvailabilitySnapshot {
+  success: boolean;
+  remaining: Record<string, number>;
+  max: Record<string, number>;
+  booked?: Record<string, number>;
+  liveData?: boolean;
+  message?: string;
+}
+
+export interface WorkshopSelectionPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  slot1?: string;
+  slot2?: string;
+  confirmNameMismatch?: boolean;
+}
+
+export type SubmitWorkshopSelectionResult =
+  | { status: 'saved' }
+  | { status: 'name_mismatch' }
+  | { status: 'workshop_full'; message?: string }
+  | { status: 'not_found'; message?: string }
+  | { status: 'error'; message?: string };
 export interface SaveTourSelectionPayload {
   email: string;
   tourSelected: BvsrTourCode;
@@ -642,6 +667,125 @@ export class RegistrationService {
         throw new Error('Request timed out. Check your connection and try again.');
       }
       throw e instanceof Error ? e : new Error('SpaceUp submission failed.');
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async fetchWorkshopAvailability(): Promise<WorkshopAvailabilitySnapshot | null> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      return null;
+    }
+
+    const url =
+      this.registrationScriptURL +
+      (this.registrationScriptURL.includes('?') ? '&' : '?') +
+      'action=workshopAvailability';
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 18_000);
+    try {
+      const res = await fetch(url, { method: 'GET', mode: 'cors', signal: ctrl.signal });
+      const text = await res.text();
+      let data: WorkshopAvailabilitySnapshot;
+      try {
+        data = JSON.parse(text) as WorkshopAvailabilitySnapshot;
+      } catch {
+        return null;
+      }
+      if (!data.success) {
+        return null;
+      }
+      return {
+        success: true,
+        remaining: data.remaining || {},
+        max: data.max || {},
+        booked: data.booked || {},
+        liveData: true
+      };
+    } catch (e) {
+      console.warn('[workshops] availability fetch failed', e);
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async submitWorkshopSelection(
+    payload: WorkshopSelectionPayload
+  ): Promise<SubmitWorkshopSelectionResult> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      return { status: 'error', message: 'Registration service is not configured.' };
+    }
+
+    const slot1 = (payload.slot1 || '').trim();
+    const slot2 = (payload.slot2 || '').trim();
+    if (!slot1 && !slot2) {
+      return { status: 'error', message: 'Please pick at least one workshop.' };
+    }
+
+    const params = new URLSearchParams();
+    params.set('action', 'submitWorkshopSelection');
+    params.set('firstName', payload.firstName.trim());
+    params.set('lastName', payload.lastName.trim());
+    params.set('email', payload.email.trim());
+    params.set('slot1', slot1);
+    params.set('slot2', slot2);
+    params.set('confirmNameMismatch', payload.confirmNameMismatch ? 'true' : 'false');
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 35_000);
+    try {
+      const res = await fetch(this.registrationScriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: params.toString(),
+        mode: 'cors',
+        signal: ctrl.signal
+      });
+
+      const text = await res.text();
+      let data: { success?: boolean; message?: string; code?: string };
+      try {
+        data = JSON.parse(text) as { success?: boolean; message?: string; code?: string };
+      } catch {
+        return {
+          status: 'error',
+          message: 'Unexpected response from server. Please try again later.'
+        };
+      }
+
+      if (data.success) {
+        return { status: 'saved' };
+      }
+      if (data.code === 'NAME_MISMATCH') {
+        return { status: 'name_mismatch' };
+      }
+      if (data.code === 'WORKSHOP_FULL') {
+        return { status: 'workshop_full', message: data.message };
+      }
+      if (data.code === 'NOT_FOUND') {
+        return { status: 'not_found', message: data.message };
+      }
+      return { status: 'error', message: data.message || 'Could not save workshop selection.' };
+    } catch (e: unknown) {
+      if (e instanceof Error && e.name === 'AbortError') {
+        return {
+          status: 'error',
+          message: 'Request timed out. Check your connection and try again.'
+        };
+      }
+      if (
+        e instanceof TypeError &&
+        /failed to fetch|networkerror|load failed/i.test(String((e as TypeError).message))
+      ) {
+        return {
+          status: 'error',
+          message:
+            'Could not reach the registration server. Check your connection and try again.'
+        };
+      }
+      throw e instanceof Error ? e : new Error('Workshop selection failed.');
     } finally {
       clearTimeout(timer);
     }
