@@ -3,43 +3,152 @@
 <section class="qr-verify-section">
   <div class="container">
     <h1 class="page-title">Verify Registration</h1>
-    <p class="subtitle">Enter the registration ID or scan the QR code to verify a conference pass.</p>
+    <p class="subtitle">
+      Scan the QR code on a participant's pass or enter the registration ID
+      manually. Please check the registration against the sheet and confirm name and
+      association.
+    </p>
+
+    <div class="warning-callout" role="note">
+      <mat-icon class="warning-icon">warning_amber</mat-icon>
+      <div class="warning-content">
+        <strong>Heads up</strong>
+        <p>
+          If the association is mentioned as <em>"Others"</em>, ask which
+          organisation they are from and contact the nearby Orga member for
+          verification.
+        </p>
+      </div>
+    </div>
+
+    <!-- Live scanner -->
+    <div class="scanner-card" *ngIf="scannerActive || scannerError">
+      <div class="scanner-frame" [class.starting]="scannerStarting">
+        <video #videoEl class="scanner-video" autoplay playsinline muted></video>
+        <div class="scanner-reticle" *ngIf="scannerActive">
+          <span class="corner tl"></span>
+          <span class="corner tr"></span>
+          <span class="corner bl"></span>
+          <span class="corner br"></span>
+        </div>
+        <div class="scanner-hint" *ngIf="scannerActive && scannerStarting">
+          Starting camera...
+        </div>
+        <div class="scanner-hint" *ngIf="scannerActive && !scannerStarting">
+          Point at a BVSR2026 QR code
+        </div>
+      </div>
+      <div class="scanner-error" *ngIf="scannerError">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ scannerError }}</span>
+      </div>
+    </div>
 
     <form [formGroup]="verifyForm" (ngSubmit)="onSubmit()" class="verify-form">
       <mat-form-field appearance="outline" class="form-field full-width">
         <mat-label>Registration ID</mat-label>
-        <input matInput formControlName="registrationId" placeholder="BVSR2026-xxxxx-xxxxx" required>
+        <input
+          matInput
+          formControlName="registrationId"
+          placeholder="BVSR2026-xxxxx-xxxxx"
+          autocomplete="off"
+          required
+        />
         <mat-error *ngIf="verifyForm.get('registrationId')?.hasError('required')">
           Registration ID is required
         </mat-error>
       </mat-form-field>
 
       <div class="button-group">
-        <button mat-raised-button type="button" (click)="onScanQR()" class="scan-button">
-          <mat-icon>qr_code_scanner</mat-icon>
-          Scan QR Code
+        <button
+          mat-raised-button
+          type="button"
+          (click)="onScanQR()"
+          class="scan-button"
+          [disabled]="verifying"
+        >
+          <mat-icon>{{ scannerActive ? 'stop_circle' : 'qr_code_scanner' }}</mat-icon>
+          {{ scannerActive ? 'Stop scanning' : 'Scan QR code' }}
         </button>
-        <button mat-raised-button type="submit" [disabled]="verifying">
+        <button mat-raised-button type="submit" [disabled]="verifying" class="verify-button">
           <span *ngIf="!verifying">Verify</span>
           <span *ngIf="verifying">Verifying...</span>
         </button>
-      </div>
-
-      <div *ngIf="verificationResult" class="verification-result" [class.valid]="verificationResult.valid" [class.invalid]="!verificationResult.valid">
-        <mat-icon>{{ verificationResult.valid ? 'check_circle' : 'error' }}</mat-icon>
-        <div class="result-content">
-          <h3>{{ verificationResult.valid ? 'Valid Registration' : 'Invalid Registration' }}</h3>
-          <p>{{ verificationResult.message }}</p>
-          <p *ngIf="verificationResult.valid && verificationResult.registrationId" class="reg-id">
-            ID: {{ verificationResult.registrationId }}
-          </p>
-        </div>
       </div>
 
       <div *ngIf="errorMsg" class="message error">
         {{ errorMsg }}
       </div>
     </form>
+
+    <!-- Result card -->
+    <div
+      *ngIf="verificationResult"
+      class="verification-result"
+      [class.valid]="verificationResult.state === 'valid_new'"
+      [class.already]="verificationResult.state === 'valid_already'"
+      [class.invalid]="verificationResult.state === 'invalid'"
+    >
+      <div class="result-header">
+        <mat-icon>
+          {{
+            verificationResult.state === 'valid_new'
+              ? 'check_circle'
+              : verificationResult.state === 'valid_already'
+              ? 'verified'
+              : 'cancel'
+          }}
+        </mat-icon>
+        <div class="result-heading">
+          <h3>{{ verificationResult.title }}</h3>
+          <p>{{ verificationResult.message }}</p>
+        </div>
+      </div>
+
+      <div
+        class="result-body"
+        *ngIf="verificationResult.state !== 'invalid'"
+      >
+        <div class="detail-row" *ngIf="verificationResult.firstName || verificationResult.lastName">
+          <span class="detail-label">Name</span>
+          <span class="detail-value">
+            {{ verificationResult.firstName }} {{ verificationResult.lastName }}
+          </span>
+        </div>
+        <div class="detail-row" *ngIf="verificationResult.association">
+          <span class="detail-label">Organisation</span>
+          <span class="detail-value">{{ verificationResult.association }}</span>
+        </div>
+        <div class="detail-row" *ngIf="verificationResult.registrationId">
+          <span class="detail-label">Registration ID</span>
+          <span class="detail-value mono">{{ verificationResult.registrationId }}</span>
+        </div>
+        <div
+          class="detail-row"
+          *ngIf="verificationResult.state === 'valid_already' && verificationResult.verifiedAt"
+        >
+          <span class="detail-label">Checked in</span>
+          <span class="detail-value">{{ formatVerifiedAt(verificationResult.verifiedAt) }}</span>
+        </div>
+      </div>
+
+      <div class="result-body invalid-id" *ngIf="verificationResult.state === 'invalid' && verificationResult.registrationId">
+        <div class="detail-row">
+          <span class="detail-label">Scanned ID</span>
+          <span class="detail-value mono">{{ verificationResult.registrationId }}</span>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button mat-raised-button type="button" class="scan-again" (click)="resetResult(); onScanQR()">
+          <mat-icon>qr_code_scanner</mat-icon>
+          Scan another
+        </button>
+        <button mat-stroked-button type="button" (click)="resetResult()">
+          Clear
+        </button>
+      </div>
+    </div>
   </div>
 </section>
 

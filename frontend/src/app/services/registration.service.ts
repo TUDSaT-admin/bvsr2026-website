@@ -66,6 +66,20 @@ export type SaveTourSelectionResult =
   | { status: 'name_mismatch' }
   | { status: 'tour_full'; message?: string }
   | { status: 'error'; message?: string };
+
+export interface VerifyRegistrationResult {
+  success: boolean;
+  found: boolean;
+  alreadyVerified: boolean;
+  firstName?: string;
+  lastName?: string;
+  association?: string;
+  email?: string;
+  registrationId?: string;
+  verifiedAt?: string;
+  code?: string;
+  message?: string;
+}
 export interface SaveTourSelectionPayload {
   email: string;
   tourSelected: BvsrTourCode;
@@ -530,27 +544,79 @@ export class RegistrationService {
     }
   }
 
-  async verifyQRCode(registrationId: string): Promise<any> {
+  /**
+   * Verifies a registration ID against the Google Sheet.
+   *
+   * The Google Apps Script must implement `action=verifyRegistration` and respond with JSON of shape:
+   *   {
+   *     success: true,
+   *     found: true,
+   *     alreadyVerified: boolean,
+   *     firstName, lastName, association, email, registrationId,
+   *     verifiedAt: ISO string  // when found or already verified
+   *   }
+   *   or { success: true, found: false, message: 'Not found' }
+   * On first successful verify, the script should write the verifiedAt timestamp into the sheet so
+   * subsequent scans return alreadyVerified: true.
+   */
+  async verifyQRCode(registrationId: string): Promise<VerifyRegistrationResult> {
     if (!this.isConfigured(this.registrationScriptURL)) {
       console.warn('Verification script URL not configured.');
       throw new Error('Verification service is not configured. Please contact the administrator.');
     }
 
-    const formData = new FormData();
-    formData.append('registrationId', registrationId);
-    formData.append('action', 'verify');
+    const trimmed = (registrationId || '').trim();
+    if (!trimmed) {
+      throw new Error('Please provide a registration ID.');
+    }
+
+    const url =
+      this.registrationScriptURL +
+      (this.registrationScriptURL.includes('?') ? '&' : '?') +
+      'action=verifyRegistration&registrationId=' +
+      encodeURIComponent(trimmed);
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 20_000);
 
     try {
-      const response = await fetch(this.registrationScriptURL, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors'
-      });
+      const res = await fetch(url, { method: 'GET', mode: 'cors', signal: ctrl.signal });
+      const text = await res.text();
+      let data: VerifyRegistrationResult;
+      try {
+        data = JSON.parse(text) as VerifyRegistrationResult;
+      } catch {
+        console.error('[verify] Non-JSON response', text.slice(0, 200));
+        throw new Error('Unexpected response from the verification server. Please try again later.');
+      }
 
-      return { success: true };
-    } catch (error) {
-      console.error('QR verification error:', error);
-      throw new Error('Failed to verify QR code. Please check the registration ID and try again.');
+      if (data.success === false) {
+        throw new Error(data.message || 'Verification failed. Please try again.');
+      }
+
+      return {
+        success: true,
+        found: !!data.found,
+        alreadyVerified: !!data.alreadyVerified,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        association: data.association,
+        email: data.email,
+        registrationId: data.registrationId || trimmed,
+        verifiedAt: data.verifiedAt,
+        code: data.code,
+        message: data.message
+      };
+    } catch (e: unknown) {
+      if (e instanceof Error && e.name === 'AbortError') {
+        throw new Error('Verification request timed out. Check your connection and try again.');
+      }
+      console.error('QR verification error:', e);
+      throw e instanceof Error
+        ? e
+        : new Error('Failed to verify QR code. Please check the registration ID and try again.');
+    } finally {
+      clearTimeout(timer);
     }
   }
 }
