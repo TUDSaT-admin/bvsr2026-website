@@ -21,8 +21,7 @@
       </div>
     </div>
 
-    <!-- Live scanner -->
-    <div class="scanner-card" *ngIf="scannerActive || scannerError">
+    <div class="scanner-card" [hidden]="!scannerActive && !scannerError">
       <div class="scanner-frame" [class.starting]="scannerStarting">
         <video #videoEl class="scanner-video" autoplay playsinline muted></video>
         <div class="scanner-reticle" *ngIf="scannerActive">
