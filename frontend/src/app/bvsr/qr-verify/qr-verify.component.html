@@ -5,9 +5,21 @@
     <h1 class="page-title">Verify Registration</h1>
     <p class="subtitle">
       Scan the QR code on a participant's pass or enter the registration ID
-      manually. We check the registration against the sheet and confirm name and
+      manually. Please check the registration against the sheet and confirm name and
       association.
     </p>
+
+    <div class="warning-callout" role="note">
+      <mat-icon class="warning-icon">warning_amber</mat-icon>
+      <div class="warning-content">
+        <strong>Heads up</strong>
+        <p>
+          If the association is mentioned as <em>"Others"</em>, ask which
+          organisation they are from and contact the nearby Orga member for
+          verification.
+        </p>
+      </div>
+    </div>
 
     <!-- Live scanner -->
     <div class="scanner-card" *ngIf="scannerActive || scannerError">
