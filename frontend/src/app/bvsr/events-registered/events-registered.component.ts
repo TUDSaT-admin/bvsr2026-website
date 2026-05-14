@@ -63,6 +63,10 @@ export class EventsRegisteredComponent implements OnInit, OnDestroy {
   private scannerControls: IScannerControls | null = null;
   private lastScannedAt = 0;
 
+  private readonly workshopUnlockAt = new Date('2026-05-14T18:30:00+02:00');
+  workshopLinkEnabled = Date.now() >= this.workshopUnlockAt.getTime();
+  private workshopUnlockTimer: ReturnType<typeof setTimeout> | null = null;
+
   constructor(
     private fb: FormBuilder,
     private seoService: SeoService,
@@ -82,10 +86,41 @@ export class EventsRegisteredComponent implements OnInit, OnDestroy {
     this.seoService.updateSEO({
       title: 'Your Events · BVSR Conference 2026'
     });
+    this.scheduleWorkshopUnlock();
   }
 
   ngOnDestroy(): void {
     this.stopScanner();
+    if (this.workshopUnlockTimer) {
+      clearTimeout(this.workshopUnlockTimer);
+      this.workshopUnlockTimer = null;
+    }
+  }
+
+  private scheduleWorkshopUnlock(): void {
+    if (this.workshopLinkEnabled) return;
+    const delta = this.workshopUnlockAt.getTime() - Date.now();
+    if (delta <= 0) {
+      this.workshopLinkEnabled = true;
+      return;
+    }
+    this.workshopUnlockTimer = setTimeout(() => {
+      this.workshopLinkEnabled = true;
+      this.workshopUnlockTimer = null;
+    }, delta);
+  }
+
+  get workshopUnlockLabel(): string {
+    try {
+      return new Intl.DateTimeFormat('de-DE', {
+        timeZone: 'Europe/Berlin',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(this.workshopUnlockAt);
+    } catch {
+      return '18:30';
+    }
   }
 
   setMode(mode: LookupMode): void {

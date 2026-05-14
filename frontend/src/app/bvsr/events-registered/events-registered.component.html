@@ -225,9 +225,15 @@
           </div>
         </div>
         <ng-template #noWorkshops>
-          <p class="empty-state">
+          <p class="empty-state" *ngIf="workshopLinkEnabled">
             No workshops booked yet.
             <a href="https://bvsr.tudsat.space/workshop">Pick your workshops</a>
+          </p>
+          <p class="empty-state locked" *ngIf="!workshopLinkEnabled">
+            <mat-icon class="lock-icon">lock_clock</mat-icon>
+            <span>
+              Workshop selection opens today at <strong>{{ workshopUnlockLabel }}</strong> (Europe/Berlin). Please check back then.
+            </span>
           </p>
         </ng-template>
       </div>

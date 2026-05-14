@@ -452,6 +452,27 @@
   text-decoration: underline;
 }
 
+.empty-state.locked {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(241, 216, 91, 0.08);
+  border: 1px dashed rgba(241, 216, 91, 0.45);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.empty-state.locked .lock-icon {
+  color: #f1d85b;
+  flex: 0 0 auto;
+}
+
+.empty-state.locked strong {
+  color: #f1d85b;
+  font-weight: 700;
+}
+
 .result-section.nothing {
   display: flex;
   align-items: center;
