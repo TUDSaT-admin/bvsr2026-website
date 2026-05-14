@@ -4,6 +4,12 @@ export interface TimelineLocation {
   iframeSrc?: string;
 }
 
+export interface TimelineActionLink {
+  label: string;
+  routerLink: string;
+  icon?: string;
+}
+
 export interface TimelineEvent {
   id: string;
   dayLabel: string;
@@ -15,6 +21,7 @@ export interface TimelineEvent {
   subtitle?: string;
   details?: string[];
   locations?: TimelineLocation[];
+  actionLink?: TimelineActionLink;
 }
 
 const S1_05 =
@@ -117,7 +124,12 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     end: '2026-05-14T23:30:00+02:00',
     timeLabel: 'from 19:30',
     title: 'Pub Night',
-    subtitle: 'Mingle with everyone in the Darmstadt pub crawl. Use the icon in your seat to find the group you are in. If any doubts, contact us.'
+    subtitle: 'Mingle with everyone in the Darmstadt pub crawl. Use the icon in your seat to find the group you are in. If any doubts, contact us.',
+    actionLink: {
+      label: 'See all pub icons & bars',
+      routerLink: '/pub-crawl',
+      icon: 'local_bar'
+    }
   },
 
   // ───────── Friday, 15 May ─────────

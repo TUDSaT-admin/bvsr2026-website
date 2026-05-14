@@ -18,6 +18,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
@@ -66,6 +67,7 @@ interface DayGroup {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterModule,
     NavbarComponent,
     FooterComponent,
     MaterialModule

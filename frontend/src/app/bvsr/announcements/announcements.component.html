@@ -99,6 +99,17 @@
                   <h3 class="event-title">{{ ev.raw.title }}</h3>
                   <p class="event-subtitle" *ngIf="ev.raw.subtitle">{{ ev.raw.subtitle }}</p>
 
+                  <a
+                    *ngIf="ev.raw.actionLink as link"
+                    class="event-action-link"
+                    [routerLink]="link.routerLink"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <mat-icon *ngIf="link.icon">{{ link.icon }}</mat-icon>
+                    <span>{{ link.label }}</span>
+                    <mat-icon class="arrow">arrow_forward</mat-icon>
+                  </a>
+
                   <button
                     type="button"
                     class="expand-btn"

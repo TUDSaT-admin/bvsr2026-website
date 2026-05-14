@@ -16,6 +16,7 @@ import { AnnouncementsComponent } from './bvsr/announcements/announcements.compo
 import { TourSelectionComponent } from './bvsr/tour-selection/tour-selection.component';
 import { EventsRegisteredComponent } from './bvsr/events-registered/events-registered.component';
 import { GetTicketComponent } from './bvsr/get-ticket/get-ticket.component';
+import { PubCrawlComponent } from './bvsr/pub-crawl/pub-crawl.component';
 
 export const routes: Routes = [
   {path: '' ,  component: HomeComponent},
@@ -34,5 +35,6 @@ export const routes: Routes = [
   {path: 'verify', component: QrVerifyComponent},
   {path: 'announcements', component: AnnouncementsComponent},
   {path: 'events-registered', component: EventsRegisteredComponent},
-  {path: 'get-ticket', component: GetTicketComponent}
+  {path: 'get-ticket', component: GetTicketComponent},
+  {path: 'pub-crawl', component: PubCrawlComponent}
 ];
