@@ -129,6 +129,14 @@ export const BVSR_WORKSHOPS: Workshop[] = [
     room: 'BK1 3.020',
     capacity: 20,
     slot: 2
+  },
+  {
+    id: 'W18',
+    title: 'Code of Conduct for BVSR',
+    speaker: "Dennis D'Argento (SeeSat e.V.)",
+    room: 'KBW 5.032',
+    capacity: 20,
+    slot: 1
   }
 ];
 
