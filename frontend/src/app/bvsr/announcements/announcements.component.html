@@ -148,6 +148,80 @@
       </div>
     </section>
 
+    <!-- ───────── SpaceUp board (booked grid) ───────── -->
+    <section class="block spaceup-board-block">
+      <div class="block-header">
+        <mat-icon class="block-icon">grid_view</mat-icon>
+        <h2>SpaceUp board</h2>
+      </div>
+      <p class="spaceup-intro">
+        SpaceUps are 20-minute pitches with a 10-minute room change in between
+        — five rounds in each room, from 10:00 to 12:20 on Sun, 17 May. Pick
+        any free cell below to grab that slot. First come, first served.
+      </p>
+
+      <div *ngIf="spaceupsLoading && spaceups.length === 0" class="ann-loading">
+        Loading SpaceUp board…
+      </div>
+
+      <div class="spaceup-grid-wrap" *ngIf="!spaceupsLoading || spaceups.length > 0">
+        <table class="spaceup-grid">
+          <thead>
+            <tr>
+              <th scope="col" class="corner">Room</th>
+              <th
+                scope="col"
+                *ngFor="let s of spaceupSlots; trackBy: trackSlot"
+                class="slot-head"
+              >
+                <span class="slot-num">Slot {{ s.slot }}</span>
+                <span class="slot-time">{{ s.rangeLabel }}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of spaceupRooms; trackBy: trackRoom">
+              <th scope="row" class="room-head">
+                <span class="room-name">{{ r.label }}</span>
+                <span class="room-cap">cap. {{ r.capacity }}</span>
+              </th>
+              <td
+                *ngFor="let s of spaceupSlots; trackBy: trackSlot"
+                class="slot-cell"
+                [class.taken]="isSlotTaken(r.id, s.slot)"
+                [class.free]="!isSlotTaken(r.id, s.slot)"
+                [class.selected]="isCellSelected(r.id, s.slot)"
+                [attr.tabindex]="isSlotTaken(r.id, s.slot) ? -1 : 0"
+                [attr.role]="isSlotTaken(r.id, s.slot) ? null : 'button'"
+                [attr.aria-label]="
+                  isSlotTaken(r.id, s.slot)
+                    ? r.label + ' slot ' + s.slot + ' taken by ' + (bookingFor(r.id, s.slot)?.title || 'someone')
+                    : 'Pick ' + r.label + ' slot ' + s.slot
+                "
+                (click)="selectSlot(r.id, s.slot)"
+                (keyup.enter)="selectSlot(r.id, s.slot)"
+              >
+                <ng-container *ngIf="bookingFor(r.id, s.slot) as b; else freeCell">
+                  <span class="taken-title">{{ b.title }}</span>
+                  <span class="taken-org" *ngIf="b.organisation">{{ b.organisation }}</span>
+                </ng-container>
+                <ng-template #freeCell>
+                  <span class="free-label">
+                    <mat-icon class="plus-icon">add</mat-icon>
+                    Free
+                  </span>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="board-hint" *ngIf="!spaceupsLoading && spaceups.length === 0">
+        No SpaceUps booked yet — be the first!
+      </p>
+    </section>
+
     <!-- ───────── SpaceUp form ───────── -->
     <section class="block spaceup-block">
       <div class="block-header">
@@ -155,8 +229,8 @@
         <h2>Submit a SpaceUp</h2>
       </div>
       <p class="spaceup-intro">
-        SpaceUps are short, lightning-style talks on Sunday morning. Got an idea?
-        Pitch it below — we'll slot it into the program and let you know.
+        Tap a free cell on the board above to pre-fill your room and slot —
+        or pick them manually from the dropdowns below.
       </p>
 
       <form
@@ -198,6 +272,28 @@
             <mat-label>Organisation</mat-label>
             <input matInput formControlName="organisation" placeholder="Your club / association" required />
             <mat-error *ngIf="spaceupForm.get('organisation')?.hasError('required')">Organisation is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="row two-cols">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Room</mat-label>
+            <mat-select formControlName="room" required>
+              <mat-option *ngFor="let r of spaceupRooms; trackBy: trackRoom" [value]="r.id">
+                {{ r.label }} — cap. {{ r.capacity }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="spaceupForm.get('room')?.hasError('required')">Room is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Time slot</mat-label>
+            <mat-select formControlName="slot" required>
+              <mat-option *ngFor="let s of spaceupSlots; trackBy: trackSlot" [value]="s.slot">
+                Slot {{ s.slot }} · {{ s.rangeLabel }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="spaceupForm.get('slot')?.hasError('required')">Pick a time slot</mat-error>
           </mat-form-field>
         </div>
 
