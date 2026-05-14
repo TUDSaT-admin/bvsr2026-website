@@ -1,0 +1,62 @@
+<app-navbar></app-navbar>
+
+<section class="pub-page">
+  <div class="page-inner">
+
+    <header class="page-head">
+      <div class="page-pill">
+        <mat-icon class="pill-icon">local_bar</mat-icon>
+        <span>Pub Crawl</span>
+      </div>
+      <h1 class="page-title">Darmstadt Pub Crawl</h1>
+      <p class="page-subtitle">
+        Look at the icon on your seat — it matches one of the bars below.
+        Head there with your group and have a great night!
+      </p>
+    </header>
+
+    <ul class="pub-grid">
+      <li class="pub-card" *ngFor="let p of pubs; trackBy: trackPub">
+        <div class="pub-card-head">
+          <div class="pub-icon-wrap">
+            <img [src]="p.icon" [alt]="p.iconAlt" class="pub-icon" loading="lazy" />
+          </div>
+          <div class="pub-card-meta">
+            <span class="pub-icon-label">{{ p.iconLabel }}</span>
+            <h2 class="pub-name">{{ p.name }}</h2>
+            <a
+              class="pub-link"
+              [href]="p.mapsUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <mat-icon>open_in_new</mat-icon>
+              Open in Google Maps
+            </a>
+          </div>
+        </div>
+
+        <div class="pub-map">
+          <iframe
+            [src]="p.safeSrc"
+            width="100%"
+            height="260"
+            style="border:0;"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            [title]="p.name + ' on Google Maps'"
+          ></iframe>
+        </div>
+      </li>
+    </ul>
+
+    <p class="page-foot">
+      Lost or unsure? Find an organiser or ping us on the conference
+      channel — we'll get you to the right bar.
+    </p>
+
+  </div>
+</section>
+
+<app-footer></app-footer>
