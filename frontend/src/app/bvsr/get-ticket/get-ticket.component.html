@@ -1,0 +1,103 @@
+<app-navbar></app-navbar>
+
+<section class="ticket-section">
+  <div class="container">
+    <h1 class="page-title">Get my Ticket</h1>
+    <p class="subtitle">
+      Lost your conference pass? Enter the email address you used when registering and
+      we'll regenerate the PDF ticket for you.
+    </p>
+
+    <div class="lookup-card" *ngIf="!downloadedFor && !notFound">
+      <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" class="lookup-form">
+        <mat-form-field appearance="fill" class="form-field full-width">
+          <mat-label>Email address</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="you@association.org" autocomplete="email" />
+          <mat-icon matSuffix>mail</mat-icon>
+          <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
+            Email is required.
+          </mat-error>
+          <mat-error *ngIf="emailForm.get('email')?.hasError('email')">
+            Please enter a valid email address.
+          </mat-error>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="lookup-btn"
+          [disabled]="looking || downloading"
+        >
+          <mat-icon *ngIf="!looking && !downloading">download</mat-icon>
+          <span class="btn-spinner" *ngIf="looking || downloading" aria-hidden="true"></span>
+          <span *ngIf="!looking && !downloading">Download my ticket</span>
+          <span *ngIf="looking">Looking up…</span>
+          <span *ngIf="downloading && !looking">Generating ticket…</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="result-card error" *ngIf="errorMsg">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ errorMsg }}</p>
+    </div>
+
+    <div class="result-card warn" *ngIf="notFound">
+      <mat-icon>search_off</mat-icon>
+      <div>
+        <h3>No ticket found</h3>
+        <p>
+          We couldn't find a conference registration for that email address. Please double-check
+          the spelling, or contact the organisers if you believe this is a mistake.
+        </p>
+        <button mat-stroked-button color="primary" type="button" (click)="reset()">
+          <mat-icon>refresh</mat-icon>
+          Try a different email
+        </button>
+      </div>
+    </div>
+
+    <div class="result-card success" *ngIf="downloadedFor">
+      <mat-icon>check_circle</mat-icon>
+      <div class="success-body">
+        <h3>Ticket sent to your downloads</h3>
+        <p>
+          We've regenerated the conference pass for
+          <strong>{{ downloadedFor.firstName }} {{ downloadedFor.lastName }}</strong>
+          ({{ downloadedFor.email }}). If the download didn't start automatically you can
+          try again below.
+        </p>
+        <dl class="ticket-meta">
+          <div>
+            <dt>Registration ID</dt>
+            <dd>{{ downloadedFor.registrationId }}</dd>
+          </div>
+          <div *ngIf="downloadedFor.association">
+            <dt>Association</dt>
+            <dd>{{ downloadedFor.association }}</dd>
+          </div>
+        </dl>
+        <div class="success-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="downloadAgain()"
+            [disabled]="downloading"
+          >
+            <mat-icon>download</mat-icon>
+            <span *ngIf="!downloading">Download again</span>
+            <span *ngIf="downloading">Generating…</span>
+          </button>
+          <button mat-stroked-button type="button" (click)="reset()">
+            <mat-icon>person_search</mat-icon>
+            Look up another ticket
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
