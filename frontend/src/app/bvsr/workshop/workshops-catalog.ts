@@ -44,8 +44,8 @@ export const BVSR_WORKSHOPS: Workshop[] = [
   },
   {
     id: 'W05',
-    title: 'How to print your engine – Additive Manufacturing Techniken',
-    speaker: 'Stefan Bindl',
+    title: 'Entwicklung der Paragon-Familie von Feststoffboostern (K bis P Klasse) sowie Telemetrieprotokolle der FAR',
+    speaker: 'David Madlener',
     room: 'SB1 4.101',
     capacity: 26,
     slot: 1
@@ -67,14 +67,6 @@ export const BVSR_WORKSHOPS: Workshop[] = [
     slot: 1
   },
   {
-    id: 'W08',
-    title: 'Space Law – Überblick Space Law',
-    speaker: 'Prof. Kristoff Ritlewski',
-    room: 'KBW 5.032',
-    capacity: 20,
-    slot: 1
-  },
-  {
     id: 'W10',
     title: 'How to start up your Startup – Informationen zum erfolgreichen Ausgründen',
     speaker: 'Cesah',
@@ -84,7 +76,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
   },
   {
     id: 'W11',
-    title: 'Datenarchivierung',
+    title: 'Schaffung eines Raumfahrterbes: Was versteht man unter Archivierung und wie funktioniert sie?',
     speaker: 'Frederic Forkel',
     room: 'KBW 5.032',
     capacity: 20,
@@ -92,7 +84,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
   },
   {
     id: 'W12',
-    title: 'Student Analog Astronaut Missions',
+    title: 'Space Analog and Student Space Flight',
     speaker: 'Ella Ganzer',
     room: 'BK1 3.020',
     capacity: 20,
@@ -116,7 +108,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
   },
   {
     id: 'W15',
-    title: 'LEOP',
+    title: 'Introduction to the Launch and Early Orbit Phase (LEOP) of Satellite Operations',
     speaker: 'Serco',
     room: 'BK1 1.001a',
     capacity: 42,
@@ -124,7 +116,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
   },
   {
     id: 'W16',
-    title: 'Rocketry Startup Design Challenge',
+    title: 'Momentum Aerospace Design Challenge',
     speaker: 'Momentum Aerospace',
     room: 'SB1 4.101',
     capacity: 26,
