@@ -106,7 +106,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     start: '2026-05-14T18:30:00+02:00',
     end: '2026-05-14T19:30:00+02:00',
     timeLabel: 'from 18:30',
-    title: 'Workshop & Tour Registration',
+    title: 'Workshop Registration',
     subtitle: 'Sign up for tours and workshop slots.'
   },
   {
