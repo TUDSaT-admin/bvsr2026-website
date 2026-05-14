@@ -1,0 +1,254 @@
+<app-navbar></app-navbar>
+
+<section class="events-section">
+  <div class="container">
+    <h1 class="page-title">Your Registered Events</h1>
+    <p class="subtitle">
+      Scan your ticket QR code or look up your registration by email to see the
+      tour and workshops you signed up for.
+    </p>
+
+    <div class="mode-toggle" role="tablist" aria-label="Lookup mode">
+      <button
+        type="button"
+        class="mode-btn"
+        [class.active]="mode === 'qr'"
+        (click)="setMode('qr')"
+        role="tab"
+        [attr.aria-selected]="mode === 'qr'"
+      >
+        <mat-icon>qr_code_scanner</mat-icon>
+        <span>Scan Ticket QR</span>
+      </button>
+      <button
+        type="button"
+        class="mode-btn"
+        [class.active]="mode === 'email'"
+        (click)="setMode('email')"
+        role="tab"
+        [attr.aria-selected]="mode === 'email'"
+      >
+        <mat-icon>email</mat-icon>
+        <span>Use Email</span>
+      </button>
+    </div>
+
+    <!-- QR scan mode -->
+    <div class="lookup-card" *ngIf="mode === 'qr'">
+      <div class="scanner-card" [hidden]="!scannerActive && !scannerError">
+        <div class="scanner-frame" [class.starting]="scannerStarting">
+          <video #videoEl class="scanner-video" autoplay playsinline muted></video>
+          <div class="scanner-reticle" *ngIf="scannerActive">
+            <span class="corner tl"></span>
+            <span class="corner tr"></span>
+            <span class="corner bl"></span>
+            <span class="corner br"></span>
+          </div>
+          <div class="scanner-hint" *ngIf="scannerActive && scannerStarting">
+            Starting camera...
+          </div>
+          <div class="scanner-hint" *ngIf="scannerActive && !scannerStarting">
+            Point at your BVSR2026 ticket QR code
+          </div>
+        </div>
+        <div class="scanner-error" *ngIf="scannerError">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ scannerError }}</span>
+        </div>
+      </div>
+
+      <p class="mode-help" *ngIf="!scannerActive && !scannerError">
+        Tap the button below and point your camera at the QR code on your
+        conference pass.
+      </p>
+
+      <div class="button-group">
+        <button
+          mat-raised-button
+          type="button"
+          class="primary-button"
+          (click)="onScanQR()"
+          [disabled]="looking"
+        >
+          <mat-icon>{{ scannerActive ? 'stop_circle' : 'qr_code_scanner' }}</mat-icon>
+          {{ scannerActive ? 'Stop scanning' : 'Scan QR code' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Email mode -->
+    <form
+      *ngIf="mode === 'email'"
+      [formGroup]="emailForm"
+      (ngSubmit)="onLookupByEmail()"
+      class="lookup-card"
+    >
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Email address</mat-label>
+        <input
+          matInput
+          formControlName="email"
+          type="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        />
+        <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="emailForm.get('email')?.hasError('email')">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+
+      <div class="button-group">
+        <button
+          mat-raised-button
+          type="submit"
+          class="primary-button"
+          [disabled]="looking"
+        >
+          <mat-icon>search</mat-icon>
+          <span *ngIf="!looking">Look up my events</span>
+          <span *ngIf="looking">Looking up...</span>
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="errorMsg" class="message error">
+      {{ errorMsg }}
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="looking && !errorMsg" class="message info">
+      Looking up your registration...
+    </div>
+
+    <!-- Not found -->
+    <div *ngIf="notFound && !looking" class="result-card invalid">
+      <div class="result-header">
+        <mat-icon>error_outline</mat-icon>
+        <div class="result-heading">
+          <h3>No registration found</h3>
+          <p>
+            {{
+              result?.message ||
+                'We could not find a registration matching what you provided. Please double-check or contact the organisers.'
+            }}
+          </p>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button mat-stroked-button type="button" (click)="reset()">
+          <mat-icon>refresh</mat-icon>
+          Try again
+        </button>
+      </div>
+    </div>
+
+    <!-- Found -->
+    <div
+      *ngIf="result && result.found && !looking"
+      class="result-card valid"
+    >
+      <div class="result-header">
+        <mat-icon>verified</mat-icon>
+        <div class="result-heading">
+          <h3>
+            Hi {{ result.firstName }} {{ result.lastName }}!
+          </h3>
+          <p *ngIf="result.association">
+            Registered for BVSR Conference 2026 with
+            <strong>{{ result.association }}</strong>.
+          </p>
+          <p *ngIf="result.registrationId" class="muted-id">
+            Registration ID: <span class="mono">{{ result.registrationId }}</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Days attending -->
+      <div class="result-section">
+        <h4 class="section-title">
+          <mat-icon>event</mat-icon>
+          Days you're attending
+        </h4>
+        <div class="day-grid">
+          <div
+            *ngFor="let d of conferenceDays"
+            class="day-chip"
+            [class.attending]="d.attending"
+          >
+            <mat-icon>{{ d.attending ? 'check_circle' : 'remove_circle_outline' }}</mat-icon>
+            <div class="day-meta">
+              <span class="day-label">{{ d.label }}</span>
+              <span class="day-date">{{ d.date }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tour -->
+      <div class="result-section">
+        <h4 class="section-title">
+          <mat-icon>tour</mat-icon>
+          Tour
+        </h4>
+        <div *ngIf="result.tourSelected; else noTour" class="event-row">
+          <mat-icon class="event-icon">place</mat-icon>
+          <div class="event-text">
+            <span class="event-name">{{ tourDisplayName(result.tourSelected) }}</span>
+            <span class="event-code mono">{{ result.tourSelected }}</span>
+          </div>
+        </div>
+        <ng-template #noTour>
+          <p class="empty-state">
+            No tour booked yet.
+            <a routerLink="/tour-selection">Choose a tour</a>
+          </p>
+        </ng-template>
+      </div>
+
+      <!-- Workshops -->
+      <div class="result-section">
+        <h4 class="section-title">
+          <mat-icon>school</mat-icon>
+          Workshops
+        </h4>
+        <div *ngIf="workshopsBooked.length > 0; else noWorkshops">
+          <div *ngFor="let w of workshopsBooked" class="event-row">
+            <mat-icon class="event-icon">menu_book</mat-icon>
+            <div class="event-text">
+              <span class="event-slot">{{ w.slot }}</span>
+              <span class="event-name">{{ w.name }}</span>
+            </div>
+          </div>
+        </div>
+        <ng-template #noWorkshops>
+          <p class="empty-state">
+            No workshops booked yet.
+            <a href="https://bvsr.tudsat.space/workshop">Pick your workshops</a>
+          </p>
+        </ng-template>
+      </div>
+
+      <!-- No events at all -->
+      <div class="result-section nothing" *ngIf="!hasAnyEvent">
+        <mat-icon>info_outline</mat-icon>
+        <p>
+          You haven't booked any tours, workshops, or marked the days you're
+          attending yet.
+        </p>
+      </div>
+
+      <div class="result-actions">
+        <button mat-stroked-button type="button" (click)="reset()">
+          <mat-icon>refresh</mat-icon>
+          Look up another
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>

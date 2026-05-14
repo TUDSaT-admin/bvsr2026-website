@@ -81,6 +81,26 @@ export interface VerifyRegistrationResult {
   message?: string;
 }
 
+export interface RegisteredEventsResult {
+  success: boolean;
+  found: boolean;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  association?: string;
+  registrationId?: string;
+  countryOfOrigin?: string;
+  nationality?: string;
+  may14?: string;
+  may15?: string;
+  may16?: string;
+  may17?: string;
+  tourSelected?: string;
+  workshopSlot1?: string;
+  workshopSlot2?: string;
+  message?: string;
+}
+
 export interface Announcement {
   timestamp: string;
   title: string;
@@ -786,6 +806,80 @@ export class RegistrationService {
         };
       }
       throw e instanceof Error ? e : new Error('Workshop selection failed.');
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async fetchRegisteredEvents(opts: {
+    email?: string;
+    registrationId?: string;
+  }): Promise<RegisteredEventsResult> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      throw new Error('Registration service is not configured. Please contact the administrator.');
+    }
+
+    const email = (opts.email || '').trim();
+    const registrationId = (opts.registrationId || '').trim();
+    if (!email && !registrationId) {
+      throw new Error('Please provide an email address or scan a ticket QR code.');
+    }
+
+    const params = new URLSearchParams();
+    params.set('action', 'getRegisteredEvents');
+    if (email) params.set('email', email);
+    if (registrationId) params.set('registrationId', registrationId);
+
+    const url =
+      this.registrationScriptURL +
+      (this.registrationScriptURL.includes('?') ? '&' : '?') +
+      params.toString();
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 20_000);
+
+    try {
+      const res = await fetch(url, { method: 'GET', mode: 'cors', signal: ctrl.signal });
+      const text = await res.text();
+      let data: RegisteredEventsResult;
+      try {
+        data = JSON.parse(text) as RegisteredEventsResult;
+      } catch {
+        console.error('[getRegisteredEvents] Non-JSON response', text.slice(0, 200));
+        throw new Error('Unexpected response from the server. Please try again later.');
+      }
+
+      if (data.success === false) {
+        throw new Error(data.message || 'Could not look up your registration. Please try again.');
+      }
+
+      return {
+        success: true,
+        found: !!data.found,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        association: data.association,
+        registrationId: data.registrationId,
+        countryOfOrigin: data.countryOfOrigin,
+        nationality: data.nationality,
+        may14: data.may14,
+        may15: data.may15,
+        may16: data.may16,
+        may17: data.may17,
+        tourSelected: data.tourSelected,
+        workshopSlot1: data.workshopSlot1,
+        workshopSlot2: data.workshopSlot2,
+        message: data.message
+      };
+    } catch (e: unknown) {
+      if (e instanceof Error && e.name === 'AbortError') {
+        throw new Error('Request timed out. Check your connection and try again.');
+      }
+      console.error('getRegisteredEvents error:', e);
+      throw e instanceof Error
+        ? e
+        : new Error('Failed to look up your registration. Please try again.');
     } finally {
       clearTimeout(timer);
     }
