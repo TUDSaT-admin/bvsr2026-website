@@ -126,6 +126,7 @@ export interface SpaceUpRegistrationResult {
 export interface SpaceUpEntry {
   timestamp: string;
   title: string;
+  description?: string;
   organisation: string;
   room: string;
   slot: number;
@@ -744,6 +745,7 @@ export class RegistrationService {
         .map(s => ({
           timestamp: String(s.timestamp || ''),
           title: String(s.title || ''),
+          description: String(s.description || ''),
           organisation: String(s.organisation || ''),
           room: String(s.room || ''),
           slot: Number(s.slot)

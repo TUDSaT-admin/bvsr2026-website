@@ -191,15 +191,15 @@
                 [class.taken]="isSlotTaken(r.id, s.slot)"
                 [class.free]="!isSlotTaken(r.id, s.slot)"
                 [class.selected]="isCellSelected(r.id, s.slot)"
-                [attr.tabindex]="isSlotTaken(r.id, s.slot) ? -1 : 0"
-                [attr.role]="isSlotTaken(r.id, s.slot) ? null : 'button'"
+                [attr.tabindex]="0"
+                role="button"
                 [attr.aria-label]="
                   isSlotTaken(r.id, s.slot)
-                    ? r.label + ' slot ' + s.slot + ' taken by ' + (bookingFor(r.id, s.slot)?.title || 'someone')
+                    ? 'View ' + r.label + ' slot ' + s.slot + ' booked by ' + (bookingFor(r.id, s.slot)?.organisation || (bookingFor(r.id, s.slot)?.title || 'someone'))
                     : 'Pick ' + r.label + ' slot ' + s.slot
                 "
-                (click)="selectSlot(r.id, s.slot)"
-                (keyup.enter)="selectSlot(r.id, s.slot)"
+                (click)="onSlotCellClick(r.id, s.slot)"
+                (keyup.enter)="onSlotCellClick(r.id, s.slot)"
               >
                 <ng-container *ngIf="bookingFor(r.id, s.slot) as b; else freeCell">
                   <span class="taken-title">{{ b.title }}</span>
@@ -221,6 +221,70 @@
         No SpaceUps booked yet — be the first!
       </p>
     </section>
+
+    <!-- ───────── SpaceUp details modal ───────── -->
+    <div
+      class="spaceup-modal-backdrop"
+      *ngIf="selectedSpaceUp"
+      (click)="closeSpaceUpDetails()"
+    >
+      <div
+        class="spaceup-modal"
+        role="dialog"
+        aria-modal="true"
+        [attr.aria-label]="'SpaceUp details: ' + selectedSpaceUp.title"
+        (click)="$event.stopPropagation()"
+      >
+        <button
+          type="button"
+          class="spaceup-modal-close"
+          aria-label="Close SpaceUp details"
+          (click)="closeSpaceUpDetails()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+
+        <header class="spaceup-modal-head">
+          <mat-icon class="modal-icon">rocket_launch</mat-icon>
+          <div>
+            <h3 class="modal-title">{{ selectedSpaceUp.title }}</h3>
+            <p class="modal-org" *ngIf="selectedSpaceUp.organisation">
+              by <strong>{{ selectedSpaceUp.organisation }}</strong>
+            </p>
+          </div>
+        </header>
+
+        <dl class="modal-meta">
+          <div>
+            <dt>Room</dt>
+            <dd>{{ roomLabelFor(selectedSpaceUp.room) }}</dd>
+          </div>
+          <div>
+            <dt>Slot</dt>
+            <dd>
+              Slot {{ selectedSpaceUp.slot }}
+              <span class="slot-range" *ngIf="slotRangeLabelFor(selectedSpaceUp.slot)">
+                · {{ slotRangeLabelFor(selectedSpaceUp.slot) }}
+              </span>
+            </dd>
+          </div>
+        </dl>
+
+        <section class="modal-body" *ngIf="selectedSpaceUp.description">
+          <h4>Description</h4>
+          <p class="modal-description">{{ selectedSpaceUp.description }}</p>
+        </section>
+        <section class="modal-body" *ngIf="!selectedSpaceUp.description">
+          <p class="modal-empty">No description provided.</p>
+        </section>
+
+        <footer class="modal-footer">
+          <button mat-stroked-button type="button" (click)="closeSpaceUpDetails()">
+            Close
+          </button>
+        </footer>
+      </div>
+    </div>
 
     <!-- ───────── SpaceUp form ───────── -->
     <section class="block spaceup-block">

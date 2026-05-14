@@ -777,7 +777,15 @@
 .spaceup-grid .slot-cell.taken {
   background: linear-gradient(180deg, rgba(76, 175, 80, 0.16), rgba(76, 175, 80, 0.06));
   border: 1px solid rgba(76, 175, 80, 0.55);
-  cursor: not-allowed;
+  cursor: pointer;
+}
+
+.spaceup-grid .slot-cell.taken:hover,
+.spaceup-grid .slot-cell.taken:focus-visible {
+  background: linear-gradient(180deg, rgba(76, 175, 80, 0.28), rgba(76, 175, 80, 0.12));
+  border-color: rgba(120, 220, 130, 0.9);
+  outline: none;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.25);
 }
 
 .spaceup-grid .free-label {
@@ -931,5 +939,179 @@
 
   .submit-btn {
     width: 100%;
+  }
+}
+
+/* ───────── SpaceUp details modal ───────── */
+.spaceup-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  animation: spaceup-modal-fade 0.18s ease-out;
+}
+
+@keyframes spaceup-modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.spaceup-modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, rgba(20, 20, 24, 0.98), rgba(10, 12, 16, 0.98));
+  border: 1px solid rgba(241, 216, 91, 0.4);
+  border-radius: 14px;
+  padding: 24px 26px 22px;
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  animation: spaceup-modal-pop 0.2s ease-out;
+}
+
+@keyframes spaceup-modal-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.spaceup-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.spaceup-modal-close:hover,
+.spaceup-modal-close:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1d85b;
+  outline: none;
+}
+
+.spaceup-modal-head {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-right: 30px;
+}
+
+.spaceup-modal .modal-icon {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  color: #f1d85b;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.spaceup-modal .modal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 19px;
+  margin: 0 0 4px 0;
+  color: #f1d85b;
+  line-height: 1.25;
+}
+
+.spaceup-modal .modal-org {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+}
+
+.spaceup-modal .modal-org strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.spaceup-modal .modal-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px 18px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 0 0 18px 0;
+}
+
+.spaceup-modal .modal-meta div {
+  display: flex;
+  flex-direction: column;
+}
+
+.spaceup-modal .modal-meta dt {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.7px;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.spaceup-modal .modal-meta dd {
+  margin: 0;
+  color: #fff;
+  font-size: 13.5px;
+  word-break: break-word;
+}
+
+.spaceup-modal .modal-meta .slot-range {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12.5px;
+}
+
+.spaceup-modal .modal-body h4 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 8px 0;
+}
+
+.spaceup-modal .modal-description {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+}
+
+.spaceup-modal .modal-empty {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-style: italic;
+  font-size: 13px;
+}
+
+.spaceup-modal .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+@media (max-width: 600px) {
+  .spaceup-modal {
+    padding: 22px 18px 18px;
+  }
+  .spaceup-modal .modal-title {
+    font-size: 17px;
   }
 }
