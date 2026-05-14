@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   OnDestroy,
   OnInit,
   QueryList,
@@ -92,6 +93,8 @@ export class AnnouncementsComponent implements OnInit, AfterViewInit, OnDestroy 
   spaceups: SpaceUpEntry[] = [];
   spaceupsLoading = true;
   spaceupBookings = new Map<string, SpaceUpEntry>();
+
+  selectedSpaceUp: SpaceUpEntry | null = null;
 
   readonly spaceupRooms: SpaceUpRoom[] = SPACEUP_ROOMS;
   readonly spaceupSlots: SpaceUpSlot[] = SPACEUP_SLOTS;
@@ -390,6 +393,40 @@ export class AnnouncementsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.spaceupForm.get('room')?.markAsTouched();
     this.spaceupForm.get('slot')?.markAsTouched();
     this.spaceupError = '';
+  }
+
+  onSlotCellClick(room: string, slot: number): void {
+    const booking = this.bookingFor(room, slot);
+    if (booking) {
+      this.openSpaceUpDetails(booking);
+    } else {
+      this.selectSlot(room, slot);
+    }
+  }
+
+  openSpaceUpDetails(entry: SpaceUpEntry): void {
+    this.selectedSpaceUp = entry;
+  }
+
+  closeSpaceUpDetails(): void {
+    this.selectedSpaceUp = null;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.selectedSpaceUp) {
+      this.closeSpaceUpDetails();
+    }
+  }
+
+  roomLabelFor(roomId: string): string {
+    const r = this.spaceupRooms.find(x => x.id === roomId);
+    return r ? r.label : roomId;
+  }
+
+  slotRangeLabelFor(slot: number): string {
+    const s = this.spaceupSlots.find(x => x.slot === slot);
+    return s ? s.rangeLabel : '';
   }
 
   isCellSelected(room: string, slot: number): boolean {
