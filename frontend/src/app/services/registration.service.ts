@@ -113,10 +113,27 @@ export interface SpaceUpRegistrationPayload {
   description: string;
   email: string;
   organisation: string;
+  room: string;
+  slot: number;
 }
 
 export interface SpaceUpRegistrationResult {
   success: boolean;
+  message?: string;
+  code?: string;
+}
+
+export interface SpaceUpEntry {
+  timestamp: string;
+  title: string;
+  organisation: string;
+  room: string;
+  slot: number;
+}
+
+export interface SpaceUpsSnapshot {
+  success: boolean;
+  spaceups: SpaceUpEntry[];
   message?: string;
 }
 
@@ -659,6 +676,8 @@ export class RegistrationService {
     params.set('description', payload.description.trim());
     params.set('email', payload.email.trim());
     params.set('organisation', payload.organisation.trim());
+    params.set('room', payload.room.trim());
+    params.set('slot', String(payload.slot));
     params.set('timestamp', new Date().toISOString());
 
     const ctrl = new AbortController();
@@ -679,7 +698,11 @@ export class RegistrationService {
         throw new Error('Unexpected response from server. Please try again later.');
       }
       if (!data.success) {
-        throw new Error(data.message || 'Could not submit SpaceUp. Please try again later.');
+        const err = new Error(data.message || 'Could not submit SpaceUp. Please try again later.') as Error & {
+          code?: string;
+        };
+        if (data.code) err.code = data.code;
+        throw err;
       }
       return data;
     } catch (e: unknown) {
@@ -687,6 +710,47 @@ export class RegistrationService {
         throw new Error('Request timed out. Check your connection and try again.');
       }
       throw e instanceof Error ? e : new Error('SpaceUp submission failed.');
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async fetchSpaceUps(): Promise<SpaceUpEntry[]> {
+    if (!this.isConfigured(this.registrationScriptURL)) {
+      return [];
+    }
+
+    const url =
+      this.registrationScriptURL +
+      (this.registrationScriptURL.includes('?') ? '&' : '?') +
+      'action=getSpaceUps';
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15_000);
+    try {
+      const res = await fetch(url, { method: 'GET', mode: 'cors', signal: ctrl.signal });
+      const text = await res.text();
+      let data: SpaceUpsSnapshot;
+      try {
+        data = JSON.parse(text) as SpaceUpsSnapshot;
+      } catch {
+        return [];
+      }
+      if (!data.success || !Array.isArray(data.spaceups)) {
+        return [];
+      }
+      return data.spaceups
+        .filter(s => s && s.room && Number.isFinite(Number(s.slot)))
+        .map(s => ({
+          timestamp: String(s.timestamp || ''),
+          title: String(s.title || ''),
+          organisation: String(s.organisation || ''),
+          room: String(s.room || ''),
+          slot: Number(s.slot)
+        }));
+    } catch (e) {
+      console.warn('[spaceups] fetch failed', e);
+      return [];
     } finally {
       clearTimeout(timer);
     }

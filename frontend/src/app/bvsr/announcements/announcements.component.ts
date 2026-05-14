@@ -24,9 +24,17 @@ import { MaterialModule } from '../../material/material.module';
 import { SeoService } from '../../services/seo.service';
 import {
   Announcement,
-  RegistrationService
+  RegistrationService,
+  SpaceUpEntry
 } from '../../services/registration.service';
 import { TIMELINE_EVENTS, TimelineEvent, TimelineLocation } from './timeline-events';
+import {
+  SPACEUP_ROOMS,
+  SPACEUP_SLOTS,
+  SpaceUpRoom,
+  SpaceUpSlot,
+  spaceupSlotKey
+} from './spaceups-catalog';
 
 type EventState = 'past' | 'current' | 'upcoming';
 
@@ -81,8 +89,16 @@ export class AnnouncementsComponent implements OnInit, AfterViewInit, OnDestroy 
   spaceupSuccess = '';
   spaceupError = '';
 
+  spaceups: SpaceUpEntry[] = [];
+  spaceupsLoading = true;
+  spaceupBookings = new Map<string, SpaceUpEntry>();
+
+  readonly spaceupRooms: SpaceUpRoom[] = SPACEUP_ROOMS;
+  readonly spaceupSlots: SpaceUpSlot[] = SPACEUP_SLOTS;
+
   private tickTimer: ReturnType<typeof setInterval> | null = null;
   private annTimer: ReturnType<typeof setInterval> | null = null;
+  private spaceupsTimer: ReturnType<typeof setInterval> | null = null;
   private didInitialScroll = false;
 
   constructor(
@@ -96,7 +112,9 @@ export class AnnouncementsComponent implements OnInit, AfterViewInit, OnDestroy 
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(800)]],
       email: ['', [Validators.required, Validators.email]],
-      organisation: ['', [Validators.required, Validators.minLength(2)]]
+      organisation: ['', [Validators.required, Validators.minLength(2)]],
+      room: ['', [Validators.required]],
+      slot: [null as number | null, [Validators.required]]
     });
   }
 
@@ -115,6 +133,9 @@ export class AnnouncementsComponent implements OnInit, AfterViewInit, OnDestroy 
 
     void this.refreshAnnouncements();
     this.annTimer = setInterval(() => void this.refreshAnnouncements(), 45_000);
+
+    void this.refreshSpaceUps();
+    this.spaceupsTimer = setInterval(() => void this.refreshSpaceUps(), 30_000);
   }
 
   ngAfterViewInit(): void {
@@ -125,6 +146,7 @@ export class AnnouncementsComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnDestroy(): void {
     if (this.tickTimer) clearInterval(this.tickTimer);
     if (this.annTimer) clearInterval(this.annTimer);
+    if (this.spaceupsTimer) clearInterval(this.spaceupsTimer);
   }
 
   private buildDays(): DayGroup[] {
@@ -295,31 +317,88 @@ export class AnnouncementsComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.spaceupForm.invalid) {
       this.spaceupForm.markAllAsTouched();
-      this.spaceupError = 'Please fill in all fields correctly.';
+      this.spaceupError = 'Please fill in all fields, including a room and a time slot.';
+      return;
+    }
+
+    const v = this.spaceupForm.value;
+    const room = String(v.room || '').trim();
+    const slot = Number(v.slot);
+
+    if (this.isSlotTaken(room, slot)) {
+      this.spaceupError =
+        'That room and slot was just taken by someone else. Please pick another free cell from the board above.';
       return;
     }
 
     this.submittingSpaceUp = true;
     try {
-      const v = this.spaceupForm.value;
       await this.registrationService.submitSpaceUpRegistration({
         title: v.title,
         description: v.description,
         email: v.email,
-        organisation: v.organisation
+        organisation: v.organisation,
+        room: room,
+        slot: slot
       });
       this.spaceupSuccess =
-        'Your SpaceUp has been submitted! We will get back to you with a time slot.';
+        'Your SpaceUp is booked! Check the board above to see your slot.';
       this.spaceupFormDir?.resetForm();
       this.spaceupForm.reset();
+      void this.refreshSpaceUps();
     } catch (e: unknown) {
-      const err = e as { message?: string };
-      this.spaceupError = err?.message || 'Could not submit. Please try again later.';
+      const err = e as { message?: string; code?: string };
+      if (err?.code === 'SLOT_TAKEN') {
+        this.spaceupError =
+          err.message ||
+          'That room and slot was just taken by someone else. Please pick another free cell.';
+        void this.refreshSpaceUps();
+      } else {
+        this.spaceupError = err?.message || 'Could not submit. Please try again later.';
+      }
     } finally {
       this.submittingSpaceUp = false;
     }
   }
 
+  async refreshSpaceUps(): Promise<void> {
+    try {
+      const items = await this.registrationService.fetchSpaceUps();
+      this.spaceups = items;
+      const map = new Map<string, SpaceUpEntry>();
+      for (const s of items) {
+        map.set(spaceupSlotKey(s.room, s.slot), s);
+      }
+      this.spaceupBookings = map;
+    } finally {
+      this.spaceupsLoading = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  isSlotTaken(room: string, slot: number): boolean {
+    return this.spaceupBookings.has(spaceupSlotKey(room, slot));
+  }
+
+  bookingFor(room: string, slot: number): SpaceUpEntry | undefined {
+    return this.spaceupBookings.get(spaceupSlotKey(room, slot));
+  }
+
+  selectSlot(room: string, slot: number): void {
+    if (this.isSlotTaken(room, slot)) return;
+    this.spaceupForm.patchValue({ room, slot });
+    this.spaceupForm.get('room')?.markAsTouched();
+    this.spaceupForm.get('slot')?.markAsTouched();
+    this.spaceupError = '';
+  }
+
+  isCellSelected(room: string, slot: number): boolean {
+    const v = this.spaceupForm.value;
+    return v.room === room && Number(v.slot) === slot;
+  }
+
   trackEvent = (_: number, ev: ViewEvent): string => ev.raw.id;
   trackAnn = (_: number, a: Announcement): string => a.timestamp + a.title;
+  trackRoom = (_: number, r: SpaceUpRoom): string => r.id;
+  trackSlot = (_: number, s: SpaceUpSlot): number => s.slot;
 }
