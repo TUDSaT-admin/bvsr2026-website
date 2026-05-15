@@ -14,7 +14,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
     id: 'W01',
     title: 'CMEx-Versuchsaufbau – Beschreibung des CubeSat-Experiments auf TRACE',
     speaker: 'Peter Wieczorek (TUDSaT / GSI)',
-    room: 'BK1 3.019',
+    room: 'KBW 1.017',
     capacity: 20,
     slot: 'BOTH'
   },
@@ -22,7 +22,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
     id: 'W02',
     title: 'Strahldiagnose',
     speaker: 'Karl Reimers (GSI)',
-    room: 'SB3 3.170a',
+    room: 'KBW 1.017',
     capacity: 60,
     slot: 'BOTH'
   },
@@ -54,7 +54,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
     id: 'W06',
     title: 'News from BVSR Committee Legal – Rocketry',
     speaker: 'Michael Witthaus',
-    room: 'KBW 2.028',
+    room: 'BK1 3.020',
     capacity: 20,
     slot: 1
   },
@@ -86,7 +86,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
     id: 'W12',
     title: 'Space Analog and Student Space Flight',
     speaker: 'Ella Ganzer',
-    room: 'BK1 3.020',
+    room: 'KBW 2.028',
     capacity: 20,
     slot: 1
   },
@@ -102,7 +102,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
     id: 'W14',
     title: 'ODIN Meetup & Outlook-Brainstorming',
     speaker: 'Jonathan Mayer',
-    room: 'KBW 2.028',
+    room: 'BK1 3.020',
     capacity: 20,
     slot: 2
   },
@@ -126,7 +126,7 @@ export const BVSR_WORKSHOPS: Workshop[] = [
     id: 'W17',
     title: 'EuRoC Conversations',
     speaker: 'Manu Schlüsener',
-    room: 'BK1 3.020',
+    room: 'KBW 2.028',
     capacity: 20,
     slot: 2
   },
