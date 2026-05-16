@@ -237,21 +237,12 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     subtitle: 'Forum for teams and VIPs.'
   },
   {
-    id: 'sat-forum-open',
-    dayLabel: 'Saturday · 16 May',
-    dayKey: '2026-05-16',
-    start: '2026-05-16T11:00:00+02:00',
-    end: '2026-05-16T11:15:00+02:00',
-    timeLabel: '11:00 – 11:15',
-    title: 'Opening of the Forum'
-  },
-  {
     id: 'sat-welcome-woerner',
     dayLabel: 'Saturday · 16 May',
     dayKey: '2026-05-16',
-    start: '2026-05-16T11:15:00+02:00',
+    start: '2026-05-16T11:00:00+02:00',
     end: '2026-05-16T11:30:00+02:00',
-    timeLabel: '11:15 – 11:30',
+    timeLabel: '11:00 – 11:30',
     title: 'Welcome Ceremony',
     subtitle: 'Speaker: Jan Wörner.'
   },
