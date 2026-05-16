@@ -212,7 +212,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     start: '2026-05-16T08:00:00+02:00',
     end: '2026-05-16T10:00:00+02:00',
     timeLabel: '08:00 – 10:00',
-    title: 'Public Forum',
+    title: 'Set up of all booths',
     subtitle: '',
     locations: [{ label: 'Orangerie Darmstadt', iframeSrc: ORANGERIE }]
   },
@@ -256,6 +256,18 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     subtitle: 'Speaker: Jan Wörner.'
   },
   {
+    id: 'sat-speaker-franke',
+    dayLabel: 'Saturday · 16 May',
+    dayKey: '2026-05-16',
+    start: '2026-05-16T11:30:00+02:00',
+    end: '2026-05-16T12:00:00+02:00',
+    timeLabel: '11:30 – 12:00',
+    title: 'Jonas Franke — Starlab Pioneers + Airbus',
+    subtitle:
+      'Strategischer Zugang zum Weltraum & zur Mikro-Gravitations-Umgebung im Low-Earth-Orbit',
+    locations: [{ label: 'Orangerie Darmstadt', iframeSrc: ORANGERIE }]
+  },
+  {
     id: 'sat-speaker-schmid',
     dayLabel: 'Saturday · 16 May',
     dayKey: '2026-05-16',
@@ -281,6 +293,17 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     end: '2026-05-16T15:30:00+02:00',
     timeLabel: '15:00 – 15:30',
     title: 'Speaker: Momentum Aerospace'
+  },
+  {
+    id: 'sat-disassemble',
+    dayLabel: 'Saturday · 16 May',
+    dayKey: '2026-05-16',
+    start: '2026-05-16T16:00:00+02:00',
+    end: '2026-05-16T18:00:00+02:00',
+    timeLabel: '16:00 – 18:00',
+    title: 'Disassemble',
+    subtitle: '',
+    locations: [{ label: 'Orangerie Darmstadt', iframeSrc: ORANGERIE }]
   },
   {
     id: 'sat-bbq',

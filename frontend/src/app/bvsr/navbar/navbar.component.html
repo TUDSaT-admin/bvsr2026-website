@@ -8,13 +8,15 @@
   <span class="spacer"></span>
 
   <nav class="links desktop-links">
+    <a class="link link-live" routerLink="/announcements">
+      <span class="nav-live-dot" aria-hidden="true"></span>
+      <span class="nav-live-text">Live timeline</span>
+    </a>
     <button mat-button class="link" routerLink="/about">About</button>
-    <button mat-button class="link" routerLink="/announcements">Schedule</button>
+    <button mat-button class="link" routerLink="/schedule">Schedule</button>
     <button mat-button class="link" routerLink="/speakers">Speakers & Guests</button>
     <button mat-button class="link" routerLink="/sponsers">Sponsors</button>
     <button mat-button class="link" routerLink="/contact">Contact</button>
-    <button mat-button class="link" routerLink="/workshop">Workshops</button>
-    <button mat-button class="link" routerLink="/events-registered">Events Registered</button>
     <button mat-button class="link" routerLink="/get-ticket">Get my Ticket</button>
   </nav>
 
@@ -26,13 +28,15 @@
 
   <div class="mobile-menu" [class.open]="menuOpen">
 
+    <a class="link link-live" routerLink="/announcements" (click)="toggleMenu()">
+      <span class="nav-live-dot" aria-hidden="true"></span>
+      <span class="nav-live-text">Live timeline</span>
+    </a>
     <button mat-button class="link" routerLink="/about" (click)="toggleMenu()">About</button>
-    <button mat-button class="link" routerLink="/announcements" (click)="toggleMenu()">Schedule</button>
+    <button mat-button class="link" routerLink="/schedule" (click)="toggleMenu()">Schedule</button>
     <button mat-button class="link" routerLink="/speakers" (click)="toggleMenu()">Speakers & Guests</button>
     <button mat-button class="link" routerLink="/sponsers" (click)="toggleMenu()">Sponsors</button>
     <button mat-button class="link" routerLink="/contact" (click)="toggleMenu()">Contact</button>
-    <button mat-button class="link" routerLink="/workshop" (click)="toggleMenu()">Workshops</button>
-    <button mat-button class="link" routerLink="/events-registered" (click)="toggleMenu()">Events Registered</button>
     <button mat-button class="link" routerLink="/get-ticket" (click)="toggleMenu()">Get my Ticket</button>
   </div>
 
