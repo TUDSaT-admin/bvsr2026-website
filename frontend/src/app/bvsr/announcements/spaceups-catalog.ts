@@ -20,8 +20,7 @@ export const SPACEUP_ROOMS: SpaceUpRoom[] = [
   { id: 'HMZ L4|02/228', label: 'HMZ L4|02/228', capacity: 24 },
   { id: 'HMZ L4|02/301', label: 'HMZ L4|02/301', capacity: 40 },
   { id: 'HMZ L4|02/304', label: 'HMZ L4|02/304', capacity: 20 },
-  { id: 'HMZ L4|02/338', label: 'HMZ L4|02/338', capacity: 25 },
-  { id: 'HMZ L4|02/340', label: 'HMZ L4|02/340', capacity: 40 }
+  { id: 'HMZ L4|02/338', label: 'HMZ L4|02/338', capacity: 25 }
 ];
 
 export const SPACEUP_SLOTS: SpaceUpSlot[] = [
