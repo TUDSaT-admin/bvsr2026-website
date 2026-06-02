@@ -7,7 +7,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { FooterComponent } from "../footer/footer.component";
 import { SeoService } from '../../services/seo.service';
 
-/** Logo frame size on the page (reflects sponsorship / partnership level) */
 export type LogoDisplaySize =
   | 'tier-primary'
   | 'tier-sponsor'
@@ -20,9 +19,7 @@ export interface SupporterLogo {
   name: string;
   tier?: string;
   amount?: string;
-  /** Visual weight of the logo area */
   logoSize?: LogoDisplaySize;
-  /** Place image at e.g. assets/sponsors/serco.png — omit for placeholder */
   logoSrc?: string;
   showPlaceholder?: boolean;
 }

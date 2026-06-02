@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
     'SeeSat eV',
     'ERIG eV',
     'ASTRA eV',
-    'Soundspace eV',
+    'Sundspace eV',
     'WüSpace eV',
     'SPROG eV',
     'ROCKIT eV',
@@ -78,7 +78,6 @@ export class RegisterComponent implements OnInit {
       cvFile: [null]
     });
 
-    // Show otherAssociation field only when "Others" is selected
     this.registrationForm.get('association')?.valueChanges.subscribe(value => {
       if (value === 'Others') {
         this.registrationForm.get('otherAssociation')?.setValidators([Validators.required]);
@@ -117,7 +116,7 @@ export class RegisterComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      if (file.size > 5 * 1024 * 1024) {
         this.errorMsg = 'File size must be less than 5MB';
         return;
       }
@@ -133,7 +132,6 @@ export class RegisterComponent implements OnInit {
     }
 
     if (this.currentStep === 1) {
-      // Validate step 1 fields
       const step1Fields = ['firstName', 'lastName', 'email', 'association'];
       let isValid = true;
 
@@ -145,7 +143,6 @@ export class RegisterComponent implements OnInit {
         }
       });
 
-      // Check if otherAssociation is required
       if (this.registrationForm.get('association')?.value === 'Others') {
         const otherControl = this.registrationForm.get('otherAssociation');
         if (otherControl && !otherControl.valid) {
@@ -189,10 +186,10 @@ export class RegisterComponent implements OnInit {
 
       const formData = this.registrationForm.value;
 
-      // Generate unique registration ID
+      // here we generate unique registration ID @tyler
       this.registrationId = this.generateRegistrationId();
 
-      // Prepare registration data
+      // to prepare registration data @tyler
       const registrationData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -215,7 +212,7 @@ export class RegisterComponent implements OnInit {
         return;
       }
 
-      // CV upload can be very slow (large base64 POST to Apps Script). Do not block the success screen.
+      //sometimes CV upload is very slow (large base64 POST to Apps Script). Do not block the success screen.
       if (this.selectedFile && formData.uploadCV) {
         void this.registrationService
           .uploadCV(this.selectedFile, formData.email, this.registrationId)
@@ -234,7 +231,7 @@ export class RegisterComponent implements OnInit {
       // Store registration data for success page
       this.registrationData = registrationData;
       this.registrationComplete = true;
-      this.currentStep = 3; // Move to success step
+      this.currentStep = 3;
 
       // Generate and download PDF
       await this.generateAndDownloadPDF(registrationData);

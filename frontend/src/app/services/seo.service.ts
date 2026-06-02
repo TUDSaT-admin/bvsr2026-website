@@ -32,16 +32,12 @@ export class SeoService {
     const type = data.type || 'website';
     const siteName = data.siteName || this.defaultSiteName;
 
-    // Update title
     this.title.setTitle(title);
-
-    // Basic meta tags
     this.meta.updateTag({ name: 'description', content: description });
     if (data.keywords) {
       this.meta.updateTag({ name: 'keywords', content: data.keywords });
     }
 
-    // Open Graph tags
     this.meta.updateTag({ property: 'og:title', content: title });
     this.meta.updateTag({ property: 'og:description', content: description });
     this.meta.updateTag({ property: 'og:image', content: image });
@@ -49,24 +45,20 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:type', content: type });
     this.meta.updateTag({ property: 'og:site_name', content: siteName });
 
-    // Twitter Card tags
     this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title', content: title });
     this.meta.updateTag({ name: 'twitter:description', content: description });
     this.meta.updateTag({ name: 'twitter:image', content: image });
 
-    // Canonical URL
     this.updateCanonicalUrl(url);
   }
 
   private updateCanonicalUrl(url: string): void {
-    // Remove existing canonical link if any
     const existingLink = document.querySelector('link[rel="canonical"]');
     if (existingLink) {
       existingLink.remove();
     }
 
-    // Add new canonical link
     const link: HTMLLinkElement = document.createElement('link');
     link.setAttribute('rel', 'canonical');
     link.setAttribute('href', url);

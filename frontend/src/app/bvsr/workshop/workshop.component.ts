@@ -1,21 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
 import { SeoService } from '../../services/seo.service';
-import {
-  RegistrationService,
-  WorkshopAvailabilitySnapshot
-} from '../../services/registration.service';
+import {RegistrationService, WorkshopAvailabilitySnapshot} from '../../services/registration.service';
 import {
   BVSR_WORKSHOPS,
   BVSR_WORKSHOPS_BY_ID,

@@ -129,14 +129,12 @@ export class QrVerifyComponent implements OnInit, OnDestroy {
           if (result) {
             const text = result.getText();
             const now = Date.now();
-            // De-bounce: ignore repeated decodes within 2 seconds.
             if (now - this.lastScannedAt < 2000) return;
             this.lastScannedAt = now;
             this.stopScanner();
             this.verifyForm.patchValue({ registrationId: text });
             void this.verifyRegistrationId(text);
           }
-          // err is expected continuously while no QR is in frame; ignore.
         }
       );
       this.scannerStarting = false;

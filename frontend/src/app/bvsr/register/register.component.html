@@ -19,7 +19,7 @@
     <p *ngIf="!capacityLoading && !registrationSoldOut && capacity && !registrationComplete" class="spots-remaining">
       Passes remaining: {{ capacity.remaining }} / {{ capacity.maxTickets }}
     </p>
-    
+
     <div class="progress-bar" *ngIf="!registrationComplete && !capacityLoading && !registrationSoldOut">
       <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
         <div class="step-number">1</div>
@@ -37,11 +37,11 @@
       (ngSubmit)="onSubmit()"
       class="registration-form"
       *ngIf="!capacityLoading && !registrationSoldOut && !registrationComplete">
-      
-      <!-- Step 1: Personal Information -->
+
+      <!-- Personal Information -->
       <div *ngIf="currentStep === 1" class="form-step">
         <h2>Personal Information</h2>
-        
+
         <div class="form-row">
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>First Name *</mat-label>
@@ -89,9 +89,9 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field 
-          *ngIf="registrationForm.get('association')?.value === 'Others'" 
-          appearance="outline" 
+        <mat-form-field
+          *ngIf="registrationForm.get('association')?.value === 'Others'"
+          appearance="outline"
           class="form-field full-width">
           <mat-label>Please specify your association *</mat-label>
           <input matInput formControlName="otherAssociation" required>
@@ -107,7 +107,7 @@
         </div>
       </div>
 
-      <!-- Step 2: CV Upload -->
+      <!-- CV Upload -->
       <div *ngIf="currentStep === 2" class="form-step">
         <h2>CV Upload (Optional)</h2>
         <p class="info-text">
@@ -120,11 +120,11 @@
           </mat-checkbox>
 
           <div *ngIf="registrationForm.get('uploadCV')?.value" class="file-upload">
-            <input 
-              type="file" 
+            <input
+              type="file"
               #fileInput
-              id="cvFile" 
-              accept=".pdf,.doc,.docx" 
+              id="cvFile"
+              accept=".pdf,.doc,.docx"
               (change)="onFileSelected($event)"
               style="display: none;">
             <button mat-raised-button type="button" class="upload-button" (click)="fileInput.click()">
@@ -165,7 +165,7 @@
 
       <div class="registration-details-card">
         <h3>Your Registration Details</h3>
-        
+
         <div class="details-grid">
           <div class="detail-item">
             <span class="detail-label">Name:</span>
